@@ -1,5 +1,4 @@
-1.Describe the set
-language and notation.
+1.Describe the set language and notation.
 
 1. Use set language and set notation, and Venn diagrams, to describe sets and
 represent relationships between sets as follows:
@@ -22,6 +21,22 @@ represent relationships between sets as follows:
   - A is not a subset of B :A ⊄ B
   - A is not a proper subset of B: A ⊄B
 
+================================================================
+2.Explain the Algebraic representation and formulae and algebraic manipulation.
+
+1. Express generalised numbers and express basic arithmetic processes
+algebraically is used.
+2. Demonstrate knowledge of substituting numbers for words and letters in
+formulae.
+3. Formulate equations for given situations.
+4. Demonstrate knowledge to manipulate directed numbers.
+5. Demonstrate use of brackets and extraction of common factors.
+6. Expand products of algebraic expressions.
+7. Factorise expressions of the form ax + ay.
+8. Manipulate simple algebraic fractions.
+
+
+================================================================
 
 1.Demonstrate ability to calculate probability of events.
 
