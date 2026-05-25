@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Set Language & Notation — Grade 9 Mathematics</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1209;
+    --parchment: #faf6ee;
+    --cream: #f2ead8;
+    --amber: #c8861a;
+    --amber-light: #e8a832;
+    --rust: #9b3a1a;
+    --teal: #1a6b6b;
+    --teal-light: #2a9090;
+    --gold: #d4a017;
+    --muted: #6b5e4a;
+    --border: #d6c9a8;
+    --correct: #2e7d32;
+    --wrong: #c62828;
+    --correct-bg: #e8f5e9;
+    --wrong-bg: #ffebee;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--parchment);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+    background-image:
+      radial-gradient(ellipse at 10% 0%, rgba(200,134,26,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 100%, rgba(26,107,107,0.06) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+
+  /* ─── Header ─── */
+  header {
+    background: var(--ink);
+    color: var(--parchment);
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(200,134,26,0.06) 40px,
+      rgba(200,134,26,0.06) 41px
+    );
+  }
+  .header-inner { position: relative; max-width: 860px; margin: 0 auto; }
+  .subject-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: var(--amber-light);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 0.6rem;
+  }
+  header p {
+    color: rgba(250,246,238,0.7);
+    font-weight: 300;
+    font-size: 1.05rem;
+  }
+  .gold-bar {
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, var(--amber), var(--gold));
+    margin: 1.2rem 0;
+    border-radius: 2px;
+  }
+
+  /* ─── Navigation pills ─── */
+  .nav-pills {
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    max-width: 860px; margin: 1.5rem auto 0;
+    padding: 0 2rem;
+  }
+  .nav-pills a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    background: rgba(250,246,238,0.1);
+    color: var(--parchment);
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1px solid rgba(250,246,238,0.2);
+    transition: all 0.2s;
+  }
+  .nav-pills a:hover { background: var(--amber); border-color: var(--amber); color: var(--ink); }
+
+  /* ─── Main layout ─── */
+  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+
+  /* ─── Section headers ─── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .section-title .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    background: var(--amber);
+    color: var(--ink);
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  /* ─── Cards ─── */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 1.8rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 2px 8px rgba(26,18,9,0.06);
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(26,18,9,0.1); }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--rust);
+    margin-bottom: 0.6rem;
+  }
+  .card p { color: #2e2510; }
+
+  /* ─── Notation table ─── */
+  .notation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(26,18,9,0.06);
+    font-size: 0.97rem;
+  }
+  .notation-table thead {
+    background: var(--ink);
+    color: var(--parchment);
+  }
+  .notation-table th {
+    padding: 0.9rem 1.2rem;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+  .notation-table td {
+    padding: 0.75rem 1.2rem;
+    border-bottom: 1px solid var(--cream);
+    vertical-align: middle;
+  }
+  .notation-table tr:last-child td { border-bottom: none; }
+  .notation-table tr:nth-child(even) td { background: #fdf9f2; }
+  .notation-table tr:hover td { background: #fef6e4; }
+  .sym {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--rust);
+    font-weight: 600;
+  }
+  .example-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--teal);
+    background: #f0f8f8;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  /* ─── Venn diagrams ─── */
+  .venn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin: 1.2rem 0;
+  }
+  .venn-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1rem 0.8rem;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(26,18,9,0.05);
+  }
+  .venn-card svg { width: 100%; max-width: 200px; height: auto; }
+  .venn-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--rust);
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  .venn-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+
+  /* ─── Definition boxes ─── */
+  .def-box {
+    border-left: 4px solid var(--amber);
+    background: linear-gradient(135deg, #fffbf0, #faf6ee);
+    padding: 1rem 1.4rem;
+    margin: 0.8rem 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .def-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--amber);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .def-box .formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    color: var(--rust);
+    margin: 0.4rem 0;
+  }
+
+  /* ─── Exercises ─── */
+  .exercises-intro {
+    background: var(--ink);
+    color: var(--parchment);
+    padding: 1.5rem 1.8rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .exercises-intro::before {
+    content: '∪ ∩ ⊆ ∈ Ø';
+    position: absolute;
+    right: 1.5rem; top: 0.5rem;
+    font-size: 2.5rem;
+    opacity: 0.08;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.3em;
+  }
+  .exercises-intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 0.4rem;
+  }
+  .exercises-intro p { color: rgba(250,246,238,0.75); font-size: 0.95rem; }
+
+  .exercise {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 1.1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(26,18,9,0.05);
+    transition: box-shadow 0.2s;
+  }
+  .exercise:hover { box-shadow: 0 4px 14px rgba(26,18,9,0.1); }
+
+  .exercise-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.1rem 1.4rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .q-num {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    background: var(--amber);
+    color: var(--ink);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-top: 0.1rem;
+  }
+  .q-text { flex: 1; font-size: 0.98rem; line-height: 1.6; }
+  .q-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    background: var(--cream);
+    color: var(--muted);
+    padding: 0.2rem 0.55rem;
+    border-radius: 12px;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 0.15rem;
+  }
+
+  /* MCQ options */
+  .options {
+    padding: 0 1.4rem 1.2rem 4rem;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 0.4rem;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--parchment);
+    font-size: 0.95rem;
+    transition: all 0.15s;
+  }
+  .option:hover { border-color: var(--amber); background: #fef8ea; }
+  .option.selected { border-color: var(--amber); background: #fef3d0; }
+  .option.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+  .option.wrong { border-color: var(--wrong); background: var(--wrong-bg); color: var(--wrong); }
+  .option-letter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .option.selected .option-letter { background: var(--amber); }
+  .option.correct .option-letter { background: var(--correct); color: white; }
+  .option.wrong .option-letter { background: var(--wrong); color: white; }
+
+  /* True/False */
+  .tf-options {
+    padding: 0 1.4rem 1.2rem 4rem;
+    display: flex; gap: 0.7rem;
+  }
+  .tf-btn {
+    padding: 0.45rem 1.4rem;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: var(--parchment);
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.95rem;
+    transition: all 0.15s;
+  }
+  .tf-btn:hover { border-color: var(--teal); background: #f0f8f8; }
+  .tf-btn.selected { border-color: var(--teal); background: #e0f2f1; }
+  .tf-btn.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+  .tf-btn.wrong { border-color: var(--wrong); background: var(--wrong-bg); color: var(--wrong); }
+
+  /* Fill-in-blank */
+  .fill-area {
+    padding: 0 1.4rem 1.2rem 4rem;
+    display: flex; gap: 0.7rem; align-items: center; flex-wrap: wrap;
+  }
+  .fill-input {
+    border: 1.5px solid var(--border);
+    background: var(--parchment);
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    color: var(--ink);
+    width: 160px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .fill-input:focus { border-color: var(--teal); }
+  .fill-input.correct { border-color: var(--correct); background: var(--correct-bg); }
+  .fill-input.wrong { border-color: var(--wrong); background: var(--wrong-bg); }
+  .check-btn {
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.42rem 1rem;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    transition: background 0.15s;
+  }
+  .check-btn:hover { background: var(--teal-light); }
+
+  /* Feedback */
+  .feedback {
+    padding: 0.6rem 1rem;
+    margin: 0 1.4rem 1rem 4rem;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    display: none;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .feedback.show { display: flex; }
+  .feedback.correct { background: var(--correct-bg); color: var(--correct); }
+  .feedback.wrong { background: var(--wrong-bg); color: var(--wrong); }
+  .feedback-icon { font-size: 1rem; flex-shrink: 0; }
+
+  /* Score bar */
+  .score-bar {
+    background: var(--ink);
+    border-radius: 10px;
+    padding: 1.4rem 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+  .score-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--parchment);
+  }
+  .score-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--amber-light);
+  }
+  .score-sub { font-size: 0.8rem; color: rgba(250,246,238,0.55); }
+  .reset-btn {
+    background: var(--amber);
+    color: var(--ink);
+    border: none;
+    padding: 0.6rem 1.3rem;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .reset-btn:hover { background: var(--amber-light); }
+
+  /* Progress track */
+  .progress-track {
+    height: 6px;
+    background: rgba(250,246,238,0.15);
+    border-radius: 3px;
+    margin-top: 0.8rem;
+    overflow: hidden;
+    width: 100%;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--amber), var(--gold));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* Math inline */
+  .math { font-family: 'JetBrains Mono', monospace; color: var(--rust); }
+
+  /* Set definition block */
+  .set-def {
+    background: #fdf9f2;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.7rem 1.1rem;
+    margin: 0.5rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.97rem;
+    color: var(--teal);
+  }
+
+  /* Info callout */
+  .callout {
+    border-left: 4px solid var(--teal);
+    background: linear-gradient(135deg, #f0f8f8, #faf6ee);
+    padding: 0.9rem 1.3rem;
+    margin: 0.8rem 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.95rem;
+  }
+  .callout strong { color: var(--teal); }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 600px) {
+    main { padding: 1.5rem 1rem 3rem; }
+    .venn-grid { grid-template-columns: 1fr 1fr; }
+    .notation-table { font-size: 0.85rem; }
+    .notation-table th, .notation-table td { padding: 0.6rem 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="subject-label">Grade 9 Mathematics · Unit 4</div>
+    <h1>Set Language<br>& Notation</h1>
+    <div class="gold-bar"></div>
+    <p>Definitions, symbols, Venn diagrams, and relationships between sets</p>
+  </div>
+  <div class="nav-pills">
+    <a href="#definitions">Definitions</a>
+    <a href="#notation">Notation</a>
+    <a href="#venn">Venn Diagrams</a>
+    <a href="#exercises">Exercises</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══ PART 1: WHAT IS A SET ══ -->
+  <h2 class="section-title" id="definitions"><span class="num">1</span> What is a Set?</h2>
+
+  <div class="card">
+    <div class="card-title">Definition</div>
+    <p>A <strong>set</strong> is a well-defined collection of distinct objects. Each object in a set is called an <strong>element</strong> (or member). Sets are usually named with capital letters: <span class="math">A, B, C, U…</span></p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Ways to Define a Set</div>
+    <p><strong>1. Listing (Roster) Method</strong> — list all elements inside curly braces:</p>
+    <div class="set-def">A = {2, 4, 6, 8, 10}</div>
+    <p style="margin-top:0.8rem"><strong>2. Set-Builder Notation</strong> — describe the property that elements must satisfy:</p>
+    <div class="set-def">A = {x : x is an even natural number, x ≤ 10}</div>
+    <div class="set-def">B = {(x, y) : y = mx + c}</div>
+    <div class="set-def">C = {x : x ∈ U, x ∈ A or x ∈ B}</div>
+    <div class="callout" style="margin-top:0.8rem">
+      <strong>Read it as:</strong> "The set of all x <em>such that</em> x satisfies the given condition." The colon <span class="math">:</span> means "such that."
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Special Sets</div>
+    <div class="def-box">
+      <div class="label">Universal Set — U</div>
+      <p>The set of <em>all</em> elements under consideration in a particular problem. All other sets in that context are subsets of U.</p>
+      <div class="formula">e.g., U = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}</div>
+    </div>
+    <div class="def-box" style="border-color: var(--teal);">
+      <div class="label" style="color:var(--teal)">Empty Set — Ø or {}</div>
+      <p>A set with <em>no elements</em>. It is unique: there is only one empty set.</p>
+      <div class="formula" style="color:var(--teal)">e.g., {x : x is a whole number, 2 &lt; x &lt; 3} = Ø</div>
+    </div>
+  </div>
+
+  <!-- ══ PART 2: NOTATION ══ -->
+  <h2 class="section-title" id="notation"><span class="num">2</span> Set Notation Reference</h2>
+
+  <table class="notation-table">
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th>Name / Meaning</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="sym">∈</span></td>
+        <td>"is an element of"</td>
+        <td><span class="example-code">3 ∈ {1, 2, 3}</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">∉</span></td>
+        <td>"is not an element of"</td>
+        <td><span class="example-code">5 ∉ {1, 2, 3}</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">A ∪ B</span></td>
+        <td>Union — elements in A <em>or</em> B (or both)</td>
+        <td><span class="example-code">{1,2} ∪ {2,3} = {1,2,3}</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">A ∩ B</span></td>
+        <td>Intersection — elements in <em>both</em> A and B</td>
+        <td><span class="example-code">{1,2,3} ∩ {2,3,4} = {2,3}</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">A'</span></td>
+        <td>Complement of A — elements in U but not in A</td>
+        <td><span class="example-code">U={1..5}, A={1,2} → A'={3,4,5}</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">n(A)</span></td>
+        <td>Number of elements in set A (cardinality)</td>
+        <td><span class="example-code">n({a,b,c}) = 3</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">Ø</span></td>
+        <td>Empty set — contains no elements</td>
+        <td><span class="example-code">n(Ø) = 0</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">U</span></td>
+        <td>Universal set</td>
+        <td><span class="example-code">All sets are subsets of U</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">A ⊆ B</span></td>
+        <td>A is a subset of B (every element of A is in B)</td>
+        <td><span class="example-code">{1,2} ⊆ {1,2,3}</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">A ⊂ B</span></td>
+        <td>A is a proper subset of B (A ⊆ B and A ≠ B)</td>
+        <td><span class="example-code">{1,2} ⊂ {1,2,3}</span></td>
+      </tr>
+      <tr>
+        <td><span class="sym">A ⊄ B</span></td>
+        <td>A is not a subset of B</td>
+        <td><span class="example-code">{1,4} ⊄ {1,2,3}</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>Subset vs Proper Subset:</strong> Every set is a subset of itself (<span class="math">A ⊆ A</span>), but no set is a proper subset of itself. Also, <span class="math">Ø ⊆ A</span> for any set A.
+  </div>
+
+  <!-- ══ PART 3: VENN DIAGRAMS ══ -->
+  <h2 class="section-title" id="venn"><span class="num">3</span> Venn Diagrams</h2>
+
+  <div class="card">
+    <div class="card-title">What is a Venn Diagram?</div>
+    <p>A Venn diagram uses overlapping circles inside a rectangle to represent sets and their relationships. The rectangle represents the Universal Set <span class="math">U</span>. Each circle represents a set.</p>
+  </div>
+
+  <div class="venn-grid">
+
+    <!-- A ∪ B -->
+    <div class="venn-card">
+      <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+        <rect width="200" height="130" rx="8" fill="#faf6ee" stroke="#d6c9a8" stroke-width="1.5"/>
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b5e4a">U</text>
+        <ellipse cx="78" cy="65" rx="50" ry="42" fill="rgba(200,134,26,0.45)" stroke="#c8861a" stroke-width="1.5"/>
+        <ellipse cx="122" cy="65" rx="50" ry="42" fill="rgba(200,134,26,0.45)" stroke="#c8861a" stroke-width="1.5"/>
+        <text x="60" y="60" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">A</text>
+        <text x="130" y="60" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">B</text>
+      </svg>
+      <div class="venn-label">A ∪ B</div>
+      <div class="venn-desc">All shaded: A or B or both</div>
+    </div>
+
+    <!-- A ∩ B -->
+    <div class="venn-card">
+      <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+        <rect width="200" height="130" rx="8" fill="#faf6ee" stroke="#d6c9a8" stroke-width="1.5"/>
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b5e4a">U</text>
+        <ellipse cx="78" cy="65" rx="50" ry="42" fill="none" stroke="#c8861a" stroke-width="1.5"/>
+        <ellipse cx="122" cy="65" rx="50" ry="42" fill="none" stroke="#c8861a" stroke-width="1.5"/>
+        <clipPath id="clipA"><ellipse cx="78" cy="65" rx="50" ry="42"/></clipPath>
+        <ellipse cx="122" cy="65" rx="50" ry="42" fill="rgba(155,58,26,0.45)" clip-path="url(#clipA)"/>
+        <text x="60" y="60" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">A</text>
+        <text x="130" y="60" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">B</text>
+      </svg>
+      <div class="venn-label">A ∩ B</div>
+      <div class="venn-desc">Only the overlap: in both A and B</div>
+    </div>
+
+    <!-- A' -->
+    <div class="venn-card">
+      <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+        <rect width="200" height="130" rx="8" fill="rgba(26,107,107,0.22)" stroke="#d6c9a8" stroke-width="1.5"/>
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b5e4a">U</text>
+        <ellipse cx="100" cy="65" rx="55" ry="44" fill="#faf6ee" stroke="#c8861a" stroke-width="1.5"/>
+        <text x="92" y="70" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">A</text>
+        <text x="158" y="30" font-family="JetBrains Mono,monospace" font-size="10" fill="#1a6b6b" font-weight="700">A'</text>
+      </svg>
+      <div class="venn-label">A'</div>
+      <div class="venn-desc">Everything outside A (shaded region)</div>
+    </div>
+
+    <!-- A ⊂ B -->
+    <div class="venn-card">
+      <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+        <rect width="200" height="130" rx="8" fill="#faf6ee" stroke="#d6c9a8" stroke-width="1.5"/>
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b5e4a">U</text>
+        <ellipse cx="105" cy="65" rx="62" ry="48" fill="rgba(200,134,26,0.2)" stroke="#c8861a" stroke-width="1.5"/>
+        <ellipse cx="95" cy="68" rx="28" ry="24" fill="rgba(200,134,26,0.55)" stroke="#9b3a1a" stroke-width="1.5"/>
+        <text x="86" y="73" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">A</text>
+        <text x="140" y="50" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">B</text>
+      </svg>
+      <div class="venn-label">A ⊂ B</div>
+      <div class="venn-desc">A is entirely inside B</div>
+    </div>
+
+    <!-- Disjoint -->
+    <div class="venn-card">
+      <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+        <rect width="200" height="130" rx="8" fill="#faf6ee" stroke="#d6c9a8" stroke-width="1.5"/>
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b5e4a">U</text>
+        <ellipse cx="65" cy="65" rx="44" ry="38" fill="rgba(200,134,26,0.35)" stroke="#c8861a" stroke-width="1.5"/>
+        <ellipse cx="140" cy="65" rx="44" ry="38" fill="rgba(26,107,107,0.3)" stroke="#1a6b6b" stroke-width="1.5"/>
+        <text x="55" y="70" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">A</text>
+        <text x="130" y="70" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">B</text>
+      </svg>
+      <div class="venn-label">A ∩ B = Ø</div>
+      <div class="venn-desc">Disjoint sets: no common elements</div>
+    </div>
+
+    <!-- Three sets -->
+    <div class="venn-card">
+      <svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+        <rect width="200" height="140" rx="8" fill="#faf6ee" stroke="#d6c9a8" stroke-width="1.5"/>
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="10" fill="#6b5e4a">U</text>
+        <ellipse cx="80" cy="70" rx="48" ry="40" fill="rgba(200,134,26,0.25)" stroke="#c8861a" stroke-width="1.5"/>
+        <ellipse cx="120" cy="70" rx="48" ry="40" fill="rgba(26,107,107,0.25)" stroke="#1a6b6b" stroke-width="1.5"/>
+        <text x="60" y="65" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">A</text>
+        <text x="132" y="65" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#1a1209">B</text>
+        <text x="95" y="78" font-family="JetBrains Mono,monospace" font-size="9" fill="#9b3a1a">A∩B</text>
+      </svg>
+      <div class="venn-label">Two overlapping sets</div>
+      <div class="venn-desc">Typical A and B with intersection</div>
+    </div>
+
+  </div>
+
+  <!-- ══ PART 4: EXERCISES ══ -->
+  <h2 class="section-title" id="exercises"><span class="num">4</span> Practice Exercises</h2>
+
+  <div class="exercises-intro">
+    <h2>20 Practice Questions</h2>
+    <p>Test your understanding of set language and notation. Select your answer — instant feedback provided.</p>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="score-bar">
+    <div>
+      <div class="score-label">Your Score</div>
+      <div class="score-sub">Answered: <span id="answered">0</span> / 20</div>
+    </div>
+    <div class="score-num"><span id="scoreNum">0</span> / 20</div>
+    <button class="reset-btn" onclick="resetAll()">↺ Reset All</button>
+  </div>
+
+  <!-- Q1 -->
+  <div class="exercise" id="ex1">
+    <div class="exercise-header">
+      <div class="q-num">1</div>
+      <div class="q-text">Which of the following correctly uses set-builder notation to describe the set of all odd numbers between 1 and 10?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex1','A')"><div class="option-letter">A</div> {1, 3, 5, 7, 9}</div>
+      <div class="option" onclick="mcq(this,'ex1','B')"><div class="option-letter">B</div> {x : x is odd, 1 ≤ x ≤ 9}</div>
+      <div class="option" onclick="mcq(this,'ex1','C')"><div class="option-letter">C</div> {x ∈ ℕ : x is even}</div>
+      <div class="option" onclick="mcq(this,'ex1','D')"><div class="option-letter">D</div> {x : x &gt; 1 and x &lt; 10}</div>
+    </div>
+    <div class="feedback" id="fb1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="exercise" id="ex2">
+    <div class="exercise-header">
+      <div class="q-num">2</div>
+      <div class="q-text">Given A = {2, 4, 6, 8} and B = {4, 6, 10, 12}, what is A ∩ B?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex2','A')"><div class="option-letter">A</div> {2, 4, 6, 8, 10, 12}</div>
+      <div class="option" onclick="mcq(this,'ex2','B')"><div class="option-letter">B</div> {4, 6}</div>
+      <div class="option" onclick="mcq(this,'ex2','C')"><div class="option-letter">C</div> {2, 8}</div>
+      <div class="option" onclick="mcq(this,'ex2','D')"><div class="option-letter">D</div> {10, 12}</div>
+    </div>
+    <div class="feedback" id="fb2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="exercise" id="ex3">
+    <div class="exercise-header">
+      <div class="q-num">3</div>
+      <div class="q-text">Given A = {1, 2, 3} and B = {1, 2, 3, 4, 5}, which statement is correct?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex3','A')"><div class="option-letter">A</div> A ⊄ B</div>
+      <div class="option" onclick="mcq(this,'ex3','B')"><div class="option-letter">B</div> A ⊂ B</div>
+      <div class="option" onclick="mcq(this,'ex3','C')"><div class="option-letter">C</div> B ⊆ A</div>
+      <div class="option" onclick="mcq(this,'ex3','D')"><div class="option-letter">D</div> A = B</div>
+    </div>
+    <div class="feedback" id="fb3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="exercise" id="ex4">
+    <div class="exercise-header">
+      <div class="q-num">4</div>
+      <div class="q-text">U = {1, 2, 3, 4, 5, 6, 7, 8} and A = {2, 4, 6, 8}. What is A'?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex4','A')"><div class="option-letter">A</div> {2, 4, 6, 8}</div>
+      <div class="option" onclick="mcq(this,'ex4','B')"><div class="option-letter">B</div> {1, 3, 5, 7}</div>
+      <div class="option" onclick="mcq(this,'ex4','C')"><div class="option-letter">C</div> {1, 2, 3, 4, 5, 6, 7, 8}</div>
+      <div class="option" onclick="mcq(this,'ex4','D')"><div class="option-letter">D</div> Ø</div>
+    </div>
+    <div class="feedback" id="fb4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="exercise" id="ex5">
+    <div class="exercise-header">
+      <div class="q-num">5</div>
+      <div class="q-text">A = {a, b, c, d} and B = {c, d, e, f}. What is A ∪ B?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex5','A')"><div class="option-letter">A</div> {c, d}</div>
+      <div class="option" onclick="mcq(this,'ex5','B')"><div class="option-letter">B</div> {a, b}</div>
+      <div class="option" onclick="mcq(this,'ex5','C')"><div class="option-letter">C</div> {a, b, c, d, e, f}</div>
+      <div class="option" onclick="mcq(this,'ex5','D')"><div class="option-letter">D</div> {e, f}</div>
+    </div>
+    <div class="feedback" id="fb5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="exercise" id="ex6">
+    <div class="exercise-header">
+      <div class="q-num">6</div>
+      <div class="q-text">True or False: The empty set Ø is a subset of every set.</div>
+      <div class="q-type">True / False</div>
+    </div>
+    <div class="tf-options">
+      <button class="tf-btn" onclick="tf(this,'ex6','T')">True</button>
+      <button class="tf-btn" onclick="tf(this,'ex6','F')">False</button>
+    </div>
+    <div class="feedback" id="fb6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="exercise" id="ex7">
+    <div class="exercise-header">
+      <div class="q-num">7</div>
+      <div class="q-text">If n(A) = 8, n(B) = 6, and n(A ∩ B) = 3, what is n(A ∪ B)?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex7','A')"><div class="option-letter">A</div> 17</div>
+      <div class="option" onclick="mcq(this,'ex7','B')"><div class="option-letter">B</div> 14</div>
+      <div class="option" onclick="mcq(this,'ex7','C')"><div class="option-letter">C</div> 11</div>
+      <div class="option" onclick="mcq(this,'ex7','D')"><div class="option-letter">D</div> 9</div>
+    </div>
+    <div class="feedback" id="fb7"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="exercise" id="ex8">
+    <div class="exercise-header">
+      <div class="q-num">8</div>
+      <div class="q-text">True or False: If A ⊂ B, then A ⊆ B is also true.</div>
+      <div class="q-type">True / False</div>
+    </div>
+    <div class="tf-options">
+      <button class="tf-btn" onclick="tf(this,'ex8','T')">True</button>
+      <button class="tf-btn" onclick="tf(this,'ex8','F')">False</button>
+    </div>
+    <div class="feedback" id="fb8"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="exercise" id="ex9">
+    <div class="exercise-header">
+      <div class="q-num">9</div>
+      <div class="q-text">Which symbol correctly completes: 7 ___ {1, 3, 5, 7, 9}?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex9','A')"><div class="option-letter">A</div> ∉</div>
+      <div class="option" onclick="mcq(this,'ex9','B')"><div class="option-letter">B</div> ∈</div>
+      <div class="option" onclick="mcq(this,'ex9','C')"><div class="option-letter">C</div> ⊂</div>
+      <div class="option" onclick="mcq(this,'ex9','D')"><div class="option-letter">D</div> ⊆</div>
+    </div>
+    <div class="feedback" id="fb9"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="exercise" id="ex10">
+    <div class="exercise-header">
+      <div class="q-num">10</div>
+      <div class="q-text">A = {1, 2, 3} and B = {1, 2, 3}. Which of the following is TRUE?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex10','A')"><div class="option-letter">A</div> A ⊂ B only</div>
+      <div class="option" onclick="mcq(this,'ex10','B')"><div class="option-letter">B</div> A ⊆ B and B ⊆ A, so A = B</div>
+      <div class="option" onclick="mcq(this,'ex10','C')"><div class="option-letter">C</div> A ⊄ B</div>
+      <div class="option" onclick="mcq(this,'ex10','D')"><div class="option-letter">D</div> A ∩ B = Ø</div>
+    </div>
+    <div class="feedback" id="fb10"></div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="exercise" id="ex11">
+    <div class="exercise-header">
+      <div class="q-num">11</div>
+      <div class="q-text">In a Venn diagram with two overlapping circles for sets A and B inside universal set U, the region inside BOTH circles represents:</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex11','A')"><div class="option-letter">A</div> A ∪ B</div>
+      <div class="option" onclick="mcq(this,'ex11','B')"><div class="option-letter">B</div> A'</div>
+      <div class="option" onclick="mcq(this,'ex11','C')"><div class="option-letter">C</div> A ∩ B</div>
+      <div class="option" onclick="mcq(this,'ex11','D')"><div class="option-letter">D</div> (A ∪ B)'</div>
+    </div>
+    <div class="feedback" id="fb11"></div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="exercise" id="ex12">
+    <div class="exercise-header">
+      <div class="q-num">12</div>
+      <div class="q-text">True or False: A set can be a subset of itself.</div>
+      <div class="q-type">True / False</div>
+    </div>
+    <div class="tf-options">
+      <button class="tf-btn" onclick="tf(this,'ex12','T')">True</button>
+      <button class="tf-btn" onclick="tf(this,'ex12','F')">False</button>
+    </div>
+    <div class="feedback" id="fb12"></div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="exercise" id="ex13">
+    <div class="exercise-header">
+      <div class="q-num">13</div>
+      <div class="q-text">Fill in: If U = {1,2,3,4,5,6} and A = {1,3,5}, then n(A') = ___</div>
+      <div class="q-type">Fill-in</div>
+    </div>
+    <div class="fill-area">
+      <input class="fill-input" id="fi13" type="text" placeholder="your answer" />
+      <button class="check-btn" onclick="checkFill('ex13','fi13',['3'])">Check</button>
+    </div>
+    <div class="feedback" id="fb13"></div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="exercise" id="ex14">
+    <div class="exercise-header">
+      <div class="q-num">14</div>
+      <div class="q-text">P = {multiples of 3 up to 15} and Q = {multiples of 5 up to 15}. What is P ∩ Q?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex14','A')"><div class="option-letter">A</div> {3, 5, 6, 10, 15}</div>
+      <div class="option" onclick="mcq(this,'ex14','B')"><div class="option-letter">B</div> {15}</div>
+      <div class="option" onclick="mcq(this,'ex14','C')"><div class="option-letter">C</div> {5, 10}</div>
+      <div class="option" onclick="mcq(this,'ex14','D')"><div class="option-letter">D</div> {3, 6, 9, 12, 15, 5, 10}</div>
+    </div>
+    <div class="feedback" id="fb14"></div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="exercise" id="ex15">
+    <div class="exercise-header">
+      <div class="q-num">15</div>
+      <div class="q-text">Which of the following describes the set of all points on a straight line y = 2x + 1 in set-builder notation?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex15','A')"><div class="option-letter">A</div> {x : y = 2x + 1}</div>
+      <div class="option" onclick="mcq(this,'ex15','B')"><div class="option-letter">B</div> {(x, y) : y = 2x + 1}</div>
+      <div class="option" onclick="mcq(this,'ex15','C')"><div class="option-letter">C</div> {y : y = 2x + 1}</div>
+      <div class="option" onclick="mcq(this,'ex15','D')"><div class="option-letter">D</div> {x, y : 2x + 1}</div>
+    </div>
+    <div class="feedback" id="fb15"></div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="exercise" id="ex16">
+    <div class="exercise-header">
+      <div class="q-num">16</div>
+      <div class="q-text">True or False: If A ∩ B = Ø, then A and B are called disjoint sets.</div>
+      <div class="q-type">True / False</div>
+    </div>
+    <div class="tf-options">
+      <button class="tf-btn" onclick="tf(this,'ex16','T')">True</button>
+      <button class="tf-btn" onclick="tf(this,'ex16','F')">False</button>
+    </div>
+    <div class="feedback" id="fb16"></div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="exercise" id="ex17">
+    <div class="exercise-header">
+      <div class="q-num">17</div>
+      <div class="q-text">U = {a, b, c, d, e, f}, A = {a, b, c}, B = {b, c, d}. What is (A ∪ B)'?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex17','A')"><div class="option-letter">A</div> {b, c}</div>
+      <div class="option" onclick="mcq(this,'ex17','B')"><div class="option-letter">B</div> {a, b, c, d}</div>
+      <div class="option" onclick="mcq(this,'ex17','C')"><div class="option-letter">C</div> {e, f}</div>
+      <div class="option" onclick="mcq(this,'ex17','D')"><div class="option-letter">D</div> {a, d}</div>
+    </div>
+    <div class="feedback" id="fb17"></div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="exercise" id="ex18">
+    <div class="exercise-header">
+      <div class="q-num">18</div>
+      <div class="q-text">Fill in the blank: The symbol for "is not an element of" is ___</div>
+      <div class="q-type">Fill-in</div>
+    </div>
+    <div class="fill-area">
+      <input class="fill-input" id="fi18" type="text" placeholder="symbol" />
+      <button class="check-btn" onclick="checkFill('ex18','fi18',['∉','∉','not in'])">Check</button>
+    </div>
+    <div class="feedback" id="fb18"></div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="exercise" id="ex19">
+    <div class="exercise-header">
+      <div class="q-num">19</div>
+      <div class="q-text">How many subsets does the set {x, y, z} have? (Include the empty set and the set itself.)</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex19','A')"><div class="option-letter">A</div> 3</div>
+      <div class="option" onclick="mcq(this,'ex19','B')"><div class="option-letter">B</div> 6</div>
+      <div class="option" onclick="mcq(this,'ex19','C')"><div class="option-letter">C</div> 8</div>
+      <div class="option" onclick="mcq(this,'ex19','D')"><div class="option-letter">D</div> 9</div>
+    </div>
+    <div class="feedback" id="fb19"></div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="exercise" id="ex20">
+    <div class="exercise-header">
+      <div class="q-num">20</div>
+      <div class="q-text">In a class of 30 students: 18 like Maths, 14 like Science, and 6 like both. Using n(M ∪ S) = n(M) + n(S) − n(M ∩ S), how many students like at least one of the two subjects?</div>
+      <div class="q-type">MCQ</div>
+    </div>
+    <div class="options">
+      <div class="option" onclick="mcq(this,'ex20','A')"><div class="option-letter">A</div> 32</div>
+      <div class="option" onclick="mcq(this,'ex20','B')"><div class="option-letter">B</div> 26</div>
+      <div class="option" onclick="mcq(this,'ex20','C')"><div class="option-letter">C</div> 20</div>
+      <div class="option" onclick="mcq(this,'ex20','D')"><div class="option-letter">D</div> 38</div>
+    </div>
+    <div class="feedback" id="fb20"></div>
+  </div>
+
+  <!-- Score bar bottom -->
+  <div class="score-bar" style="margin-top:2rem">
+    <div>
+      <div class="score-label">Final Score</div>
+      <div class="score-sub">Answered: <span id="answered2">0</span> / 20</div>
+    </div>
+    <div class="score-num"><span id="scoreNum2">0</span> / 20</div>
+    <button class="reset-btn" onclick="resetAll()">↺ Reset All</button>
+  </div>
+
+</main>
+
+<footer>Grade 9 Mathematics · Set Language & Notation · © Educational Use</footer>
+
+<script>
+// ── Answer key ──
+const answers = {
+  ex1:  { correct: 'B', explain: 'Set-builder notation uses the form {x : condition}. Option B correctly writes: the set of odd x with 1 ≤ x ≤ 9.' },
+  ex2:  { correct: 'B', explain: 'A ∩ B contains elements in BOTH sets. Both {2,4,6,8} and {4,6,10,12} share 4 and 6.' },
+  ex3:  { correct: 'B', explain: 'Every element of A = {1,2,3} is in B = {1,2,3,4,5}, and A ≠ B, so A is a proper subset: A ⊂ B.' },
+  ex4:  { correct: 'B', explain: "A' is everything in U that is NOT in A. U = {1..8}, A = {2,4,6,8}, so A' = {1,3,5,7}." },
+  ex5:  { correct: 'C', explain: 'A ∪ B contains all elements from A OR B (no duplicates): {a,b,c,d} ∪ {c,d,e,f} = {a,b,c,d,e,f}.' },
+  ex6:  { correct: 'T', explain: 'By definition, Ø ⊆ A for every set A, because there are no elements in Ø that could violate membership in A.' },
+  ex7:  { correct: 'C', explain: 'Use the formula: n(A ∪ B) = n(A) + n(B) − n(A ∩ B) = 8 + 6 − 3 = 11.' },
+  ex8:  { correct: 'T', explain: 'A proper subset (⊂) is a special case of a subset (⊆). If A ⊂ B, then certainly A ⊆ B.' },
+  ex9:  { correct: 'B', explain: '7 is an element of the set {1,3,5,7,9}, so we write 7 ∈ {1,3,5,7,9}.' },
+  ex10: { correct: 'B', explain: 'When A ⊆ B and B ⊆ A simultaneously, the two sets are equal: A = B. Note A is NOT a proper subset here.' },
+  ex11: { correct: 'C', explain: 'The overlapping (intersection) region of two circles in a Venn diagram represents A ∩ B — elements in both sets.' },
+  ex12: { correct: 'T', explain: 'Every set is a subset of itself (A ⊆ A). However, it is NOT a proper subset of itself.' },
+  ex13: { correct: '3', explain: "A = {1,3,5}, so A' = {2,4,6}. Therefore n(A') = 3." },
+  ex14: { correct: 'B', explain: 'P = {3,6,9,12,15}, Q = {5,10,15}. The only common element is 15, so P ∩ Q = {15}.' },
+  ex15: { correct: 'B', explain: 'A straight line is a set of coordinate PAIRS (x, y). The correct notation is {(x, y) : y = 2x + 1}.' },
+  ex16: { correct: 'T', explain: 'Disjoint sets share no common elements, so their intersection is the empty set Ø. This is the standard definition.' },
+  ex17: { correct: 'C', explain: 'A ∪ B = {a,b,c,d}. Its complement (everything in U NOT in A ∪ B) = {e, f}.' },
+  ex18: { correct: '∉', explain: 'The symbol ∉ means "is not an element of." It is the negation of ∈.' },
+  ex19: { correct: 'C', explain: 'A set with n elements has 2ⁿ subsets. For {x,y,z}, n = 3, so 2³ = 8 subsets.' },
+  ex20: { correct: 'B', explain: 'n(M ∪ S) = 18 + 14 − 6 = 26. So 26 students like at least one subject.' },
+};
+
+let score = 0;
+let answered = 0;
+const attempted = {};
+
+function updateUI() {
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('scoreNum2').textContent = score;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('answered2').textContent = answered;
+  document.getElementById('progressFill').style.width = (answered / 20 * 100) + '%';
+}
+
+function showFeedback(id, correct, explain) {
+  const fb = document.getElementById('fb' + id.replace('ex',''));
+  fb.className = 'feedback show ' + (correct ? 'correct' : 'wrong');
+  fb.innerHTML = `<span class="feedback-icon">${correct ? '✓' : '✗'}</span><span>${explain}</span>`;
+}
+
+function mcq(el, exId, chosen) {
+  if (attempted[exId]) return;
+  attempted[exId] = true;
+  answered++;
+
+  const data = answers[exId];
+  const container = document.getElementById(exId);
+  const options = container.querySelectorAll('.option');
+  const letters = ['A','B','C','D'];
+
+  options.forEach((opt, i) => {
+    const letter = letters[i];
+    opt.style.cursor = 'default';
+    if (letter === data.correct) opt.classList.add('correct');
+    else if (letter === chosen && chosen !== data.correct) opt.classList.add('wrong');
+  });
+
+  const isCorrect = chosen === data.correct;
+  if (isCorrect) score++;
+  showFeedback(exId, isCorrect, data.explain);
+  updateUI();
+}
+
+function tf(el, exId, chosen) {
+  if (attempted[exId]) return;
+  attempted[exId] = true;
+  answered++;
+
+  const data = answers[exId];
+  const container = document.getElementById(exId);
+  const btns = container.querySelectorAll('.tf-btn');
+
+  btns.forEach(btn => {
+    btn.style.cursor = 'default';
+    const val = btn.textContent === 'True' ? 'T' : 'F';
+    if (val === data.correct) btn.classList.add('correct');
+    else if (val === chosen && chosen !== data.correct) btn.classList.add('wrong');
+  });
+
+  const isCorrect = chosen === data.correct;
+  if (isCorrect) score++;
+  showFeedback(exId, isCorrect, data.explain);
+  updateUI();
+}
+
+function checkFill(exId, inputId, acceptedAnswers) {
+  if (attempted[exId]) return;
+  const input = document.getElementById(inputId);
+  const val = input.value.trim();
+  if (!val) return;
+
+  attempted[exId] = true;
+  answered++;
+
+  const isCorrect = acceptedAnswers.some(a => a.toLowerCase() === val.toLowerCase());
+  input.classList.add(isCorrect ? 'correct' : 'wrong');
+  input.disabled = true;
+
+  const data = answers[exId];
+  if (isCorrect) score++;
+  showFeedback(exId, isCorrect, data.explain);
+  updateUI();
+}
+
+function resetAll() {
+  score = 0; answered = 0;
+  Object.keys(attempted).forEach(k => delete attempted[k]);
+
+  document.querySelectorAll('.option').forEach(el => {
+    el.className = 'option';
+    el.style.cursor = '';
+    const fn = el.getAttribute('onclick');
+    if (fn) el.onclick = new Function(fn);
+  });
+  document.querySelectorAll('.tf-btn').forEach(el => {
+    el.className = 'tf-btn';
+    el.style.cursor = '';
+  });
+  document.querySelectorAll('.fill-input').forEach(el => {
+    el.value = '';
+    el.className = 'fill-input';
+    el.disabled = false;
+  });
+  document.querySelectorAll('.feedback').forEach(el => {
+    el.className = 'feedback';
+    el.innerHTML = '';
+  });
+  updateUI();
+}
+</script>
+</body>
+</html>
