@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probability Tutorial — Unit 10 | Grade 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-page: #F4F3F0;
+    --bg-white: #FFFFFF;
+    --bg-surface: #F0EEE9;
+    --text-primary: #1A1917;
+    --text-secondary: #5F5E5A;
+    --text-muted: #888780;
+    --border-light: rgba(0,0,0,0.08);
+    --border-mid: rgba(0,0,0,0.14);
+    --blue-50: #E6F1FB;
+    --blue-100: #B5D4F4;
+    --blue-400: #378ADD;
+    --blue-600: #185FA5;
+    --blue-800: #0C447C;
+    --blue-900: #042C53;
+    --green-50: #EAF3DE;
+    --green-600: #3B6D11;
+    --green-800: #27500A;
+    --amber-50: #FAEEDA;
+    --amber-600: #854F0B;
+    --amber-800: #633806;
+    --red-50: #FCEBEB;
+    --red-600: #A32D2D;
+    --coral-100: #F5C4B3;
+    --coral-400: #D85A30;
+    --coral-600: #993C1D;
+    --teal-400: #1D9E75;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 0.5px solid var(--border-mid);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+  }
+
+  .header-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-nav {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+  }
+
+  .header-nav a {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 5px 12px;
+    border-radius: var(--radius-md);
+    transition: background 0.15s, color 0.15s;
+    font-weight: 400;
+  }
+
+  .header-nav a:hover,
+  .header-nav a.active {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--bg-white);
+    border-bottom: 0.5px solid var(--border-light);
+    padding: 3.5rem 2rem 2.5rem;
+  }
+
+  .hero-inner {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .unit-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    background: var(--blue-50);
+    color: var(--blue-800);
+    padding: 4px 11px;
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.22;
+    margin-bottom: 0.7rem;
+  }
+
+  .hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  .pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .pill {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 99px;
+    border: 0.5px solid var(--border-mid);
+    color: var(--text-secondary);
+    background: var(--bg-white);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  .section-block {
+    margin-bottom: 3rem;
+    scroll-margin-top: 70px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 0.5px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label .lbl-chip {
+    background: var(--bg-surface);
+    padding: 2px 8px;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg-white);
+    border: 0.5px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .card h3 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card h3 i { font-size: 18px; }
+
+  .card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 0.7rem;
+  }
+
+  .card p:last-child { margin-bottom: 0; }
+
+  .formula-box {
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13.5px;
+    color: var(--text-primary);
+    margin: 0.8rem 0;
+    border-left: 3px solid var(--blue-400);
+    line-height: 1.7;
+  }
+
+  .example-box {
+    background: var(--green-50);
+    border-radius: var(--radius-md);
+    padding: 0.8rem 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--green-600);
+    margin-bottom: 0.4rem;
+  }
+
+  .example-box p {
+    font-size: 13.5px;
+    color: var(--green-800);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .warn-box {
+    background: var(--amber-50);
+    border-radius: var(--radius-md);
+    padding: 0.8rem 1rem;
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+  }
+
+  .warn-box i { font-size: 16px; color: var(--amber-600); flex-shrink: 0; margin-top: 2px; }
+
+  .warn-box p {
+    font-size: 13.5px;
+    color: var(--amber-800);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ── TABLES ── */
+  table.poss-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 13px;
+    margin: 0.8rem 0;
+  }
+
+  table.poss-table th {
+    background: var(--bg-surface);
+    padding: 7px 12px;
+    text-align: center;
+    font-weight: 500;
+    border: 0.5px solid var(--border-mid);
+    color: var(--text-secondary);
+  }
+
+  table.poss-table td {
+    padding: 7px 12px;
+    text-align: center;
+    border: 0.5px solid var(--border-light);
+    color: var(--text-secondary);
+  }
+
+  table.poss-table td.hit {
+    background: var(--blue-50);
+    color: var(--blue-800);
+    font-weight: 500;
+  }
+
+  table.poss-table td.corner {
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  /* ── STEP LIST ── */
+  .step-list {
+    list-style: none;
+    padding: 0;
+    counter-reset: steps;
+    margin-top: 0.85rem;
+  }
+
+  .step-list li {
+    counter-increment: steps;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--border-light);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .step-list li:last-child { border-bottom: none; }
+
+  .step-list li::before {
+    content: counter(steps);
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 0.5px solid var(--border-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 1px;
+  }
+
+  .tip-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+  }
+
+  .tip-chip {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-mid);
+    color: var(--text-secondary);
+    background: var(--bg-white);
+  }
+
+  /* ── TREE SVG ── */
+  .tree-wrap {
+    overflow-x: auto;
+    margin: 0.8rem 0;
+  }
+
+  /* ── QUIZ ── */
+  .score-bar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .score-num {
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .progress-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-left: 4px;
+  }
+
+  .prog-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border-mid);
+    transition: background 0.3s;
+  }
+
+  .prog-dot.done { background: #639922; }
+
+  .quiz-card {
+    background: var(--bg-white);
+    border: 0.5px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .quiz-card h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .q-text {
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.65;
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+  }
+
+  .quiz-opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 13px;
+    border: 0.5px solid var(--border-mid);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s, border-color 0.15s;
+    background: var(--bg-white);
+    user-select: none;
+  }
+
+  .quiz-opt:hover { background: var(--bg-surface); }
+
+  .quiz-opt.correct { background: var(--green-50); border-color: #97C459; color: var(--green-800); }
+  .quiz-opt.wrong { background: var(--red-50); border-color: #F09595; color: var(--red-600); }
+  .quiz-opt.disabled { pointer-events: none; }
+
+  .opt-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 0.5px solid var(--border-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    background: var(--bg-surface);
+  }
+
+  .quiz-feedback {
+    display: none;
+    font-size: 13.5px;
+    line-height: 1.65;
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-md);
+    margin-top: 0.5rem;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: var(--green-50); color: var(--green-800); }
+  .quiz-feedback.no { background: var(--red-50); color: var(--red-600); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .header-nav { display: none; }
+    .hero h1 { font-size: 26px; }
+    .main { padding: 1.5rem 1rem 3rem; }
+    .site-header { padding: 0 1rem; }
+    .hero { padding: 2rem 1rem 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- STICKY HEADER -->
+<header class="site-header">
+  <div class="header-title">
+    📐 Probability — Unit 10
+  </div>
+  <nav>
+    <ul class="header-nav">
+      <li><a href="#d1" id="nav-d1" class="active">D1 Single Events</a></li>
+      <li><a href="#d2" id="nav-d2">D2 Combined Events</a></li>
+      <li><a href="#d3" id="nav-d3">D3 Problem Solving</a></li>
+      <li><a href="#quiz" id="nav-quiz">Practice Quiz</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="unit-badge">Grade 9 · Section D · 35 Marks</div>
+    <h1>Mastering Probability</h1>
+    <p>Learn how to calculate chances, draw possibility diagrams and tree diagrams, and tackle real-world probability problems — step by step.</p>
+    <div class="pills">
+      <span class="pill">Single events</span>
+      <span class="pill">Complementary events</span>
+      <span class="pill">Possibility diagrams</span>
+      <span class="pill">Tree diagrams</span>
+      <span class="pill">Set theory</span>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+
+  <!-- ═══════════════════════ D1 ═══════════════════════ -->
+  <div class="section-block" id="d1">
+    <div class="section-label"><span class="lbl-chip">D1</span> Single Events — 10 Marks</div>
+
+    <!-- Core Formula -->
+    <div class="card">
+      <h3><i class="ti ti-math-function" style="color:#378ADD"></i> The Core Formula</h3>
+      <p>Probability measures how likely an event is to happen. It always falls between <strong>0</strong> (impossible) and <strong>1</strong> (certain).</p>
+      <div class="formula-box">P(event) = Number of favourable outcomes ÷ Total possible outcomes</div>
+      <div class="example-box">
+        <div class="ex-label">Example — D1.1: Fair Die (6 sides)</div>
+        <p>
+          a) P(odd number) = 3 ÷ 6 = <strong>1/2</strong> &nbsp;→ favourable outcomes: {1, 3, 5}<br>
+          b) P(number &gt; 2) = 4 ÷ 6 = <strong>2/3</strong> &nbsp;→ favourable outcomes: {3, 4, 5, 6}<br>
+          c) P(number 7) = 0 ÷ 6 = <strong>0</strong> &nbsp;→ impossible, a die only goes up to 6
+        </p>
+      </div>
+      <div class="warn-box">
+        <i class="ti ti-alert-triangle"></i>
+        <p>A probability can <strong>never</strong> be greater than 1 or less than 0. If you get an answer outside this range, check your working!</p>
+      </div>
+    </div>
+
+    <!-- Coloured Balls -->
+    <div class="card">
+      <h3><i class="ti ti-circle-dot" style="color:#378ADD"></i> Coloured Balls — D1.2</h3>
+      <p>Bag contains <strong>5 red</strong> + <strong>3 blue</strong> + <strong>2 green</strong> = <strong>10 balls total</strong>. One drawn at random.</p>
+      <div class="formula-box">P(red) = 5/10 = <strong>1/2</strong> &nbsp;&nbsp;|&nbsp;&nbsp; P(not blue) = 7/10</div>
+      <div class="example-box">
+        <div class="ex-label">Two ways to find P(not blue)</div>
+        <p>
+          <strong>Method 1 (direct):</strong> balls that are not blue = 5 red + 2 green = 7. So P(not blue) = 7/10.<br>
+          <strong>Method 2 (complement):</strong> P(not blue) = 1 − P(blue) = 1 − 3/10 = 7/10. Both give the same answer!
+        </p>
+      </div>
+      <ul class="step-list">
+        <li>Count all items in the sample space (always do this first)</li>
+        <li>Identify the favourable outcomes for your event</li>
+        <li>Write the fraction and simplify if possible</li>
+      </ul>
+    </div>
+
+    <!-- Complement Rule -->
+    <div class="card">
+      <h3><i class="ti ti-circles-relation" style="color:#378ADD"></i> The Complement Rule — D1.3</h3>
+      <p>The complement of event E is "E does not happen". Together they cover all possibilities, so their probabilities add to exactly 1.</p>
+      <div class="formula-box">P(E does not occur) = 1 − P(E)</div>
+      <div class="example-box">
+        <div class="ex-label">Example — D1.3</div>
+        <p>If P(E) = 0.35, then P(E does not occur) = 1 − 0.35 = <strong>0.65</strong></p>
+      </div>
+      <div class="tip-row">
+        <div class="tip-chip">💡 Think: "everything else"</div>
+        <div class="tip-chip">Useful when NOT is easier to count</div>
+        <div class="tip-chip">Always check: P(E) + P(E') = 1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ D2 ═══════════════════════ -->
+  <div class="section-block" id="d2">
+    <div class="section-label"><span class="lbl-chip">D2</span> Combined Events — 15 Marks</div>
+
+    <!-- Two Coins -->
+    <div class="card">
+      <h3><i class="ti ti-table" style="color:#1D9E75"></i> Possibility Diagram — Two Coins (D2.1)</h3>
+      <p>When two or more events happen together, list <strong>all combinations</strong> systematically. For two coins, each can land H or T:</p>
+      <table class="poss-table">
+        <thead>
+          <tr><th></th><th>Coin 2 → H</th><th>Coin 2 → T</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Coin 1 ↓ H</th><td class="hit">HH ✓</td><td>HT</td></tr>
+          <tr><th>Coin 1 ↓ T</th><td>TH</td><td>TT</td></tr>
+        </tbody>
+      </table>
+      <div class="formula-box">Total outcomes = 4 &nbsp;|&nbsp; P(two heads) = 1/4 &nbsp;|&nbsp; P(at least one tail) = 3/4</div>
+      <div class="example-box">
+        <div class="ex-label">Key insight — "at least one tail"</div>
+        <p>"At least one tail" includes HT, TH, TT = 3 outcomes. Or use the complement: 1 − P(no tails) = 1 − 1/4 = 3/4. The complement method is often faster!</p>
+      </div>
+    </div>
+
+    <!-- Spinner -->
+    <div class="card">
+      <h3><i class="ti ti-grid-dots" style="color:#1D9E75"></i> Spinner Possibility Diagram — D2.2 (1–4 spun twice)</h3>
+      <p>Create a 4×4 grid showing the <strong>sum</strong> of both spins. Total possible outcomes = <strong>16</strong>. Highlighted cells show sum = 5.</p>
+      <table class="poss-table">
+        <thead>
+          <tr><th class="corner">Spin 1 + Spin 2</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>1</th><td>2</td><td>3</td><td>4</td><td class="hit">5 ✓</td></tr>
+          <tr><th>2</th><td>3</td><td>4</td><td class="hit">5 ✓</td><td>6</td></tr>
+          <tr><th>3</th><td>4</td><td class="hit">5 ✓</td><td>6</td><td>7</td></tr>
+          <tr><th>4</th><td class="hit">5 ✓</td><td>6</td><td>7</td><td>8</td></tr>
+        </tbody>
+      </table>
+      <div class="formula-box">P(sum = 5) = 4/16 = 1/4 &nbsp;&nbsp;|&nbsp;&nbsp; P(both numbers same) = 4/16 = 1/4</div>
+      <div class="example-box">
+        <div class="ex-label">"Both same" — the diagonal</div>
+        <p>"Both same" means (1,1), (2,2), (3,3), (4,4) — that's the main diagonal of the grid. Count them: 4 outcomes out of 16.</p>
+      </div>
+    </div>
+
+    <!-- Tree Diagram -->
+    <div class="card">
+      <h3><i class="ti ti-hierarchy-2" style="color:#1D9E75"></i> Tree Diagram — Without Replacement (D2.3)</h3>
+      <p>Bag: <strong>4 red, 3 blue</strong> (7 total). Draw two balls without replacing the first. Probabilities <em>change</em> after the first draw!</p>
+      <div class="tree-wrap">
+        <svg viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:620px;height:auto;font-family:'Inter',sans-serif">
+          <!-- Branch lines -->
+          <line x1="70" y1="140" x2="185" y2="75" stroke="#B5D4F4" stroke-width="1.8"/>
+          <line x1="70" y1="140" x2="185" y2="205" stroke="#F5C4B3" stroke-width="1.8"/>
+          <line x1="205" y1="75" x2="320" y2="38" stroke="#B5D4F4" stroke-width="1.8"/>
+          <line x1="205" y1="75" x2="320" y2="112" stroke="#F5C4B3" stroke-width="1.8"/>
+          <line x1="205" y1="205" x2="320" y2="172" stroke="#B5D4F4" stroke-width="1.8"/>
+          <line x1="205" y1="205" x2="320" y2="238" stroke="#F5C4B3" stroke-width="1.8"/>
+          <!-- Start node -->
+          <circle cx="70" cy="140" r="6" fill="#888780"/>
+          <text x="70" y="162" font-size="11" fill="#888780" text-anchor="middle">Start</text>
+          <!-- First level nodes -->
+          <circle cx="205" cy="75" r="6" fill="#378ADD"/>
+          <circle cx="205" cy="205" r="6" fill="#D85A30"/>
+          <!-- Second level nodes -->
+          <circle cx="320" cy="38" r="6" fill="#378ADD"/>
+          <circle cx="320" cy="112" r="6" fill="#D85A30"/>
+          <circle cx="320" cy="172" r="6" fill="#378ADD"/>
+          <circle cx="320" cy="238" r="6" fill="#D85A30"/>
+          <!-- Branch probability labels -->
+          <text x="118" y="95" font-size="12" fill="#185FA5" text-anchor="middle" font-weight="500">4/7</text>
+          <text x="118" y="195" font-size="12" fill="#993C1D" text-anchor="middle" font-weight="500">3/7</text>
+          <text x="258" y="46" font-size="12" fill="#185FA5" text-anchor="middle" font-weight="500">3/6</text>
+          <text x="258" y="84" font-size="12" fill="#993C1D" text-anchor="middle" font-weight="500">3/6</text>
+          <text x="258" y="170" font-size="12" fill="#185FA5" text-anchor="middle" font-weight="500">4/6</text>
+          <text x="258" y="242" font-size="12" fill="#993C1D" text-anchor="middle" font-weight="500">2/6</text>
+          <!-- Node labels -->
+          <text x="218" y="72" font-size="13" fill="#185FA5" font-weight="500">Red</text>
+          <text x="218" y="202" font-size="13" fill="#993C1D" font-weight="500">Blue</text>
+          <text x="333" y="41" font-size="13" fill="#185FA5">Red</text>
+          <text x="333" y="115" font-size="13" fill="#993C1D">Blue</text>
+          <text x="333" y="175" font-size="13" fill="#185FA5">Red</text>
+          <text x="333" y="241" font-size="13" fill="#993C1D">Blue</text>
+          <!-- Outcome labels -->
+          <text x="392" y="41" font-size="12" fill="#27500A">→ 4/7 × 3/6 = 12/42 = <tspan font-weight="600">2/7</tspan></text>
+          <text x="392" y="115" font-size="12" fill="#633806">→ 4/7 × 3/6 = 12/42 = <tspan font-weight="600">2/7</tspan></text>
+          <text x="392" y="175" font-size="12" fill="#633806">→ 3/7 × 4/6 = 12/42 = <tspan font-weight="600">2/7</tspan></text>
+          <text x="392" y="241" font-size="12" fill="#27500A">→ 3/7 × 2/6 = 6/42 = <tspan font-weight="600">1/7</tspan></text>
+          <!-- Outcome box labels -->
+          <text x="392" y="55" font-size="10" fill="#888780">R, R</text>
+          <text x="392" y="129" font-size="10" fill="#888780">R, B</text>
+          <text x="392" y="189" font-size="10" fill="#888780">B, R</text>
+          <text x="392" y="255" font-size="10" fill="#888780">B, B</text>
+        </svg>
+      </div>
+      <div class="formula-box">
+        P(two red) = 4/7 × 3/6 = 12/42 = <strong>2/7</strong><br>
+        P(one of each) = P(R,B) + P(B,R) = 2/7 + 2/7 = <strong>4/7</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">Why probabilities change on second draw</div>
+        <p>After drawing 1 red ball, only <strong>3 red</strong> remain in <strong>6 total</strong> balls. Always update both the colour count AND the total when the problem says "without replacement".</p>
+      </div>
+      <ul class="step-list">
+        <li>Draw the first branches with original bag probabilities</li>
+        <li>For each second branch: reduce total by 1, and reduce the drawn colour by 1</li>
+        <li>Multiply along branches (AND = ×) to get end-branch probabilities</li>
+        <li>Add matching end-branches for combined outcomes (OR = +)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ D3 ═══════════════════════ -->
+  <div class="section-block" id="d3">
+    <div class="section-label"><span class="lbl-chip">D3</span> Problem Solving — 10 Marks</div>
+
+    <!-- Multiple choice -->
+    <div class="card">
+      <h3><i class="ti ti-pencil-question" style="color:#BA7517"></i> Multiple Choice Guessing — D3.1</h3>
+      <p>4 questions, each with 4 options. Guessing randomly. P(correct on one question) = <strong>1/4</strong>. P(wrong on one) = <strong>3/4</strong>.</p>
+      <p>To find P(at least 1 correct) — use the complement. It is <em>much</em> easier than listing every possibility.</p>
+      <div class="formula-box">P(at least 1 correct) = 1 − P(none correct)</div>
+      <div class="example-box">
+        <div class="ex-label">Step-by-step solution</div>
+        <p>
+          Step 1: P(all 4 wrong) = 3/4 × 3/4 × 3/4 × 3/4 = (3/4)⁴ = 81/256<br>
+          Step 2: P(at least 1 correct) = 1 − 81/256 = <strong>175/256 ≈ 0.684</strong>
+        </p>
+      </div>
+      <div class="warn-box">
+        <i class="ti ti-alert-triangle"></i>
+        <p>"At least 1" problems almost always use the complement strategy. Calculating P(exactly 1) + P(exactly 2) + P(exactly 3) + P(exactly 4) is much harder and more error-prone.</p>
+      </div>
+    </div>
+
+    <!-- Venn / Set operations -->
+    <div class="card">
+      <h3><i class="ti ti-circles-relation" style="color:#BA7517"></i> Venn Diagrams & Set Operations — D3.2</h3>
+      <p>Class of 30. Football (F) = 12, Netball (N) = 15, Both = 8. Find P(play either but not both).</p>
+      <div class="tree-wrap">
+        <svg viewBox="0 0 400 145" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;height:auto;font-family:'Inter',sans-serif">
+          <rect width="400" height="145" rx="10" fill="#F4F3F0"/>
+          <text x="385" y="22" font-size="10" fill="#888780" text-anchor="end">Total = 30</text>
+          <ellipse cx="158" cy="74" rx="98" ry="55" fill="#B5D4F4" fill-opacity="0.5" stroke="#378ADD" stroke-width="1.5"/>
+          <ellipse cx="242" cy="74" rx="98" ry="55" fill="#F5C4B3" fill-opacity="0.5" stroke="#D85A30" stroke-width="1.5"/>
+          <text x="100" y="68" font-size="12" fill="#0C447C" font-weight="500" text-anchor="middle">Football</text>
+          <text x="100" y="85" font-size="13" fill="#0C447C" font-weight="500" text-anchor="middle">only: 4</text>
+          <text x="200" y="68" font-size="12" fill="#444441" text-anchor="middle">Both</text>
+          <text x="200" y="85" font-size="15" fill="#444441" font-weight="600" text-anchor="middle">8</text>
+          <text x="300" y="68" font-size="12" fill="#993C1D" font-weight="500" text-anchor="middle">Netball</text>
+          <text x="300" y="85" font-size="13" fill="#993C1D" font-weight="500" text-anchor="middle">only: 7</text>
+          <text x="20" y="130" font-size="10" fill="#888780">Neither: 11</text>
+          <text x="20" y="22" font-size="11" fill="#185FA5" font-weight="500">F = 12</text>
+          <text x="290" y="22" font-size="11" fill="#993C1D" font-weight="500">N = 15</text>
+        </svg>
+      </div>
+      <div class="formula-box">
+        Football only = 12 − 8 = 4<br>
+        Netball only = 15 − 8 = 7<br>
+        Either but not both = 4 + 7 = 11 &nbsp;&nbsp;→ P = 11/30
+      </div>
+      <ul class="step-list">
+        <li>Draw the Venn diagram with two overlapping circles inside a rectangle (the universal set)</li>
+        <li>Place the "both" count in the intersection (overlap region): 8</li>
+        <li>Subtract: Football only = 12 − 8 = 4; Netball only = 15 − 8 = 7</li>
+        <li>Neither = 30 − (4 + 8 + 7) = 11 (plays neither sport)</li>
+        <li>P(either but not both) = (4 + 7) ÷ 30 = 11/30</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ QUIZ ═══════════════════════ -->
+  <div class="section-block" id="quiz">
+    <div class="section-label"><span class="lbl-chip">Practice</span> Quick Quiz — Test Yourself</div>
+    <div class="score-bar">
+      <span class="score-num" id="score-num">0</span>
+      <span>/ <span id="score-total">5</span> correct</span>
+      <div class="progress-dots" id="prog-dots"></div>
+    </div>
+    <div id="quiz-container"></div>
+  </div>
+
+</main>
+
+<script>
+  const QUESTIONS = [
+    {
+      q: "A bag has 5 red, 3 blue, 2 green balls. What is P(not blue)?",
+      opts: ["3/10", "7/10", "1/2", "3/7"],
+      ans: 1,
+      explain: "Not blue = 5 red + 2 green = 7 balls. P(not blue) = 7/10. You can also use the complement: 1 − 3/10 = 7/10."
+    },
+    {
+      q: "P(E) = 0.35. What is P(E does not occur)?",
+      opts: ["0.35", "1.35", "0.65", "0.50"],
+      ans: 2,
+      explain: "P(complement) = 1 − P(E) = 1 − 0.35 = 0.65. All probabilities for an event and its complement must sum to exactly 1."
+    },
+    {
+      q: "A fair die is rolled. What is P(number > 2)?",
+      opts: ["1/3", "1/2", "2/3", "5/6"],
+      ans: 2,
+      explain: "Numbers greater than 2: {3, 4, 5, 6} = 4 favourable outcomes. P = 4/6 = 2/3."
+    },
+    {
+      q: "Two coins are tossed. What is P(at least one tail)?",
+      opts: ["1/4", "1/2", "2/4", "3/4"],
+      ans: 3,
+      explain: "Outcomes: HH, HT, TH, TT. At least one tail: HT, TH, TT = 3 outcomes. P = 3/4. Complement method: 1 − P(HH) = 1 − 1/4 = 3/4."
+    },
+    {
+      q: "Bag: 4 red, 3 blue. Two drawn WITHOUT replacement. What is P(two red)?",
+      opts: ["4/7 × 4/7", "4/7 × 3/6", "16/49", "1/7"],
+      ans: 1,
+      explain: "First draw P(red) = 4/7. After removing one red ball, second draw P(red) = 3/6. Multiply along the branch: 4/7 × 3/6 = 12/42 = 2/7."
+    }
+  ];
+
+  let score = 0;
+  const answered = new Array(QUESTIONS.length).fill(false);
+  const container = document.getElementById('quiz-container');
+  const scoreEl = document.getElementById('score-num');
+  const dotsEl = document.getElementById('prog-dots');
+
+  dotsEl.innerHTML = QUESTIONS.map(() => '<div class="prog-dot"></div>').join('');
+
+  QUESTIONS.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = 'q' + qi;
+    div.innerHTML = `
+      <h3>Question ${qi + 1}</h3>
+      <div class="q-text">${q.q}</div>
+      <div class="quiz-options" id="opts-${qi}">
+        ${q.opts.map((o, oi) => `
+          <div class="quiz-opt" onclick="answer(${qi},${oi})" id="opt-${qi}-${oi}">
+            <div class="opt-dot">${String.fromCharCode(65 + oi)}</div>
+            ${o}
+          </div>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="fb-${qi}"></div>
+    `;
+    container.appendChild(div);
+  });
+
+  function answer(qi, selected) {
+    if (answered[qi]) return;
+    answered[qi] = true;
+    const q = QUESTIONS[qi];
+    const correct = selected === q.ans;
+    if (correct) { score++; scoreEl.textContent = score; }
+    dotsEl.querySelectorAll('.prog-dot')[qi].classList.add('done');
+    for (let oi = 0; oi < q.opts.length; oi++) {
+      const el = document.getElementById('opt-' + qi + '-' + oi);
+      el.classList.add('disabled');
+      if (oi === q.ans) el.classList.add('correct');
+      else if (oi === selected && !correct) el.classList.add('wrong');
+    }
+    const fb = document.getElementById('fb-' + qi);
+    fb.className = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
+    fb.textContent = (correct ? '✓ Correct! ' : '✗ Not quite. ') + q.explain;
+  }
+
+  // Active nav highlight on scroll
+  const sections = ['d1','d2','d3','quiz'];
+  window.addEventListener('scroll', () => {
+    const offset = 80;
+    let current = sections[0];
+    for (const s of sections) {
+      const el = document.getElementById(s);
+      if (el && el.getBoundingClientRect().top < offset) current = s;
+    }
+    document.querySelectorAll('.header-nav a').forEach(a => a.classList.remove('active'));
+    const navEl = document.getElementById('nav-' + current);
+    if (navEl) navEl.classList.add('active');
+  }, { passive: true });
+</script>
+</body>
+</html>
