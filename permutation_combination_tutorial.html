@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permutations & Combinations — Complete Tutorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --surface: #1a1928;
+    --surface2: #222136;
+    --accent: #f7c59f;
+    --accent2: #a8dadc;
+    --accent3: #e63946;
+    --text: #fffffe;
+    --muted: #a7a9be;
+    --correct: #06d6a0;
+    --wrong: #e63946;
+    --border: rgba(247,197,159,0.15);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #0f0e17 0%, #1f1d35 50%, #0f0e17 100%);
+    padding: 80px 40px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 60% 40%, rgba(168,218,220,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 30% 70%, rgba(247,197,159,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(247,197,159,0.1);
+    border: 1px solid rgba(247,197,159,0.3);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    padding: 6px 16px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 40px;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    padding: 18px 20px;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN LAYOUT */
+  main { max-width: 900px; margin: 0 auto; padding: 60px 32px; }
+
+  /* SECTIONS */
+  section { margin-bottom: 80px; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--accent2);
+    margin: 36px 0 16px;
+  }
+  p { color: #ccc; margin-bottom: 16px; }
+
+  /* FORMULA BOX */
+  .formula {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .formula .label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* EXAMPLE CARD */
+  .example {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .example::before {
+    content: 'EXAMPLE';
+    position: absolute;
+    top: 0; right: 0;
+    background: rgba(168,218,220,0.1);
+    color: var(--accent2);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    padding: 6px 14px;
+    border-bottom-left-radius: 6px;
+  }
+  .example-q {
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 16px;
+    font-size: 1rem;
+  }
+  .example-steps { counter-reset: step; }
+  .step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: rgba(247,197,159,0.1);
+    border: 1px solid rgba(247,197,159,0.2);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-text { color: #ccc; font-size: 0.95rem; }
+  .step-text .calc {
+    font-family: 'DM Mono', monospace;
+    color: var(--accent2);
+    background: rgba(168,218,220,0.07);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.88rem;
+  }
+  .answer {
+    margin-top: 16px;
+    padding: 12px 20px;
+    background: rgba(6,214,160,0.08);
+    border: 1px solid rgba(6,214,160,0.2);
+    border-radius: 4px;
+    color: var(--correct);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.92rem;
+  }
+
+  /* INFO BOX */
+  .info-box {
+    background: rgba(168,218,220,0.05);
+    border: 1px solid rgba(168,218,220,0.2);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    color: #ccc;
+    font-size: 0.95rem;
+  }
+  .info-box strong { color: var(--accent2); }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 0.9rem;
+  }
+  th {
+    background: var(--surface2);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 14px 18px;
+    color: #ccc;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 60px 0;
+  }
+
+  /* QUIZ SECTION */
+  #quiz h2 { color: var(--text); }
+  .quiz-intro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .quiz-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+  }
+  .quiz-meta { color: var(--muted); font-size: 0.9rem; }
+  .quiz-meta strong { color: var(--accent2); display: block; font-size: 1rem; margin-bottom: 4px; }
+
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+  .question-card.correct { border-color: var(--correct); }
+  .question-card.wrong { border-color: var(--wrong); }
+
+  .question-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+  }
+  .question-text {
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+  .options { display: grid; gap: 10px; }
+  .option {
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 13px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ccc;
+    font-size: 0.95rem;
+    user-select: none;
+  }
+  .option:hover:not(.disabled) {
+    border-color: rgba(247,197,159,0.3);
+    background: rgba(247,197,159,0.04);
+    color: var(--text);
+  }
+  .option.selected { border-color: var(--accent); background: rgba(247,197,159,0.07); color: var(--text); }
+  .option.correct-ans { border-color: var(--correct); background: rgba(6,214,160,0.08); color: var(--correct); }
+  .option.wrong-ans { border-color: var(--wrong); background: rgba(230,57,70,0.08); color: var(--wrong); }
+  .option.disabled { cursor: default; pointer-events: none; }
+  .opt-letter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+  .feedback {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(6,214,160,0.08); border: 1px solid rgba(6,214,160,0.2); color: var(--correct); }
+  .feedback.wrong-fb { background: rgba(230,57,70,0.08); border: 1px solid rgba(230,57,70,0.2); color: #ff8a8a; }
+  .feedback .explanation { color: #ccc; margin-top: 8px; font-size: 0.88rem; }
+
+  /* SCORE PANEL */
+  #score-panel {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    margin-top: 40px;
+  }
+  #score-panel.show { display: block; }
+  .score-circle {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) 0%, transparent 0%);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    position: relative;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--accent);
+    font-weight: 700;
+    box-shadow: 0 0 40px rgba(247,197,159,0.1);
+  }
+  .score-circle::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: var(--surface);
+    z-index: 0;
+  }
+  .score-circle span { position: relative; z-index: 1; }
+  .score-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+  .score-subtitle { color: var(--muted); margin-bottom: 28px; }
+  .retry-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 14px 36px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .retry-btn:hover { opacity: 0.85; }
+
+  /* SUBMIT BTN */
+  #submit-btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 14px 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 32px;
+    display: block;
+    width: 100%;
+  }
+  #submit-btn:hover { background: var(--accent); color: var(--bg); }
+  #submit-btn:disabled { opacity: 0.3; cursor: default; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* RULE OF THUMB CARD */
+  .rule-card {
+    background: linear-gradient(135deg, rgba(247,197,159,0.07) 0%, rgba(168,218,220,0.07) 100%);
+    border: 1px solid rgba(247,197,159,0.2);
+    border-radius: 10px;
+    padding: 32px;
+    text-align: center;
+    margin: 32px 0;
+  }
+  .rule-card .question { font-size: 1.3rem; color: var(--text); margin-bottom: 20px; font-family: 'Playfair Display', serif; }
+  .rule-options { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .rule-opt {
+    flex: 1; min-width: 200px;
+    padding: 18px 24px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+  .rule-opt.perm { background: rgba(247,197,159,0.1); border: 1px solid rgba(247,197,159,0.25); color: var(--accent); }
+  .rule-opt.comb { background: rgba(168,218,220,0.1); border: 1px solid rgba(168,218,220,0.25); color: var(--accent2); }
+  .rule-opt .rt { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; opacity: 0.7; margin-bottom: 6px; }
+  .rule-opt .rv { font-size: 1.1rem; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Mathematics · Discrete Counting</div>
+  <h1>Permutations &amp;<br>Combinations</h1>
+  <p class="subtitle">A complete tutorial with worked examples and an interactive quiz</p>
+</header>
+
+<nav>
+  <a href="#foundations">Foundations</a>
+  <a href="#permutations">Permutations</a>
+  <a href="#combinations">Combinations</a>
+  <a href="#identities">Identities</a>
+  <a href="#applications">Applications</a>
+  <a href="#quiz">Quiz</a>
+</nav>
+
+<main>
+
+  <!-- FOUNDATIONS -->
+  <section id="foundations">
+    <div class="section-label">01 — Building Blocks</div>
+    <h2>Foundations</h2>
+    <p>Before diving into permutations and combinations, you need to understand three foundational ideas that underpin all counting problems.</p>
+
+    <h3>Factorial ( n! )</h3>
+    <p>The factorial of a non-negative integer n is the product of all positive integers up to and including n.</p>
+    <div class="formula">
+      <div class="label">Definition</div>
+      n! = n × (n−1) × (n−2) × … × 2 × 1 &nbsp;&nbsp;&nbsp; and &nbsp;&nbsp;&nbsp; 0! = 1
+    </div>
+
+    <div class="example">
+      <div class="example-q">Calculate 5! and 3!</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">5! = 5 × 4 × 3 × 2 × 1 = <span class="calc">120</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">3! = 3 × 2 × 1 = <span class="calc">6</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Note: 0! = <span class="calc">1</span> by definition — a special but important case.</div></div>
+      </div>
+    </div>
+
+    <h3>Fundamental Counting Principle</h3>
+    <p>If Event A can occur in <strong style="color:var(--accent)">m</strong> ways and Event B can occur in <strong style="color:var(--accent)">n</strong> ways, then both events together can occur in <strong style="color:var(--accent)">m × n</strong> ways.</p>
+
+    <div class="example">
+      <div class="example-q">A restaurant offers 4 starters and 6 mains. How many different 2-course meals are possible?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Starters: <span class="calc">4</span> choices</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Mains: <span class="calc">6</span> choices</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Total meals: <span class="calc">4 × 6 = 24</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 24 different meal combinations</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PERMUTATIONS -->
+  <section id="permutations">
+    <div class="section-label">02 — Order Matters</div>
+    <h2>Permutations</h2>
+    <p>A <strong style="color:var(--accent)">permutation</strong> is an arrangement of items where <em>the order in which they are placed matters</em>. Swapping two items creates a different permutation.</p>
+
+    <h3>All n Objects</h3>
+    <p>The number of ways to arrange ALL n distinct objects in a row:</p>
+    <div class="formula">
+      <div class="label">Formula</div>
+      P = n!
+    </div>
+
+    <div class="example">
+      <div class="example-q">In how many ways can 4 students stand in a line for a photo?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">We arrange all 4 students, so n = <span class="calc">4</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">P = 4! = 4 × 3 × 2 × 1 = <span class="calc">24</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 24 different arrangements</div>
+    </div>
+
+    <h3>Choosing r from n — nPr</h3>
+    <p>The number of ways to choose AND arrange r items from a group of n distinct items:</p>
+    <div class="formula">
+      <div class="label">Formula</div>
+      nPr = n! / (n − r)!
+    </div>
+
+    <div class="example">
+      <div class="example-q">From 8 athletes, how many ways can Gold, Silver, and Bronze medals be awarded?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">n = 8 athletes, r = 3 medals → order matters (Gold ≠ Silver)</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text"><span class="calc">8P3 = 8! / (8−3)! = 8! / 5!</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">= (8 × 7 × 6 × 5!) / 5! = <span class="calc">8 × 7 × 6 = 336</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 336 ways to award the medals</div>
+    </div>
+
+    <h3>Permutations with Repetition</h3>
+    <p>When items can be reused, the number of arrangements of r items from n is:</p>
+    <div class="formula">
+      <div class="label">Formula</div>
+      P = n<sup style="font-size:0.8em">r</sup>
+    </div>
+
+    <div class="example">
+      <div class="example-q">How many 3-digit PIN codes are possible using digits 0–9?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">n = 10 (digits 0–9), r = 3 positions, repetition allowed</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">P = 10³ = <span class="calc">1,000</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 1,000 possible PINs</div>
+    </div>
+
+    <h3>Permutations with Identical Objects</h3>
+    <p>When some items are identical, divide by the factorials of each repeated count:</p>
+    <div class="formula">
+      <div class="label">Formula</div>
+      P = n! / (p! × q! × r! × …)
+    </div>
+
+    <div class="example">
+      <div class="example-q">How many distinct arrangements are there of the letters in MISSISSIPPI?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Total letters n = 11</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Repeats: M×1, I×4, S×4, P×2</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">P = <span class="calc">11! / (1! × 4! × 4! × 2!)</span></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text">= 39,916,800 / (1 × 24 × 24 × 2) = <span class="calc">34,650</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 34,650 distinct arrangements</div>
+    </div>
+
+    <h3>Circular Permutations</h3>
+    <p>When arranging n objects in a circle, one position is fixed to remove duplicate rotations:</p>
+    <div class="formula">
+      <div class="label">Formula</div>
+      Circular P = (n − 1)!
+    </div>
+
+    <div class="example">
+      <div class="example-q">In how many ways can 6 people be seated around a round table?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">n = 6 people, circular arrangement</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">P = (6−1)! = 5! = <span class="calc">120</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 120 circular arrangements</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COMBINATIONS -->
+  <section id="combinations">
+    <div class="section-label">03 — Order Doesn't Matter</div>
+    <h2>Combinations</h2>
+    <p>A <strong style="color:var(--accent2)">combination</strong> is a selection of items where only <em>which</em> items are chosen matters — not the order. {A, B} and {B, A} count as the same combination.</p>
+
+    <h3>Choosing r from n — nCr</h3>
+    <p>Also written as C(n, r) or ⁿCᵣ or "n choose r":</p>
+    <div class="formula">
+      <div class="label">Formula</div>
+      nCr = n! / (r! × (n − r)!)
+    </div>
+
+    <div class="example">
+      <div class="example-q">A class of 10 students needs to choose a committee of 3. How many committees are possible?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">n = 10, r = 3 → order doesn't matter (committee, not ranked positions)</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text"><span class="calc">10C3 = 10! / (3! × 7!)</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">= (10 × 9 × 8) / (3 × 2 × 1) = 720 / 6 = <span class="calc">120</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 120 possible committees</div>
+    </div>
+
+    <div class="example">
+      <div class="example-q">A hand of 5 cards is dealt from a standard 52-card deck. How many different hands are possible?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">n = 52, r = 5 → order of cards in hand doesn't matter</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text"><span class="calc">52C5 = 52! / (5! × 47!)</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">= (52 × 51 × 50 × 49 × 48) / (5 × 4 × 3 × 2 × 1) = <span class="calc">2,598,960</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 2,598,960 possible hands</div>
+    </div>
+
+    <h3>Combinations with Repetition</h3>
+    <p>When you can choose the same item more than once:</p>
+    <div class="formula">
+      <div class="label">Formula</div>
+      C = (n + r − 1)! / (r! × (n − 1)!)  &nbsp; = &nbsp; C(n + r − 1, r)
+    </div>
+
+    <div class="example">
+      <div class="example-q">An ice cream shop has 5 flavours. How many ways can you choose 3 scoops (repetition allowed, order of scoops doesn't matter)?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">n = 5, r = 3, repetition allowed, order doesn't matter</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">C = C(5 + 3 − 1, 3) = <span class="calc">C(7, 3)</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">= 7! / (3! × 4!) = 210 / 6 = <span class="calc">35</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 35 different ways</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- IDENTITIES -->
+  <section id="identities">
+    <div class="section-label">04 — Key Properties</div>
+    <h2>Identities &amp; Relationships</h2>
+
+    <table>
+      <thead>
+        <tr><th>Identity</th><th>Expression</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Symmetry</td><td>nCr = nC(n−r)</td><td>Choosing r is the same as leaving out n−r</td></tr>
+        <tr><td>Trivial cases</td><td>nC0 = nCn = 1</td><td>Choosing none or all: only one way</td></tr>
+        <tr><td>Single selection</td><td>nC1 = n</td><td>Choosing exactly one item: n ways</td></tr>
+        <tr><td>Pascal's Rule</td><td>nCr + nC(r+1) = (n+1)C(r+1)</td><td>Building Pascal's triangle row by row</td></tr>
+        <tr><td>P–C Link</td><td>nPr = r! × nCr</td><td>Permutation = Combination × arrangements of r</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Pascal's Triangle</h3>
+    <p>Each number in Pascal's Triangle equals the sum of the two numbers directly above it. Row n, position r gives the value of nCr.</p>
+    <div class="info-box">
+      <strong>Row 0:</strong> 1<br>
+      <strong>Row 1:</strong> 1 &nbsp; 1<br>
+      <strong>Row 2:</strong> 1 &nbsp; 2 &nbsp; 1<br>
+      <strong>Row 3:</strong> 1 &nbsp; 3 &nbsp; 3 &nbsp; 1<br>
+      <strong>Row 4:</strong> 1 &nbsp; 4 &nbsp; 6 &nbsp; 4 &nbsp; 1<br>
+      <strong>Row 5:</strong> 1 &nbsp; 5 &nbsp; 10 &nbsp; 10 &nbsp; 5 &nbsp; 1
+    </div>
+
+    <div class="example">
+      <div class="example-q">Verify that 4C2 = 6 using Pascal's Triangle.</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Row 4, position 2 (0-indexed) in the triangle = <span class="calc">6</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Check: 4C2 = 4!/(2!×2!) = 24/(2×2) = <span class="calc">6</span> ✓</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- APPLICATIONS -->
+  <section id="applications">
+    <div class="section-label">05 — Real-World Uses</div>
+    <h2>Applications</h2>
+
+    <div class="rule-card">
+      <div class="question">Does order matter?</div>
+      <div class="rule-options">
+        <div class="rule-opt perm">
+          <div class="rt">YES → USE</div>
+          <div class="rv">Permutation nPr</div>
+        </div>
+        <div class="rule-opt comb">
+          <div class="rt">NO → USE</div>
+          <div class="rv">Combination nCr</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="example">
+      <div class="example-q">🔐 How many 4-letter passwords (no repeats) can be made from the 26 English letters?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Order matters (ABCD ≠ DCBA) → Permutation</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">26P4 = 26!/(26−4)! = <span class="calc">26 × 25 × 24 × 23 = 358,800</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 358,800 passwords</div>
+    </div>
+
+    <div class="example">
+      <div class="example-q">⚽ A football squad has 20 players. How many ways can a team of 11 be selected?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Order doesn't matter (just who plays) → Combination</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">20C11 = 20! / (11! × 9!) = <span class="calc">167,960</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 167,960 possible teams</div>
+    </div>
+
+    <div class="example">
+      <div class="example-q">🎲 What is the probability of picking 2 red balls from a bag of 5 red and 3 blue balls?</div>
+      <div class="example-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Favourable outcomes: Choose 2 red from 5 → <span class="calc">5C2 = 10</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Total outcomes: Choose any 2 from 8 → <span class="calc">8C2 = 28</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">P = 10 / 28 = <span class="calc">5/14 ≈ 0.357</span></div></div>
+      </div>
+      <div class="answer">✓ Answer: 5/14 ≈ 35.7%</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <div class="section-label">06 — Test Yourself</div>
+    <h2>Interactive Quiz</h2>
+
+    <div class="quiz-intro">
+      <div class="quiz-icon">🧮</div>
+      <div>
+        <strong class="quiz-meta">10 Questions &nbsp;·&nbsp; Mixed Difficulty</strong>
+        <div class="quiz-meta">Select an answer for each question, then click Submit to see your score and full explanations.</div>
+      </div>
+    </div>
+
+    <div id="questions-container"></div>
+    <button id="submit-btn" onclick="submitQuiz()">Submit Answers</button>
+    <div id="score-panel">
+      <div class="score-circle"><span id="score-text">0/10</span></div>
+      <div class="score-title" id="score-title">Well done!</div>
+      <div class="score-subtitle" id="score-subtitle">Review your answers above.</div>
+      <button class="retry-btn" onclick="resetQuiz()">Try Again</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>Permutations &amp; Combinations Tutorial &nbsp;·&nbsp; Mathematics Reference Guide</footer>
+
+<script>
+const questions = [
+  {
+    q: "What is the value of 6! ?",
+    options: ["120", "360", "720", "5040"],
+    answer: 2,
+    explanation: "6! = 6 × 5 × 4 × 3 × 2 × 1 = 720"
+  },
+  {
+    q: "In how many ways can 5 people be arranged in a line?",
+    options: ["25", "60", "100", "120"],
+    answer: 3,
+    explanation: "All 5 people, so P = 5! = 5 × 4 × 3 × 2 × 1 = 120"
+  },
+  {
+    q: "A classroom has 10 students. In how many ways can a President, Vice-President and Secretary be chosen?",
+    options: ["120", "720", "3628800", "30"],
+    answer: 1,
+    explanation: "Order matters (different roles) → 10P3 = 10!/7! = 10 × 9 × 8 = 720"
+  },
+  {
+    q: "From 7 colours, how many ways can you choose 3 colours for a flag (order does NOT matter)?",
+    options: ["35", "210", "21", "42"],
+    answer: 0,
+    explanation: "7C3 = 7!/(3!×4!) = (7×6×5)/(3×2×1) = 210/6 = 35"
+  },
+  {
+    q: "How many 2-digit codes can be formed from {1, 2, 3, 4, 5} if repetition is allowed?",
+    options: ["10", "20", "25", "120"],
+    answer: 2,
+    explanation: "Repetition allowed → n^r = 5² = 25"
+  },
+  {
+    q: "Which formula correctly represents nPr?",
+    options: ["n! / r!", "n! / (n−r)!", "n! / (r! × (n−r)!)", "(n+r−1)! / (r!(n−1)!)"],
+    answer: 1,
+    explanation: "nPr = n! / (n−r)! selects and arranges r items from n"
+  },
+  {
+    q: "How many distinct ways can the letters of the word NOON be arranged?",
+    options: ["24", "12", "6", "4"],
+    answer: 2,
+    explanation: "Total 4 letters with N repeated twice and O repeated twice: 4!/(2!×2!) = 24/4 = 6"
+  },
+  {
+    q: "Using Pascal's Rule, if 6C2 = 15 and 6C3 = 20, what is 7C3?",
+    options: ["25", "30", "35", "15"],
+    answer: 2,
+    explanation: "Pascal's Rule: nCr + nC(r+1) = (n+1)C(r+1) → 6C2 + 6C3 = 7C3 → 15 + 20 = 35"
+  },
+  {
+    q: "In how many ways can 4 people sit around a circular table?",
+    options: ["24", "12", "6", "4"],
+    answer: 2,
+    explanation: "Circular permutation = (n−1)! = (4−1)! = 3! = 6"
+  },
+  {
+    q: "A bag contains 6 red and 4 blue marbles. How many ways can you pick 2 red and 1 blue?",
+    options: ["15", "36", "60", "30"],
+    answer: 2,
+    explanation: "2 red from 6: 6C2 = 15. 1 blue from 4: 4C1 = 4. Total = 15 × 4 = 60"
+  }
+];
+
+let answered = new Array(questions.length).fill(null);
+
+function buildQuiz() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  answered = new Array(questions.length).fill(null);
+
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q${qi}`;
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const optHtml = q.options.map((opt, oi) => `
+      <div class="option" id="opt-${qi}-${oi}" onclick="selectOption(${qi}, ${oi})">
+        <div class="opt-letter">${letters[oi]}</div>
+        ${opt}
+      </div>
+    `).join('');
+
+    card.innerHTML = `
+      <div class="question-num">QUESTION ${qi + 1} OF ${questions.length}</div>
+      <div class="question-text">${q.q}</div>
+      <div class="options">${optHtml}</div>
+      <div class="feedback" id="fb-${qi}"></div>
+    `;
+    container.appendChild(card);
+  });
+
+  document.getElementById('score-panel').classList.remove('show');
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').style.display = 'block';
+}
+
+function selectOption(qi, oi) {
+  if (answered[qi] !== null) return; // already answered (post-submit)
+  answered[qi] = oi;
+
+  // deselect all
+  questions[qi].options.forEach((_, i) => {
+    document.getElementById(`opt-${qi}-${i}`).classList.remove('selected');
+  });
+  document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
+}
+
+function submitQuiz() {
+  let score = 0;
+  questions.forEach((q, qi) => {
+    const card = document.getElementById(`q${qi}`);
+    const fb = document.getElementById(`fb-${qi}`);
+    const sel = answered[qi];
+
+    // disable all options
+    q.options.forEach((_, oi) => {
+      const el = document.getElementById(`opt-${qi}-${oi}`);
+      el.classList.add('disabled');
+    });
+
+    if (sel === null) {
+      card.classList.add('wrong');
+      fb.className = 'feedback show wrong-fb';
+      fb.innerHTML = `⚠️ Not answered.<div class="explanation">${q.explanation}</div>`;
+    } else if (sel === q.answer) {
+      score++;
+      card.classList.add('correct');
+      document.getElementById(`opt-${qi}-${sel}`).classList.remove('selected');
+      document.getElementById(`opt-${qi}-${sel}`).classList.add('correct-ans');
+      fb.className = 'feedback show correct-fb';
+      fb.innerHTML = `✓ Correct! <div class="explanation">${q.explanation}</div>`;
+    } else {
+      card.classList.add('wrong');
+      document.getElementById(`opt-${qi}-${sel}`).classList.remove('selected');
+      document.getElementById(`opt-${qi}-${sel}`).classList.add('wrong-ans');
+      document.getElementById(`opt-${qi}-${q.answer}`).classList.add('correct-ans');
+      fb.className = 'feedback show wrong-fb';
+      fb.innerHTML = `✗ Incorrect. <div class="explanation">${q.explanation}</div>`;
+    }
+  });
+
+  // Score panel
+  const pct = Math.round((score / questions.length) * 100);
+  document.getElementById('score-text').textContent = `${score}/${questions.length}`;
+  const circle = document.querySelector('.score-circle');
+  circle.style.background = `conic-gradient(var(--accent) ${pct * 3.6}deg, rgba(255,255,255,0.05) 0deg)`;
+
+  let title, subtitle;
+  if (pct === 100) { title = "Perfect Score! 🏆"; subtitle = "Outstanding mastery of permutations & combinations."; }
+  else if (pct >= 80) { title = "Excellent Work! 🌟"; subtitle = "You have a strong grasp of the concepts."; }
+  else if (pct >= 60) { title = "Good Effort! 👍"; subtitle = "Review the sections you found tricky above."; }
+  else { title = "Keep Practising! 📚"; subtitle = "Go through the tutorial again and retry the quiz."; }
+
+  document.getElementById('score-title').textContent = title;
+  document.getElementById('score-subtitle').textContent = subtitle;
+  document.getElementById('score-panel').classList.add('show');
+  document.getElementById('submit-btn').style.display = 'none';
+  document.getElementById('score-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz() {
+  buildQuiz();
+  document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+}
+
+// init
+buildQuiz();
+</script>
+</body>
+</html>
