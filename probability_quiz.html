@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probability Quiz - MCQ and Short Answer Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        .question-block {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.05em;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .options {
+            margin: 15px 0 0 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #e8eaf6;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 1em;
+        }
+
+        .short-answer {
+            background: #f8f9fa;
+            border-left: 5px solid #764ba2;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+        }
+
+        .short-answer textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1em;
+            margin-top: 10px;
+            resize: vertical;
+        }
+
+        .short-answer textarea:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 5px rgba(118, 75, 162, 0.3);
+        }
+
+        .diagram-info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 0.95em;
+            color: #1565c0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+        }
+
+        .answer-key {
+            background: #f0f7f0;
+            border: 2px solid #4caf50;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .answer-key.show {
+            display: block;
+        }
+
+        .answer-key h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+
+        .answer-item {
+            margin: 12px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .answer-item strong {
+            color: #2e7d32;
+        }
+
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Probability Quiz</h1>
+            <p>Multiple Choice and Short Answer Questions</p>
+        </div>
+
+        <div class="content">
+            <form id="quizForm">
+                <!-- SECTION 1: SINGLE EVENT PROBABILITY MCQ -->
+                <div class="section">
+                    <div class="section-title">Section 1: Single Event Probability (MCQ)</div>
+
+                    <!-- Question 1 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 1</div>
+                        <div class="question-text">A fair die is rolled once. What is the probability of rolling a number greater than 4? Express your answer as a fraction.</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q1a" name="q1" value="a">
+                                <label for="q1a">A) 1/6</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q1b" name="q1" value="b">
+                                <label for="q1b">B) 2/6 or 1/3</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q1c" name="q1" value="c">
+                                <label for="q1c">C) 3/6 or 1/2</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q1d" name="q1" value="d">
+                                <label for="q1d">D) 4/6 or 2/3</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 2</div>
+                        <div class="question-text">A bag contains 5 red balls, 3 blue balls, and 2 green balls. If one ball is drawn at random, what is the probability of drawing a blue ball? Express as a decimal.</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q2a" name="q2" value="a">
+                                <label for="q2a">A) 0.25</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q2b" name="q2" value="b">
+                                <label for="q2b">B) 0.30</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q2c" name="q2" value="c">
+                                <label for="q2c">C) 0.35</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q2d" name="q2" value="d">
+                                <label for="q2d">D) 0.50</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 3</div>
+                        <div class="question-text">In a deck of standard playing cards (52 cards), what is the probability of drawing an Ace? Give your answer as a fraction in simplest form.</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q3a" name="q3" value="a">
+                                <label for="q3a">A) 1/13</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q3b" name="q3" value="b">
+                                <label for="q3b">B) 1/52</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q3c" name="q3" value="c">
+                                <label for="q3c">C) 4/13</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q3d" name="q3" value="d">
+                                <label for="q3d">D) 1/12</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: COMBINED EVENTS MCQ -->
+                <div class="section">
+                    <div class="section-title">Section 2: Combined Events Using Diagrams (MCQ)</div>
+
+                    <!-- Question 4 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 4</div>
+                        <div class="question-text">A coin is flipped and a die is rolled. Using a possibility diagram (grid), how many possible outcomes are there?</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q4a" name="q4" value="a">
+                                <label for="q4a">A) 6</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q4b" name="q4" value="b">
+                                <label for="q4b">B) 8</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q4c" name="q4" value="c">
+                                <label for="q4c">C) 12</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q4d" name="q4" value="d">
+                                <label for="q4d">D) 16</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 5</div>
+                        <div class="question-text">A spinner has 3 equal sections (red, blue, yellow) and a coin has 2 sides (heads, tails). Using a possibility diagram, what is the probability of getting a red and heads?</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q5a" name="q5" value="a">
+                                <label for="q5a">A) 1/3</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q5b" name="q5" value="b">
+                                <label for="q5b">B) 1/6</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q5c" name="q5" value="c">
+                                <label for="q5c">C) 1/5</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q5d" name="q5" value="d">
+                                <label for="q5d">D) 2/5</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 6 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 6</div>
+                        <div class="question-text">Two fair coins are flipped. Using a tree diagram approach, what is the probability of getting at least one tail?</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q6a" name="q6" value="a">
+                                <label for="q6a">A) 1/4</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q6b" name="q6" value="b">
+                                <label for="q6b">B) 1/2</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q6c" name="q6" value="c">
+                                <label for="q6c">C) 2/3</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q6d" name="q6" value="d">
+                                <label for="q6d">D) 3/4</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 7 -->
+                    <div class="question-block">
+                        <div class="question-number">Question 7</div>
+                        <div class="question-text">A bag contains 2 red balls and 3 blue balls. Two balls are drawn without replacement. Using a tree diagram, what is the probability of drawing two red balls?</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q7a" name="q7" value="a">
+                                <label for="q7a">A) 4/25</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q7b" name="q7" value="b">
+                                <label for="q7b">B) 1/10</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q7c" name="q7" value="c">
+                                <label for="q7c">C) 2/5</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q7d" name="q7" value="d">
+                                <label for="q7d">D) 3/10</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: SHORT ANSWER QUESTIONS -->
+                <div class="section">
+                    <div class="section-title">Section 3: Short Answer Questions</div>
+
+                    <!-- Short Answer 1 -->
+                    <div class="short-answer">
+                        <div class="question-number">Question 8</div>
+                        <div class="question-text">A student rolls two fair dice. Draw a possibility diagram (grid) showing all possible outcomes. What is the probability of getting a sum of 7?</div>
+                        <div class="diagram-info">
+                            💡 Hint: Your possibility diagram should show all outcomes as points on a 6×6 grid.
+                        </div>
+                        <textarea name="q8" placeholder="Draw your diagram and explain your answer..."></textarea>
+                    </div>
+
+                    <!-- Short Answer 2 -->
+                    <div class="short-answer">
+                        <div class="question-number">Question 9</div>
+                        <div class="question-text">Draw a tree diagram to represent the following scenario: A person flips a coin and then spins a spinner with sections A, B, and C. List all possible outcomes and calculate the probability of getting heads and section B.</div>
+                        <div class="diagram-info">
+                            💡 Hint: Your tree diagram should show two levels of branching with probabilities labeled on each branch.
+                        </div>
+                        <textarea name="q9" placeholder="Draw your tree diagram, list outcomes, and show your calculation..."></textarea>
+                    </div>
+
+                    <!-- Short Answer 3 -->
+                    <div class="short-answer">
+                        <div class="question-number">Question 10</div>
+                        <div class="question-text">Without replacement: A drawer contains 4 white socks and 2 black socks. Two socks are drawn randomly. Using a tree diagram, show the probability of drawing two white socks. Express your final answer as both a fraction and a decimal.</div>
+                        <div class="diagram-info">
+                            💡 Hint: Remember that the total number of socks changes after the first draw.
+                        </div>
+                        <textarea name="q10" placeholder="Draw your tree diagram and show your calculations..."></textarea>
+                    </div>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="button-group">
+                    <button type="button" class="btn-submit" onclick="toggleAnswerKey()">📋 Show Answer Key</button>
+                    <button type="reset" class="btn-reset">🔄 Clear All</button>
+                </div>
+            </form>
+
+            <!-- ANSWER KEY -->
+            <div class="answer-key" id="answerKey">
+                <h3>✅ Answer Key</h3>
+                
+                <div class="answer-item">
+                    <strong>Question 1:</strong> B) 2/6 or 1/3 (Numbers greater than 4 are 5 and 6)
+                </div>
+
+                <div class="answer-item">
+                    <strong>Question 2:</strong> B) 0.30 (3 blue balls out of 10 total = 3/10 = 0.30)
+                </div>
+
+                <div class="answer-item">
+                    <strong>Question 3:</strong> A) 1/13 (4 aces out of 52 cards = 4/52 = 1/13)
+                </div>
+
+                <div class="answer-item">
+                    <strong>Question 4:</strong> C) 12 (2 outcomes for coin × 6 outcomes for die = 12 total outcomes)
+                </div>
+
+                <div class="answer-item">
+                    <strong>Question 5:</strong> B) 1/6 (1 favorable outcome out of 6 total outcomes in the grid = 1/6)
+                </div>
+
+                <div class="answer-item">
+                    <strong>Question 6:</strong> D) 3/4 (Outcomes: HH, HT, TH, TT. At least one tail: HT, TH, TT = 3/4)
+                </div>
+
+                <div class="answer-item">
+                    <strong>Question 7:</strong> B) 1/10 (First red: 2/5, Second red: 1/4 → 2/5 × 1/4 = 2/20 = 1/10)
+                </div>
+
+                <div class="answer-item">
+                    <strong>Question 8:</strong> Possibility diagram should show 36 outcomes. Pairs summing to 7: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) = 6 favorable outcomes. Probability = 6/36 = 1/6
+                </div>
+
+                <div class="answer-item">
+                    <strong>Question 9:</strong> Possible outcomes: HH, HA, HB, HC, TH, TA, TB, TC (8 total). P(Heads and B) = 1/6
+                </div>
+
+                <div class="answer-item">
+                    <strong>Question 10:</strong> P(Two white) = 4/6 × 3/5 = 12/30 = 2/5 = 0.4
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📚 Probability Assessment | Topics: Single Events & Combined Events with Diagrams</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswerKey() {
+            const answerKey = document.getElementById('answerKey');
+            answerKey.classList.toggle('show');
+        }
+
+        // Clear button functionality
+        document.querySelector('form').addEventListener('reset', function() {
+            document.getElementById('answerKey').classList.remove('show');
+        });
+    </script>
+</body>
+</html>
