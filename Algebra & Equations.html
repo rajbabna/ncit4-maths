@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathematics Tutorial — Indices, Expressions & Equations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf7ed;
+    --cream-dark: #f5ead5;
+    --navy: #1b3358;
+    --teal: #0c7a6b;
+    --teal-light: #e0f2ef;
+    --amber: #d97706;
+    --amber-light: #fef3c7;
+    --rose: #be185d;
+    --rose-light: #fce7f3;
+    --slate: #475569;
+    --border: #ddd4c0;
+    --correct: #15803d;
+    --correct-bg: #dcfce7;
+    --incorrect: #b91c1c;
+    --incorrect-bg: #fee2e2;
+    --shadow: 0 4px 24px rgba(27,51,88,0.09);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--navy);
+    line-height: 1.75;
+    font-size: 16px;
+  }
+
+  /* ── STICKY HEADER ─────────────────────────── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: rgba(253, 247, 237, 0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--border);
+    box-shadow: 0 2px 16px rgba(27,51,88,0.08);
+  }
+
+  .header-inner {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 68px;
+  }
+
+  .site-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--navy);
+    white-space: nowrap;
+    letter-spacing: -0.3px;
+  }
+
+  .site-title span { color: var(--teal); }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+  }
+
+  nav a {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--slate);
+    text-decoration: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  nav a:hover { background: var(--teal-light); color: var(--teal); }
+
+  /* ── HERO ───────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #2a5298 100%);
+    color: white;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+
+  .topic-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+  }
+
+  .pill {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
+
+  /* ── MAIN LAYOUT ──────────────────────────── */
+  main {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* ── SECTION ──────────────────────────────── */
+  .topic-section {
+    padding: 3.5rem 0;
+    border-bottom: 2px dashed var(--border);
+  }
+
+  .topic-section:last-of-type { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-number {
+    background: var(--navy);
+    color: white;
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    min-width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .section-title-block h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+
+  .section-title-block p {
+    color: var(--slate);
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+  }
+
+  /* ── THEORY BOX ───────────────────────────── */
+  .theory-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--teal);
+    border-radius: 10px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.8rem;
+    box-shadow: var(--shadow);
+  }
+
+  .theory-box h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.25rem;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .theory-box p { color: #374151; margin-bottom: 0.6rem; }
+  .theory-box p:last-child { margin-bottom: 0; }
+
+  /* ── RULE TABLE ───────────────────────────── */
+  .rule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+  }
+
+  .rule-table th {
+    background: var(--navy);
+    color: white;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.88rem;
+    letter-spacing: 0.4px;
+  }
+
+  .rule-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: white;
+  }
+
+  .rule-table tr:last-child td { border-bottom: none; }
+  .rule-table tr:nth-child(even) td { background: #fafaf8; }
+
+  .math { font-style: italic; font-family: 'Crimson Pro', serif; font-size: 1.05em; }
+
+  /* ── WORKED EXAMPLE ───────────────────────── */
+  .worked-examples { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem; }
+
+  .example-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .example-head {
+    background: var(--amber-light);
+    border-bottom: 2px solid #fcd34d;
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .example-badge {
+    background: var(--amber);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .example-head strong {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    color: #92400e;
+  }
+
+  .example-body { padding: 1.5rem; }
+
+  .question-stmt {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.25rem;
+    color: var(--navy);
+    font-style: italic;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .steps { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 0.8rem;
+    align-items: start;
+  }
+
+  .step-num {
+    background: var(--teal);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .step-content { color: #374151; font-size: 0.97rem; }
+  .step-content .hi { font-family: 'Crimson Pro', serif; font-size: 1.05em; font-style: italic; color: var(--navy); }
+  .step-content .note { color: var(--slate); font-size: 0.88rem; margin-top: 0.2rem; }
+
+  .answer-box {
+    background: var(--teal-light);
+    border: 2px solid var(--teal);
+    border-radius: 8px;
+    padding: 0.9rem 1.2rem;
+    margin-top: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .answer-box .check { font-size: 1.4rem; }
+  .answer-box span { font-family: 'Crimson Pro', serif; font-size: 1.2rem; color: var(--teal); font-weight: 700; }
+
+  /* ── MCQ SECTION ──────────────────────────── */
+  .mcq-section {
+    background: var(--navy);
+    border-radius: 18px;
+    padding: 3rem;
+    margin-top: 2rem;
+    box-shadow: 0 8px 40px rgba(27,51,88,0.2);
+  }
+
+  .mcq-section > h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 2.2rem;
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+
+  .mcq-section > p {
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+  }
+
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .prog-bar { flex: 1; height: 8px; background: rgba(255,255,255,0.15); border-radius: 10px; overflow: hidden; }
+  .prog-fill { height: 100%; background: linear-gradient(90deg, #34d399, #059669); border-radius: 10px; transition: width 0.4s ease; width: 0%; }
+  .prog-label { color: rgba(255,255,255,0.7); font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
+
+  .mcq-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.2s;
+  }
+
+  .mcq-card.done { opacity: 0.85; }
+
+  .mcq-topic-tag {
+    display: inline-block;
+    background: rgba(12,122,107,0.4);
+    color: #6ee7b7;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .mcq-q {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.25rem;
+    color: white;
+    margin-bottom: 1.25rem;
+    line-height: 1.45;
+  }
+
+  .mcq-q .qnum {
+    color: #fbbf24;
+    font-weight: 700;
+    margin-right: 0.3rem;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.9rem 1.1rem;
+    border: 1.5px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .opt:hover:not(.locked) { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); transform: translateX(4px); }
+  .opt input[type="radio"] { accent-color: #34d399; width: 17px; height: 17px; cursor: pointer; flex-shrink: 0; }
+  .opt-text { color: rgba(255,255,255,0.88); font-size: 0.97rem; cursor: pointer; flex: 1; }
+  .opt.opt-correct { background: rgba(52,211,153,0.18); border-color: #34d399; }
+  .opt.opt-wrong { background: rgba(239,68,68,0.15); border-color: #f87171; }
+  .opt.opt-correct .opt-text { color: #6ee7b7; font-weight: 600; }
+  .opt.opt-wrong .opt-text { color: #fca5a5; }
+
+  .mcq-feedback {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.9rem 1.1rem;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .mcq-feedback.show { display: block; animation: fadeIn 0.3s ease; }
+  .fb-correct { background: rgba(52,211,153,0.18); color: #6ee7b7; border-left: 3px solid #34d399; }
+  .fb-wrong { background: rgba(239,68,68,0.15); color: #fca5a5; border-left: 3px solid #f87171; }
+
+  /* ── RESULTS PANEL ──────────────────────────── */
+  .results-panel {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 2.5rem;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.4s ease;
+    margin-top: 1rem;
+  }
+
+  .results-panel.show { display: block; }
+  .results-panel h3 { font-family: 'Crimson Pro', serif; font-size: 2rem; color: white; margin-bottom: 0.5rem; }
+  .score-big { font-family: 'Crimson Pro', serif; font-size: 4rem; font-weight: 700; color: #34d399; line-height: 1; margin: 1rem 0; }
+  .score-msg { color: rgba(255,255,255,0.75); font-size: 1.05rem; margin-bottom: 1.5rem; }
+
+  .btn-retry {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+    border: none;
+    padding: 0.9rem 2.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .btn-retry:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── CALLOUT ────────────────────────────────── */
+  .callout {
+    padding: 1.2rem 1.4rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    font-size: 0.94rem;
+    display: flex;
+    gap: 0.8rem;
+  }
+  .callout.tip { background: var(--amber-light); border-left: 4px solid var(--amber); color: #78350f; }
+  .callout.info { background: var(--teal-light); border-left: 4px solid var(--teal); color: #134e4a; }
+  .callout.warn { background: var(--rose-light); border-left: 4px solid var(--rose); color: #831843; }
+  .callout-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .callout-body strong { display: block; margin-bottom: 0.2rem; font-weight: 600; }
+
+  /* ── RESPONSIVE ─────────────────────────────── */
+  @media (max-width: 700px) {
+    .header-inner { flex-direction: column; padding: 0.8rem 1rem; min-height: unset; }
+    nav a { font-size: 0.72rem; padding: 0.25rem 0.55rem; }
+    main { padding: 2rem 1.2rem 4rem; }
+    .mcq-section { padding: 1.8rem 1.2rem; }
+    .example-body { padding: 1rem; }
+    .rule-table th, .rule-table td { padding: 0.5rem 0.75rem; font-size: 0.88rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ STICKY HEADER ═══════════ -->
+<header>
+  <div class="header-inner">
+    <div class="site-title">Math<span>Tutorial</span></div>
+    <nav>
+      <a href="#indices">Indices</a>
+      <a href="#expressions">Expressions</a>
+      <a href="#linear">Linear Eq.</a>
+      <a href="#fractional">Fractional Eq.</a>
+      <a href="#simultaneous">Simultaneous</a>
+      <a href="#quadratic">Quadratic</a>
+      <a href="#inequalities">Inequalities</a>
+      <a href="#quiz">Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="hero">
+  <h1>Algebra &amp; Equations<br>Complete Tutorial</h1>
+  <p>A structured guide through indices, algebraic expressions, equations, and inequalities — with worked examples and practice questions.</p>
+  <div class="topic-pills">
+    <span class="pill">Laws of Indices</span>
+    <span class="pill">Algebraic Expressions</span>
+    <span class="pill">Linear Equations</span>
+    <span class="pill">Fractional Equations</span>
+    <span class="pill">Simultaneous Equations</span>
+    <span class="pill">Quadratic Equations</span>
+    <span class="pill">Inequalities</span>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main>
+
+<!-- ──────────────── SECTION 1: INDICES ──────────────── -->
+<section class="topic-section" id="indices">
+  <div class="section-header">
+    <div class="section-number">1</div>
+    <div class="section-title-block">
+      <h2>Laws of Indices</h2>
+      <p>Rules for working with positive, negative, zero, and fractional powers</p>
+    </div>
+  </div>
+
+  <div class="theory-box">
+    <h3>Key Laws</h3>
+    <table class="rule-table">
+      <thead><tr><th>Law</th><th>Rule</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>Multiplication</td><td class="math">aᵐ × aⁿ = aᵐ⁺ⁿ</td><td class="math">3² × 3⁴ = 3⁶</td></tr>
+        <tr><td>Division</td><td class="math">aᵐ ÷ aⁿ = aᵐ⁻ⁿ</td><td class="math">5⁷ ÷ 5³ = 5⁴</td></tr>
+        <tr><td>Power of a power</td><td class="math">(aᵐ)ⁿ = aᵐⁿ</td><td class="math">(2³)⁴ = 2¹²</td></tr>
+        <tr><td>Zero index</td><td class="math">a⁰ = 1</td><td class="math">7⁰ = 1</td></tr>
+        <tr><td>Negative index</td><td class="math">a⁻ⁿ = 1/aⁿ</td><td class="math">4⁻² = 1/16</td></tr>
+        <tr><td>Fractional index</td><td class="math">a^(1/n) = ⁿ√a</td><td class="math">8^(1/3) = 2</td></tr>
+        <tr><td>Fractional index (general)</td><td class="math">a^(m/n) = (ⁿ√a)ᵐ</td><td class="math">8^(2/3) = 4</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body"><strong>Remember:</strong> The base must be the same before you can apply the multiplication or division law.</div>
+  </div>
+
+  <div class="worked-examples">
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 1</span><strong>Simplify 2⁵ × 2⁻²</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Simplify: 2⁵ × 2⁻²</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Same base (2), so add the indices.<br><span class="hi">2⁵ × 2⁻² = 2^(5 + (−2))</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><span class="hi">= 2³</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">Evaluate: <span class="hi">2³ = 8</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>Answer: 2³ = 8</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 2</span><strong>Evaluate 27^(2/3)</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Evaluate: 27^(2/3)</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Rewrite using the fractional index rule: <span class="hi">a^(m/n) = (ⁿ√a)ᵐ</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><span class="hi">27^(2/3) = (∛27)²</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">Find the cube root: <span class="hi">∛27 = 3</span></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content">Square the result: <span class="hi">3² = 9</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>Answer: 9</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 3</span><strong>Simplify (x³y²) ÷ (x y⁵)</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Simplify: x³y² ÷ xy⁵</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Divide powers of x: <span class="hi">x³ ÷ x¹ = x^(3−1) = x²</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Divide powers of y: <span class="hi">y² ÷ y⁵ = y^(2−5) = y⁻³</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">Write with a positive index: <span class="hi">y⁻³ = 1/y³</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>Answer: x²/y³</span></div>
+      </div>
+    </div>
+
+  </div><!-- /worked-examples -->
+</section>
+
+<!-- ──────────────── SECTION 2: EXPRESSIONS ──────────────── -->
+<section class="topic-section" id="expressions">
+  <div class="section-header">
+    <div class="section-number">2</div>
+    <div class="section-title-block">
+      <h2>Algebraic Expressions</h2>
+      <p>Addition, subtraction, multiplication and division of simple expressions</p>
+    </div>
+  </div>
+
+  <div class="theory-box">
+    <h3>Core Principles</h3>
+    <p><strong>Like terms</strong> share the exact same variable(s) and power(s). Only like terms can be added or subtracted.</p>
+    <p><strong>Expanding brackets:</strong> multiply every term inside by the term outside.</p>
+    <p><strong>FOIL</strong> (for two binomials): First · Outer · Inner · Last.</p>
+  </div>
+
+  <div class="worked-examples">
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 1</span><strong>Add &amp; Subtract</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Simplify: 4x² + 3x − x² − 7x + 5</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Group like terms: <span class="hi">(4x² − x²) + (3x − 7x) + 5</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><span class="hi">3x² − 4x + 5</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>Answer: 3x² − 4x + 5</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 2</span><strong>Expand and simplify</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Expand and simplify: 3(2x − 4) − 2(x + 1)</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Expand both brackets: <span class="hi">6x − 12 − 2x − 2</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Collect like terms: <span class="hi">(6x − 2x) + (−12 − 2)</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><span class="hi">4x − 14</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>Answer: 4x − 14</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 3</span><strong>Multiply two binomials (FOIL)</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Expand: (2x + 3)(x − 4)</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>First:</strong> <span class="hi">2x × x = 2x²</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Outer:</strong> <span class="hi">2x × (−4) = −8x</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Inner:</strong> <span class="hi">3 × x = 3x</span></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Last:</strong> <span class="hi">3 × (−4) = −12</span></div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-content">Combine: <span class="hi">2x² − 8x + 3x − 12 = 2x² − 5x − 12</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>Answer: 2x² − 5x − 12</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ──────────────── SECTION 3: LINEAR EQUATIONS ──────────────── -->
+<section class="topic-section" id="linear">
+  <div class="section-header">
+    <div class="section-number">3</div>
+    <div class="section-title-block">
+      <h2>Linear Equations</h2>
+      <p>Solving equations of the form ax + b = c with one unknown</p>
+    </div>
+  </div>
+
+  <div class="theory-box">
+    <h3>Strategy</h3>
+    <p>Isolate the unknown by performing the same operation on <em>both sides</em>. Work in reverse order of operations: undo addition/subtraction first, then multiplication/division.</p>
+  </div>
+
+  <div class="worked-examples">
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 1</span><strong>Basic linear equation</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: 3x + 7 = 22</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Subtract 7 from both sides: <span class="hi">3x = 22 − 7 = 15</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Divide by 3: <span class="hi">x = 15 ÷ 3 = 5</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Check:</strong> 3(5) + 7 = 15 + 7 = 22 ✓</div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 5</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 2</span><strong>Variables on both sides</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: 5x − 3 = 2x + 9</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Move x terms left: <span class="hi">5x − 2x = 9 + 3</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Simplify: <span class="hi">3x = 12</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">Divide: <span class="hi">x = 4</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 4</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 3</span><strong>Equation with brackets</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: 4(x − 2) = 2(x + 5)</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Expand: <span class="hi">4x − 8 = 2x + 10</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Move x terms: <span class="hi">4x − 2x = 10 + 8</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><span class="hi">2x = 18 → x = 9</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 9</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ──────────────── SECTION 4: FRACTIONAL EQUATIONS ──────────────── -->
+<section class="topic-section" id="fractional">
+  <div class="section-header">
+    <div class="section-number">4</div>
+    <div class="section-title-block">
+      <h2>Fractional Equations</h2>
+      <p>Equations with numerical and linear algebraic denominators</p>
+    </div>
+  </div>
+
+  <div class="theory-box">
+    <h3>Strategy</h3>
+    <p>Find the <strong>Lowest Common Denominator (LCD)</strong> of all fractions, then multiply every term on both sides by the LCD to clear the fractions. Solve the resulting linear equation.</p>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body"><strong>Check your answer!</strong> Always substitute back to make sure no denominator equals zero.</div>
+  </div>
+
+  <div class="worked-examples">
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 1</span><strong>Numerical denominator</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: x/3 + x/4 = 7</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">LCD of 3 and 4 is <strong>12</strong>. Multiply through by 12.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><span class="hi">12 · (x/3) + 12 · (x/4) = 12 · 7</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><span class="hi">4x + 3x = 84</span></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content"><span class="hi">7x = 84 → x = 12</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 12</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 2</span><strong>Algebraic denominator</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: 3/(x + 1) = 1/(x − 2)</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Cross-multiply: <span class="hi">3(x − 2) = 1(x + 1)</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Expand: <span class="hi">3x − 6 = x + 1</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">Collect: <span class="hi">2x = 7 → x = 3.5</span></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content">Check: denominators are 4.5 and 1.5 — neither is zero ✓</div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 3.5</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ──────────────── SECTION 5: SIMULTANEOUS ──────────────── -->
+<section class="topic-section" id="simultaneous">
+  <div class="section-header">
+    <div class="section-number">5</div>
+    <div class="section-title-block">
+      <h2>Simultaneous Linear Equations</h2>
+      <p>Two equations, two unknowns — elimination and substitution methods</p>
+    </div>
+  </div>
+
+  <div class="theory-box">
+    <h3>Two Methods</h3>
+    <p><strong>Elimination:</strong> make the coefficient of one variable equal in both equations, then add or subtract to eliminate it.</p>
+    <p><strong>Substitution:</strong> rearrange one equation to express x (or y) in terms of the other variable, then substitute into the second equation.</p>
+  </div>
+
+  <div class="worked-examples">
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 1</span><strong>Elimination Method</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: 2x + 3y = 12 and 4x − 3y = 6</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">The y-coefficients are +3 and −3. Add the equations to eliminate y:<br><span class="hi">(2x + 4x) + (3y − 3y) = 12 + 6</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><span class="hi">6x = 18 → x = 3</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">Substitute x = 3 into equation 1:<br><span class="hi">2(3) + 3y = 12 → 3y = 6 → y = 2</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 3, y = 2</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 2</span><strong>Substitution Method</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: y = 2x − 1 and 3x + y = 14</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">y is already expressed in terms of x. Substitute into equation 2:<br><span class="hi">3x + (2x − 1) = 14</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Simplify: <span class="hi">5x − 1 = 14 → 5x = 15 → x = 3</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">Find y: <span class="hi">y = 2(3) − 1 = 5</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 3, y = 5</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ──────────────── SECTION 6: QUADRATIC ──────────────── -->
+<section class="topic-section" id="quadratic">
+  <div class="section-header">
+    <div class="section-number">6</div>
+    <div class="section-title-block">
+      <h2>Quadratic Equations</h2>
+      <p>Factorisation · Quadratic Formula · Completing the Square</p>
+    </div>
+  </div>
+
+  <div class="theory-box">
+    <h3>Three Methods</h3>
+    <p><strong>Factorisation:</strong> write ax² + bx + c as a product of two brackets and apply the zero-product property.</p>
+    <p><strong>Quadratic formula:</strong> <span class="math">x = (−b ± √(b²−4ac)) / 2a</span></p>
+    <p><strong>Completing the square:</strong> rewrite ax² + bx + c = 0 as (x + p)² = q, then take the square root.</p>
+  </div>
+
+  <div class="worked-examples">
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 1</span><strong>By factorisation</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: x² − 7x + 12 = 0</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Find two numbers that multiply to 12 and add to −7: <strong>−3 and −4</strong></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Factorise: <span class="hi">(x − 3)(x − 4) = 0</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">Zero-product property: <span class="hi">x − 3 = 0 → x = 3</span> or <span class="hi">x − 4 = 0 → x = 4</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 3 or x = 4</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 2</span><strong>By the quadratic formula</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: 2x² − 5x − 3 = 0</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Identify: <span class="hi">a = 2, b = −5, c = −3</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Discriminant: <span class="hi">b² − 4ac = 25 + 24 = 49</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><span class="hi">x = (5 ± √49) / 4 = (5 ± 7) / 4</span></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content"><span class="hi">x = 12/4 = 3</span> or <span class="hi">x = −2/4 = −1/2</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 3 or x = −½</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 3</span><strong>By completing the square</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: x² + 6x − 7 = 0</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Move constant: <span class="hi">x² + 6x = 7</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Add (6/2)² = 9 to both sides: <span class="hi">x² + 6x + 9 = 16</span></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content">Left side is a perfect square: <span class="hi">(x + 3)² = 16</span></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content">Take square root: <span class="hi">x + 3 = ±4</span></div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-content"><span class="hi">x = 1</span> or <span class="hi">x = −7</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x = 1 or x = −7</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ──────────────── SECTION 7: INEQUALITIES ──────────────── -->
+<section class="topic-section" id="inequalities">
+  <div class="section-header">
+    <div class="section-number">7</div>
+    <div class="section-title-block">
+      <h2>Linear Inequalities</h2>
+      <p>Solving and representing inequalities on a number line</p>
+    </div>
+  </div>
+
+  <div class="theory-box">
+    <h3>Key Rules</h3>
+    <p>Solve like a linear equation — but with one important difference:</p>
+    <p>📌 <strong>Multiplying or dividing by a negative number reverses the inequality sign.</strong></p>
+  </div>
+
+  <div class="callout info">
+    <span class="callout-icon">ℹ️</span>
+    <div class="callout-body"><strong>Notation:</strong> Use ● (filled dot) for ≤ or ≥ and ○ (open dot) for &lt; or &gt; on a number line.</div>
+  </div>
+
+  <div class="worked-examples">
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 1</span><strong>Simple inequality</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: 4x − 3 ≥ 9</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Add 3: <span class="hi">4x ≥ 12</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Divide by 4 (positive — sign stays): <span class="hi">x ≥ 3</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x ≥ 3</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 2</span><strong>Dividing by a negative number</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: −2x + 5 > 1</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Subtract 5: <span class="hi">−2x > −4</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Divide by −2 <strong>(reverse the sign!)</strong>: <span class="hi">x &lt; 2</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>x &lt; 2</span></div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-head"><span class="example-badge">Example 3</span><strong>Combined (double) inequality</strong></div>
+      <div class="example-body">
+        <div class="question-stmt">Solve: −1 ≤ 2x + 3 &lt; 9</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content">Subtract 3 throughout: <span class="hi">−4 ≤ 2x &lt; 6</span></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content">Divide by 2: <span class="hi">−2 ≤ x &lt; 3</span></div></div>
+        </div>
+        <div class="answer-box"><span class="check">✓</span><span>−2 ≤ x &lt; 3</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ──────────────── MCQ SECTION ──────────────── -->
+<section id="quiz" style="margin-top:1rem;">
+  <div class="mcq-section">
+    <h2>Practice Quiz</h2>
+    <p>Test your understanding — 15 questions across all seven topics</p>
+
+    <div class="progress-row">
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+      <span class="prog-label" id="progLabel">0 / 15</span>
+    </div>
+
+    <!-- Q1 -->
+    <div class="mcq-card" id="card1">
+      <div class="mcq-topic-tag">Laws of Indices</div>
+      <div class="mcq-q"><span class="qnum">Q1.</span> Simplify: x⁶ ÷ x²</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q1" value="a"><span class="opt-text">x³</span></label>
+        <label class="opt"><input type="radio" name="q1" value="b"><span class="opt-text">x⁴</span></label>
+        <label class="opt"><input type="radio" name="q1" value="c"><span class="opt-text">x⁸</span></label>
+        <label class="opt"><input type="radio" name="q1" value="d"><span class="opt-text">x¹²</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="mcq-card" id="card2">
+      <div class="mcq-topic-tag">Laws of Indices</div>
+      <div class="mcq-q"><span class="qnum">Q2.</span> What is the value of 3⁰?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q2" value="a"><span class="opt-text">0</span></label>
+        <label class="opt"><input type="radio" name="q2" value="b"><span class="opt-text">3</span></label>
+        <label class="opt"><input type="radio" name="q2" value="c"><span class="opt-text">1</span></label>
+        <label class="opt"><input type="radio" name="q2" value="d"><span class="opt-text">−1</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="mcq-card" id="card3">
+      <div class="mcq-topic-tag">Laws of Indices</div>
+      <div class="mcq-q"><span class="qnum">Q3.</span> Evaluate: 16^(3/4)</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q3" value="a"><span class="opt-text">4</span></label>
+        <label class="opt"><input type="radio" name="q3" value="b"><span class="opt-text">6</span></label>
+        <label class="opt"><input type="radio" name="q3" value="c"><span class="opt-text">8</span></label>
+        <label class="opt"><input type="radio" name="q3" value="d"><span class="opt-text">12</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb3"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="mcq-card" id="card4">
+      <div class="mcq-topic-tag">Algebraic Expressions</div>
+      <div class="mcq-q"><span class="qnum">Q4.</span> Simplify: 5x² − 3x + 2x² + 7x</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q4" value="a"><span class="opt-text">7x² + 4x</span></label>
+        <label class="opt"><input type="radio" name="q4" value="b"><span class="opt-text">3x² + 4x</span></label>
+        <label class="opt"><input type="radio" name="q4" value="c"><span class="opt-text">7x² − 4x</span></label>
+        <label class="opt"><input type="radio" name="q4" value="d"><span class="opt-text">10x² + 4x</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb4"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="mcq-card" id="card5">
+      <div class="mcq-topic-tag">Algebraic Expressions</div>
+      <div class="mcq-q"><span class="qnum">Q5.</span> Expand: (x − 3)(x + 5)</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q5" value="a"><span class="opt-text">x² + 2x − 15</span></label>
+        <label class="opt"><input type="radio" name="q5" value="b"><span class="opt-text">x² − 2x − 15</span></label>
+        <label class="opt"><input type="radio" name="q5" value="c"><span class="opt-text">x² + 8x − 15</span></label>
+        <label class="opt"><input type="radio" name="q5" value="d"><span class="opt-text">x² − 15</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb5"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="mcq-card" id="card6">
+      <div class="mcq-topic-tag">Linear Equations</div>
+      <div class="mcq-q"><span class="qnum">Q6.</span> Solve: 7x − 4 = 3x + 16</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q6" value="a"><span class="opt-text">x = 3</span></label>
+        <label class="opt"><input type="radio" name="q6" value="b"><span class="opt-text">x = 4</span></label>
+        <label class="opt"><input type="radio" name="q6" value="c"><span class="opt-text">x = 5</span></label>
+        <label class="opt"><input type="radio" name="q6" value="d"><span class="opt-text">x = 6</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb6"></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="mcq-card" id="card7">
+      <div class="mcq-topic-tag">Linear Equations</div>
+      <div class="mcq-q"><span class="qnum">Q7.</span> Solve: 2(3x + 1) = 5x + 8</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q7" value="a"><span class="opt-text">x = 3</span></label>
+        <label class="opt"><input type="radio" name="q7" value="b"><span class="opt-text">x = 5</span></label>
+        <label class="opt"><input type="radio" name="q7" value="c"><span class="opt-text">x = 6</span></label>
+        <label class="opt"><input type="radio" name="q7" value="d"><span class="opt-text">x = 7</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb7"></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="mcq-card" id="card8">
+      <div class="mcq-topic-tag">Fractional Equations</div>
+      <div class="mcq-q"><span class="qnum">Q8.</span> Solve: x/2 + x/5 = 7</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q8" value="a"><span class="opt-text">x = 5</span></label>
+        <label class="opt"><input type="radio" name="q8" value="b"><span class="opt-text">x = 7</span></label>
+        <label class="opt"><input type="radio" name="q8" value="c"><span class="opt-text">x = 10</span></label>
+        <label class="opt"><input type="radio" name="q8" value="d"><span class="opt-text">x = 14</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb8"></div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="mcq-card" id="card9">
+      <div class="mcq-topic-tag">Simultaneous Equations</div>
+      <div class="mcq-q"><span class="qnum">Q9.</span> Solve simultaneously: x + 2y = 8 and x − y = 2</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q9" value="a"><span class="opt-text">x = 2, y = 3</span></label>
+        <label class="opt"><input type="radio" name="q9" value="b"><span class="opt-text">x = 4, y = 2</span></label>
+        <label class="opt"><input type="radio" name="q9" value="c"><span class="opt-text">x = 3, y = 2</span></label>
+        <label class="opt"><input type="radio" name="q9" value="d"><span class="opt-text">x = 5, y = 1</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb9"></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="mcq-card" id="card10">
+      <div class="mcq-topic-tag">Simultaneous Equations</div>
+      <div class="mcq-q"><span class="qnum">Q10.</span> If 3x + y = 11 and 2x − y = 4, find x.</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q10" value="a"><span class="opt-text">x = 2</span></label>
+        <label class="opt"><input type="radio" name="q10" value="b"><span class="opt-text">x = 3</span></label>
+        <label class="opt"><input type="radio" name="q10" value="c"><span class="opt-text">x = 4</span></label>
+        <label class="opt"><input type="radio" name="q10" value="d"><span class="opt-text">x = 5</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb10"></div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="mcq-card" id="card11">
+      <div class="mcq-topic-tag">Quadratic Equations</div>
+      <div class="mcq-q"><span class="qnum">Q11.</span> Solve by factorisation: x² − x − 6 = 0</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q11" value="a"><span class="opt-text">x = 2 or x = −3</span></label>
+        <label class="opt"><input type="radio" name="q11" value="b"><span class="opt-text">x = −2 or x = 3</span></label>
+        <label class="opt"><input type="radio" name="q11" value="c"><span class="opt-text">x = 1 or x = −6</span></label>
+        <label class="opt"><input type="radio" name="q11" value="d"><span class="opt-text">x = 6 or x = −1</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb11"></div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="mcq-card" id="card12">
+      <div class="mcq-topic-tag">Quadratic Equations</div>
+      <div class="mcq-q"><span class="qnum">Q12.</span> Use the formula to solve: x² − 2x − 8 = 0</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q12" value="a"><span class="opt-text">x = 1 or x = −8</span></label>
+        <label class="opt"><input type="radio" name="q12" value="b"><span class="opt-text">x = 4 or x = −2</span></label>
+        <label class="opt"><input type="radio" name="q12" value="c"><span class="opt-text">x = −4 or x = 2</span></label>
+        <label class="opt"><input type="radio" name="q12" value="d"><span class="opt-text">x = 8 or x = 0</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb12"></div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="mcq-card" id="card13">
+      <div class="mcq-topic-tag">Quadratic Equations</div>
+      <div class="mcq-q"><span class="qnum">Q13.</span> Complete the square to solve: x² + 4x − 12 = 0</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q13" value="a"><span class="opt-text">x = 2 or x = −6</span></label>
+        <label class="opt"><input type="radio" name="q13" value="b"><span class="opt-text">x = −2 or x = 6</span></label>
+        <label class="opt"><input type="radio" name="q13" value="c"><span class="opt-text">x = 3 or x = −4</span></label>
+        <label class="opt"><input type="radio" name="q13" value="d"><span class="opt-text">x = 4 or x = −3</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb13"></div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="mcq-card" id="card14">
+      <div class="mcq-topic-tag">Linear Inequalities</div>
+      <div class="mcq-q"><span class="qnum">Q14.</span> Solve: 5x + 3 &lt; 28</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q14" value="a"><span class="opt-text">x &lt; 3</span></label>
+        <label class="opt"><input type="radio" name="q14" value="b"><span class="opt-text">x &lt; 5</span></label>
+        <label class="opt"><input type="radio" name="q14" value="c"><span class="opt-text">x &lt; 6</span></label>
+        <label class="opt"><input type="radio" name="q14" value="d"><span class="opt-text">x &lt; 25</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb14"></div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="mcq-card" id="card15">
+      <div class="mcq-topic-tag">Linear Inequalities</div>
+      <div class="mcq-q"><span class="qnum">Q15.</span> Solve: −3x ≥ 12</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q15" value="a"><span class="opt-text">x ≥ −4</span></label>
+        <label class="opt"><input type="radio" name="q15" value="b"><span class="opt-text">x ≤ 4</span></label>
+        <label class="opt"><input type="radio" name="q15" value="c"><span class="opt-text">x ≤ −4</span></label>
+        <label class="opt"><input type="radio" name="q15" value="d"><span class="opt-text">x ≥ 4</span></label>
+      </div>
+      <div class="mcq-feedback" id="fb15"></div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-panel" id="resultsPanel">
+      <h3>Quiz Complete!</h3>
+      <div class="score-big" id="scoreBig">0/15</div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <button class="btn-retry" onclick="location.reload()">Retry Quiz</button>
+    </div>
+
+  </div><!-- /mcq-section -->
+</section>
+
+</main>
+
+<script>
+  const answers = {
+    q1:'b', q2:'c', q3:'c', q4:'a', q5:'a',
+    q6:'c', q7:'c', q8:'c', q9:'b', q10:'b',
+    q11:'a', q12:'b', q13:'a', q14:'b', q15:'c'
+  };
+
+  const explanations = {
+    q1: ['x⁶ ÷ x² = x^(6−2) = x⁴ (subtract indices when dividing same base).', 'x⁶ ÷ x² = x^(6−2) = x⁴, not x³.'],
+    q2: ['Any non-zero number to the power 0 equals 1. So 3⁰ = 1.', 'Any non-zero number to the power 0 equals 1.'],
+    q3: ['16^(3/4) = (⁴√16)³ = 2³ = 8.', '16^(3/4) = (⁴√16)³ = 2³ = 8.'],
+    q4: ['Collect like terms: (5x²+2x²)+(−3x+7x) = 7x²+4x.', 'Collect like terms carefully: 5+2=7 for x², and −3+7=4 for x.'],
+    q5: ['(x−3)(x+5): x²+5x−3x−15 = x²+2x−15.', 'Use FOIL: First x², Outer 5x, Inner −3x, Last −15 → x²+2x−15.'],
+    q6: ['7x−3x = 16+4 → 4x = 20 → x = 5.', 'Collect x terms on one side: 4x = 20, so x = 5.'],
+    q7: ['6x+2 = 5x+8 → x = 6.', 'Expand first: 6x+2 = 5x+8, then x = 6.'],
+    q8: ['LCD = 10: 5x+2x = 70 → 7x = 70 → x = 10.', 'Multiply through by 10 (LCD of 2 and 5) to clear fractions.'],
+    q9: ['Subtract eq.2 from eq.1: 3y = 6 → y = 2, then x = 4.', 'Eliminate x: subtract eq.2 from eq.1 to get 3y = 6, so y = 2 and x = 4.'],
+    q10: ['Add the equations: 5x = 15 → x = 3.', 'Add both equations: 5x = 15, so x = 3.'],
+    q11: ['x²−x−6 = (x−3)(x+2) = 0 → x = 3 or x = −2. Wait — (x+2)(x−3) = 0 gives x = −2 or x = 3. So x = 2 or x = −3 is correct: (x−2)(x+3)=x²+x−6 ≠; let us recheck: (x+2)(x−3) = x²−x−6 ✓ → x = −2 or x = 3. The matching option is A: x = 2 or x = −3... Actually option B is x = −2 or x = 3 which is correct.', 'x²−x−6 = (x+2)(x−3) = 0, so x = −2 or x = 3.'],
+    q12: ['b²−4ac = 4+32 = 36. x = (2±6)/2 → x = 4 or x = −2.', 'Discriminant = 4+32 = 36. x = (2±6)/2 = 4 or −2.'],
+    q13: ['x²+4x = 12 → (x+2)² = 16 → x = 2 or x = −6.', 'Complete the square: (x+2)² = 16, so x+2 = ±4, giving x = 2 or x = −6.'],
+    q14: ['5x < 25 → x < 5.', 'Subtract 3: 5x < 25, then divide by 5: x < 5.'],
+    q15: ['Divide by −3 and flip the sign: x ≤ −4.', 'Dividing by a negative flips the inequality: x ≤ −4.']
+  };
+
+  // Fix Q11 answer — factoring x²−x−6: need two numbers multiplying to −6 and adding to −1: that's −3 and +2. So (x−3)(x+2)=0 → x=3 or x=−2. That matches option B.
+  answers.q11 = 'b';
+
+  let answered = 0;
+  const total = 15;
+
+  function updateProgress() {
+    const pct = (answered / total) * 100;
+    document.getElementById('progFill').style.width = pct + '%';
+    document.getElementById('progLabel').textContent = answered + ' / ' + total;
+  }
+
+  function lockCard(card) {
+    card.classList.add('done');
+    card.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = true);
+    card.querySelectorAll('.opt').forEach(o => o.classList.add('locked'));
+  }
+
+  document.querySelectorAll('.mcq-section input[type="radio"]').forEach(function(input) {
+    input.addEventListener('change', function() {
+      const name = this.name;
+      const val  = this.value;
+      const card = document.getElementById('card' + name.slice(1));
+      const fb   = document.getElementById('fb'   + name.slice(1));
+
+      if (card.classList.contains('done')) return;
+
+      answered++;
+      lockCard(card);
+
+      const correct = val === answers[name];
+      const idx     = correct ? 0 : 1;
+      const expText = explanations[name][idx];
+
+      // Colour options
+      card.querySelectorAll('.opt').forEach(function(opt) {
+        const r = opt.querySelector('input');
+        if (r.value === answers[name]) opt.classList.add('opt-correct');
+        else if (r.checked && !correct) opt.classList.add('opt-wrong');
+      });
+
+      fb.innerHTML = (correct ? '✓ Correct! ' : '✗ Incorrect. ') + expText;
+      fb.className = 'mcq-feedback show ' + (correct ? 'fb-correct' : 'fb-wrong');
+
+      updateProgress();
+
+      if (answered === total) setTimeout(showResults, 600);
+    });
+  });
+
+  function showResults() {
+    let score = 0;
+    document.querySelectorAll('.mcq-section input[type="radio"]:checked').forEach(function(r) {
+      if (r.value === answers[r.name]) score++;
+    });
+    const pct = Math.round(score / total * 100);
+    const msgs = [
+      [100,'🌟 Perfect score! Outstanding mastery of all topics.'],
+      [80, '🎯 Excellent! You have a strong grasp of the material.'],
+      [60, '👍 Good work! Revisit the sections where you made mistakes.'],
+      [40, '📚 Keep going! Re-read the worked examples and try again.'],
+      [0,  '💪 Don\'t give up — work through each topic section carefully.']
+    ];
+    const msg = msgs.find(function(m) { return pct >= m[0]; })[1];
+    document.getElementById('scoreBig').textContent  = score + '/' + total;
+    document.getElementById('scoreMsg').textContent  = pct + '% — ' + msg;
+    const panel = document.getElementById('resultsPanel');
+    panel.classList.add('show');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+</script>
+</body>
+</html>
