@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solutions of Equations and Inequalities</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* Sticky Header */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            padding: 1rem 0;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .topics-nav {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .topic-link {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background: #ecf0f1;
+            color: #2c3e50;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .topic-link:hover {
+            background: #3498db;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .topic-link.active {
+            background: #2980b9;
+            color: #fff;
+            border-color: #1a5276;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .content-section {
+            background: #fff;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-number {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 2.5rem;
+            font-weight: bold;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .subsection {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+            border-left: 4px solid #3498db;
+        }
+
+        .subsection-title {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .example-box {
+            background: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: #e74c3c;
+            margin-bottom: 0.5rem;
+        }
+
+        .formula {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: #2c3e50;
+            margin: 1rem 0;
+            border: 1px solid #dee2e6;
+            overflow-x: auto;
+        }
+
+        .steps {
+            background: #f0f8ff;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 2rem;
+            height: 2rem;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .key-points {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 1.5rem 0;
+        }
+
+        .key-points-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.8rem;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            color: #856404;
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .key-points li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+
+        .scroll-to-top:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+        }
+
+        .scroll-to-top.show {
+            display: flex;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .topics-nav {
+                gap: 0.3rem;
+            }
+
+            .topic-link {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.85rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Header with Navigation -->
+    <div class="sticky-header">
+        <div class="header-container">
+            <h1 class="header-title">Solutions of Equations and Inequalities</h1>
+            <nav class="topics-nav">
+                <a class="topic-link active" onclick="switchSection(0)">Topic 1: Linear Equations</a>
+                <a class="topic-link" onclick="switchSection(1)">Topic 2: Fractional Equations</a>
+                <a class="topic-link" onclick="switchSection(2)">Topic 3: Simultaneous Equations</a>
+                <a class="topic-link" onclick="switchSection(3)">Topic 4: Quadratic Equations</a>
+                <a class="topic-link" onclick="switchSection(4)">Topic 5: Linear Inequalities</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Topic 1: Linear Equations -->
+        <div class="content-section active">
+            <div class="section-title">
+                <span class="section-number">1</span>
+                Solve Simple Linear Equations with One Unknown
+            </div>
+
+            <div class="section-content">
+                <div class="subsection">
+                    <p class="subsection-title">Definition</p>
+                    <p>A linear equation with one unknown is an equation that contains only one variable raised to the power of 1. The general form is:</p>
+                    <div class="formula">ax + b = c</div>
+                    <p>where a, b, and c are constants and a ≠ 0.</p>
+                </div>
+
+                <div class="key-points">
+                    <p class="key-points-title">Core Principles</p>
+                    <ul>
+                        <li>An equation is balanced on both sides of the equals sign</li>
+                        <li>Whatever operation you perform on one side, you must perform on the other</li>
+                        <li>The goal is to isolate the variable (x) on one side</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Solution Method</p>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">Identify the variable and constants</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">Collect all terms with the variable on one side</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">Collect constant terms on the other side</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">Divide by the coefficient of the variable to isolate it</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">Verify your solution by substituting back into the original equation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <p class="example-title">Example</p>
+                    <p><strong>Solve: 3x + 5 = 14</strong></p>
+                    <div class="formula">
+3x + 5 = 14
+3x = 14 - 5
+3x = 9
+x = 9 ÷ 3
+x = 3
+                    </div>
+                    <p><strong>Check:</strong> 3(3) + 5 = 9 + 5 = 14 ✓</p>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Important Tips</p>
+                    <p>• Always perform the same operation on both sides of the equation</p>
+                    <p>• When moving a term to the other side, change its sign</p>
+                    <p>• Check your answer by substituting it back into the original equation</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 2: Fractional Equations -->
+        <div class="content-section">
+            <div class="section-title">
+                <span class="section-number">2</span>
+                Solve Simple Fractional Equations
+            </div>
+
+            <div class="section-content">
+                <div class="subsection">
+                    <p class="subsection-title">Definition</p>
+                    <p>Fractional equations (also called rational equations) contain one or more fractions with variables in the numerator and/or denominator.</p>
+                </div>
+
+                <div class="key-points">
+                    <p class="key-points-title">Key Concepts</p>
+                    <ul>
+                        <li>Identify the lowest common denominator (LCD)</li>
+                        <li>Multiply all terms by the LCD to clear fractions</li>
+                        <li>Solve the resulting linear or quadratic equation</li>
+                        <li>Always check that solutions don't make any denominator zero</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Solution Method</p>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">Find the LCD of all denominators</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">Multiply both sides of the equation by the LCD</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">Simplify each fraction</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">Solve the resulting equation</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">Verify the solution is not an excluded value</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <p class="example-title">Example with Numerical Denominators</p>
+                    <p><strong>Solve: x/3 + 2/5 = 7/15</strong></p>
+                    <div class="formula">
+LCD = 15
+
+Multiply by 15:
+15(x/3) + 15(2/5) = 15(7/15)
+5x + 6 = 7
+5x = 1
+x = 1/5 = 0.2
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <p class="example-title">Example with Algebraic Denominators</p>
+                    <p><strong>Solve: 2/(x-1) + 1 = 3/(x-1)</strong></p>
+                    <div class="formula">
+LCD = (x-1), where x ≠ 1
+
+Multiply by (x-1):
+2 + (x-1) = 3
+2 + x - 1 = 3
+x + 1 = 3
+x = 2
+
+Check: x ≠ 1 ✓
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 3: Simultaneous Equations -->
+        <div class="content-section">
+            <div class="section-title">
+                <span class="section-number">3</span>
+                Solve Simple Simultaneous Linear Equations with Two Unknowns
+            </div>
+
+            <div class="section-content">
+                <div class="subsection">
+                    <p class="subsection-title">Definition</p>
+                    <p>Simultaneous equations (also called systems of equations) are two or more equations with multiple unknowns that must all be satisfied by the same values.</p>
+                </div>
+
+                <div class="key-points">
+                    <p class="key-points-title">Solution Methods</p>
+                    <ul>
+                        <li><strong>Substitution Method:</strong> Solve one equation for one variable, then substitute into the other</li>
+                        <li><strong>Elimination Method:</strong> Multiply equations so coefficients are equal, then add or subtract</li>
+                        <li><strong>Graphical Method:</strong> Plot both equations and find the intersection point</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Substitution Method</p>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">Solve one equation for one variable</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">Substitute this expression into the other equation</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">Solve for the remaining variable</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">Substitute back to find the other variable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <p class="example-title">Example - Substitution Method</p>
+                    <p><strong>Solve:</strong></p>
+                    <p>x + y = 5 ... (1)</p>
+                    <p>2x - y = 4 ... (2)</p>
+                    <div class="formula">
+From equation (1): y = 5 - x
+
+Substitute into (2):
+2x - (5 - x) = 4
+2x - 5 + x = 4
+3x = 9
+x = 3
+
+From (1): y = 5 - 3 = 2
+
+Solution: x = 3, y = 2
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Elimination Method</p>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">Multiply one or both equations to make coefficients equal</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">Add or subtract equations to eliminate one variable</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">Solve for the remaining variable</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">Substitute back to find the other variable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <p class="example-title">Example - Elimination Method</p>
+                    <p><strong>Solve:</strong></p>
+                    <p>2x + 3y = 7 ... (1)</p>
+                    <p>3x - 3y = 3 ... (2)</p>
+                    <div class="formula">
+Add equations (1) and (2) to eliminate y:
+5x = 10
+x = 2
+
+Substitute into (1):
+2(2) + 3y = 7
+4 + 3y = 7
+3y = 3
+y = 1
+
+Solution: x = 2, y = 1
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 4: Quadratic Equations -->
+        <div class="content-section">
+            <div class="section-title">
+                <span class="section-number">4</span>
+                Solve Quadratic Equations
+            </div>
+
+            <div class="section-content">
+                <div class="subsection">
+                    <p class="subsection-title">Definition</p>
+                    <p>A quadratic equation is a polynomial equation of degree 2. The standard form is:</p>
+                    <div class="formula">ax² + bx + c = 0</div>
+                    <p>where a ≠ 0.</p>
+                </div>
+
+                <div class="key-points">
+                    <p class="key-points-title">Solution Methods</p>
+                    <ul>
+                        <li><strong>Factorisation:</strong> Express as (px + q)(rx + s) = 0</li>
+                        <li><strong>Quadratic Formula:</strong> x = (-b ± √(b² - 4ac)) / 2a</li>
+                        <li><strong>Completing the Square:</strong> Rewrite in the form (x + p)² = q</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Method 1: Factorisation</p>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">Ensure the equation is in standard form: ax² + bx + c = 0</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">Factor the left side into two binomials</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">Set each factor equal to zero</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">Solve each resulting linear equation</div>
+                        </div>
+                    </div>
+
+                    <div class="example-box">
+                        <p class="example-title">Example - Factorisation</p>
+                        <p><strong>Solve: x² + 5x + 6 = 0</strong></p>
+                        <div class="formula">
+Factor: (x + 2)(x + 3) = 0
+
+Set each factor to zero:
+x + 2 = 0  →  x = -2
+x + 3 = 0  →  x = -3
+
+Solutions: x = -2, x = -3
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Method 2: Quadratic Formula</p>
+                    <p>For any quadratic equation ax² + bx + c = 0, the solutions are given by:</p>
+                    <div class="formula">
+x = (-b ± √(b² - 4ac)) / 2a
+
+The discriminant: Δ = b² - 4ac
+- If Δ > 0: two distinct real roots
+- If Δ = 0: one repeated real root
+- If Δ < 0: no real roots (complex roots)
+                    </div>
+
+                    <div class="example-box">
+                        <p class="example-title">Example - Quadratic Formula</p>
+                        <p><strong>Solve: 2x² - 4x - 6 = 0</strong></p>
+                        <div class="formula">
+a = 2, b = -4, c = -6
+
+x = (4 ± √(16 + 48)) / 4
+x = (4 ± √64) / 4
+x = (4 ± 8) / 4
+
+x = 12/4 = 3  or  x = -4/4 = -1
+
+Solutions: x = 3, x = -1
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Method 3: Completing the Square</p>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">Rearrange to get x² and x terms on the left: x² + bx = -c</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">Add (b/2)² to both sides to complete the square</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">Write the left side as a perfect square: (x + b/2)² = ...</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">Take the square root of both sides</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">Solve for x</div>
+                        </div>
+                    </div>
+
+                    <div class="example-box">
+                        <p class="example-title">Example - Completing the Square</p>
+                        <p><strong>Solve: x² + 6x + 5 = 0</strong></p>
+                        <div class="formula">
+x² + 6x = -5
+
+Add (6/2)² = 9 to both sides:
+x² + 6x + 9 = -5 + 9
+(x + 3)² = 4
+
+Take square root:
+x + 3 = ±2
+
+x = -3 + 2 = -1
+x = -3 - 2 = -5
+
+Solutions: x = -1, x = -5
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 5: Linear Inequalities -->
+        <div class="content-section">
+            <div class="section-title">
+                <span class="section-number">5</span>
+                Solve Simple Linear Inequalities
+            </div>
+
+            <div class="section-content">
+                <div class="subsection">
+                    <p class="subsection-title">Definition</p>
+                    <p>A linear inequality is similar to a linear equation but uses inequality symbols instead of an equals sign. The symbols are:</p>
+                    <div class="formula">
+< (less than)
+> (greater than)
+≤ (less than or equal to)
+≥ (greater than or equal to)
+                    </div>
+                </div>
+
+                <div class="key-points">
+                    <p class="key-points-title">Important Rules</p>
+                    <ul>
+                        <li>Solve inequalities like equations, with one exception</li>
+                        <li>When multiplying or dividing by a negative number, FLIP the inequality sign</li>
+                        <li>Solutions are typically a range of values, not just one value</li>
+                        <li>Graph the solution on a number line</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Solution Method</p>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">Use the same steps as solving linear equations</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">Remember to flip the inequality sign if dividing/multiplying by negative numbers</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">Express the solution as an inequality or interval notation</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">Optionally graph on a number line</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <p class="example-title">Example 1 - Without Sign Flip</p>
+                    <p><strong>Solve: 2x + 3 > 7</strong></p>
+                    <div class="formula">
+2x + 3 > 7
+2x > 4
+x > 2
+
+Solution: x > 2  or in interval notation: (2, ∞)
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <p class="example-title">Example 2 - With Sign Flip</p>
+                    <p><strong>Solve: -3x + 5 ≤ 2</strong></p>
+                    <div class="formula">
+-3x + 5 ≤ 2
+-3x ≤ -3
+
+Divide by -3 and FLIP the inequality sign:
+x ≥ 1
+
+Solution: x ≥ 1  or in interval notation: [1, ∞)
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Compound Inequalities</p>
+                    <p>Inequalities can be combined to show a range:</p>
+
+                    <div class="example-box">
+                        <p class="example-title">Example - Compound Inequality</p>
+                        <p><strong>Solve: -2 < x + 1 ≤ 4</strong></p>
+                        <div class="formula">
+Subtract 1 from all parts:
+-2 - 1 < x ≤ 4 - 1
+-3 < x ≤ 3
+
+Solution: -3 < x ≤ 3  or in interval notation: (-3, 3]
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <p class="subsection-title">Interval Notation</p>
+                    <div class="formula">
+(a, b)     means a < x < b  (open interval)
+[a, b]     means a ≤ x ≤ b  (closed interval)
+[a, b)     means a ≤ x < b  (half-open)
+(a, ∞)     means x > a
+[a, ∞)     means x ≥ a
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Educational Resource - Solutions of Equations and Inequalities</p>
+        <p>Master the fundamental techniques for solving mathematical equations</p>
+    </footer>
+
+    <script>
+        function switchSection(index) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all topic links
+            const links = document.querySelectorAll('.topic-link');
+            links.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show selected section
+            sections[index].classList.add('active');
+            links[index].classList.add('active');
+
+            // Scroll to content
+            sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Scroll to Top Button
+        const scrollToTopBtn = document.querySelector('.scroll-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Update active link on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.content-section');
+            const links = document.querySelectorAll('.topic-link');
+
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+                    links.forEach(link => link.classList.remove('active'));
+                    links[index].classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
