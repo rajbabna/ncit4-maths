@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Substituting Numbers into Formulae</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1a2847;
+            --bg-input: #0f172a;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-correct: #10b981;
+            --accent-incorrect: #ef4444;
+            --accent-focus: #3b82f6;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: var(--border-color);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 28px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-number {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .formula-box {
+            background-color: var(--bg-input);
+            border-left: 4px solid var(--accent-focus);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 4px;
+            font-size: 1.1em;
+        }
+
+        .formula-box span {
+            font-family: 'Courier New', monospace;
+            color: #60a5fa;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-size: 1em;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-focus);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-submit {
+            background-color: var(--accent-focus);
+            color: white;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-submit:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-next {
+            background-color: var(--accent-correct);
+            color: white;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-next:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-prev {
+            background-color: var(--border-color);
+            color: var(--text-primary);
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-prev:hover {
+            background-color: #475569;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 4px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .feedback.correct {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--accent-correct);
+            color: #10b981;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--accent-incorrect);
+            color: #ef4444;
+            display: block;
+        }
+
+        .feedback-icon {
+            margin-right: 8px;
+        }
+
+        .explanation {
+            margin-top: 16px;
+            padding: 12px;
+            background-color: rgba(94, 234, 212, 0.05);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            border-left: 2px solid #14b8a6;
+        }
+
+        .results-screen {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+
+        .results-screen.active {
+            display: block;
+        }
+
+        .final-score {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+        }
+
+        .score-message {
+            font-size: 1.3em;
+            margin: 20px 0;
+            color: var(--text-secondary);
+        }
+
+        .restart-btn {
+            background-color: var(--accent-focus);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.2s;
+        }
+
+        .restart-btn:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .question-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .question-card {
+                padding: 20px;
+            }
+
+            .final-score {
+                font-size: 2.5em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn-submit, .btn-next, .btn-prev {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Substituting Numbers into Formulae</h1>
+            <p class="subtitle">Master algebraic substitution with 10 practice questions</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </header>
+
+        <!-- Questions -->
+        <div id="questions-container"></div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="results-screen">
+            <h2 style="font-size: 2em; margin-bottom: 20px;">Quiz Complete!</h2>
+            <div class="final-score" id="final-score">0%</div>
+            <div class="score-message" id="score-message"></div>
+            <button class="restart-btn" onclick="restartQuiz()">Retake Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                number: 1,
+                text: "Find the value of <strong>y</strong> when <strong>y = 3x + 5</strong> and <strong>x = 2</strong>",
+                formula: "y = 3x + 5, where x = 2",
+                type: "numeric",
+                answer: 11,
+                explanation: "Substitute x = 2 into y = 3x + 5: y = 3(2) + 5 = 6 + 5 = 11"
+            },
+            {
+                number: 2,
+                text: "Calculate the area of a rectangle using the formula <strong>A = l × w</strong> when <strong>l = 8 cm</strong> and <strong>w = 5 cm</strong>",
+                formula: "A = l × w, where l = 8, w = 5",
+                type: "numeric",
+                answer: 40,
+                explanation: "A = 8 × 5 = 40 cm²"
+            },
+            {
+                number: 3,
+                text: "Find <strong>C</strong> using the formula <strong>C = 2πr</strong> (circumference of a circle) when <strong>r = 3</strong> (use π ≈ 3.14)",
+                formula: "C = 2πr, where r = 3, π ≈ 3.14",
+                type: "numeric",
+                answer: 18.84,
+                explanation: "C = 2 × 3.14 × 3 = 18.84"
+            },
+            {
+                number: 4,
+                text: "Find the value of <strong>v</strong> using <strong>v = u + at</strong> when <strong>u = 5</strong>, <strong>a = 2</strong>, and <strong>t = 4</strong>",
+                formula: "v = u + at, where u = 5, a = 2, t = 4",
+                type: "numeric",
+                answer: 13,
+                explanation: "v = 5 + (2 × 4) = 5 + 8 = 13"
+            },
+            {
+                number: 5,
+                text: "Calculate <strong>E</strong> using Einstein's formula <strong>E = mc²</strong> when <strong>m = 2</strong> and <strong>c = 3</strong>",
+                formula: "E = mc², where m = 2, c = 3",
+                type: "numeric",
+                answer: 18,
+                explanation: "E = 2 × 3² = 2 × 9 = 18"
+            },
+            {
+                number: 6,
+                text: "Find the value of <strong>P</strong> when <strong>P = 2(l + w)</strong> (perimeter of rectangle), <strong>l = 10</strong>, and <strong>w = 6</strong>",
+                formula: "P = 2(l + w), where l = 10, w = 6",
+                type: "numeric",
+                answer: 32,
+                explanation: "P = 2(10 + 6) = 2(16) = 32"
+            },
+            {
+                number: 7,
+                text: "Calculate <strong>T</strong> using <strong>T = 2π√(L/g)</strong> (period of pendulum) when <strong>L = 1</strong> and <strong>g = 10</strong> (use π ≈ 3.14)",
+                formula: "T = 2π√(L/g), where L = 1, g = 10, π ≈ 3.14",
+                type: "numeric",
+                answer: 1.99,
+                explanation: "T = 2 × 3.14 × √(1/10) = 2 × 3.14 × 0.316 ≈ 1.99"
+            },
+            {
+                number: 8,
+                text: "Find <strong>a</strong> using the formula <strong>a = (v - u)/t</strong> when <strong>v = 20</strong>, <strong>u = 5</strong>, and <strong>t = 3</strong>",
+                formula: "a = (v - u)/t, where v = 20, u = 5, t = 3",
+                type: "numeric",
+                answer: 5,
+                explanation: "a = (20 - 5)/3 = 15/3 = 5"
+            },
+            {
+                number: 9,
+                text: "Calculate the volume <strong>V</strong> of a cylinder using <strong>V = πr²h</strong> when <strong>r = 2</strong> and <strong>h = 5</strong> (use π ≈ 3.14)",
+                formula: "V = πr²h, where r = 2, h = 5, π ≈ 3.14",
+                type: "numeric",
+                answer: 62.8,
+                explanation: "V = 3.14 × 2² × 5 = 3.14 × 4 × 5 = 62.8 cubic units"
+            },
+            {
+                number: 10,
+                text: "Find <strong>y</strong> when <strong>y = x² - 4x + 3</strong> and <strong>x = 5</strong>",
+                formula: "y = x² - 4x + 3, where x = 5",
+                type: "numeric",
+                answer: 8,
+                explanation: "y = 5² - 4(5) + 3 = 25 - 20 + 3 = 8"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = [];
+
+        function initQuiz() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card' + (index === 0 ? ' active' : '');
+                card.innerHTML = `
+                    <div class="question-meta">
+                        <span class="question-number">Question ${q.number} of 10</span>
+                        <span style="color: var(--text-secondary);">${Math.round((index / 10) * 100)}% complete</span>
+                    </div>
+                    <div class="question-text">${q.text}</div>
+                    <div class="formula-box">
+                        <strong>Formula:</strong> <span>${q.formula}</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" step="0.01" placeholder="Enter your answer" class="answer-input" data-index="${index}">
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-submit" onclick="submitAnswer(${index})">Check Answer</button>
+                        ${index > 0 ? `<button class="btn-prev" onclick="previousQuestion()">← Previous</button>` : ''}
+                    </div>
+                    <div class="feedback" data-index="${index}"></div>
+                `;
+                container.appendChild(card);
+            });
+
+            updateProgress();
+        }
+
+        function submitAnswer(index) {
+            const input = document.querySelector(`input[data-index="${index}"]`);
+            const userAnswer = parseFloat(input.value);
+            const question = questions[index];
+            const feedback = document.querySelector(`.feedback[data-index="${index}"]`);
+
+            if (input.value === '') {
+                feedback.textContent = '⚠️ Please enter an answer';
+                feedback.className = 'feedback incorrect';
+                return;
+            }
+
+            const tolerance = 0.05;
+            const isCorrect = Math.abs(userAnswer - question.answer) <= tolerance;
+
+            answered[index] = {
+                answer: userAnswer,
+                correct: isCorrect
+            };
+
+            if (isCorrect) {
+                score++;
+                feedback.innerHTML = `<span class="feedback-icon">✓</span>Correct!<div class="explanation">${question.explanation}</div>`;
+                feedback.className = 'feedback correct';
+                input.style.borderColor = 'var(--accent-correct)';
+
+                setTimeout(() => {
+                    if (index < questions.length - 1) {
+                        nextQuestion();
+                    } else {
+                        showResults();
+                    }
+                }, 1500);
+            } else {
+                feedback.innerHTML = `<span class="feedback-icon">✗</span>Incorrect. The answer is ${question.answer}<div class="explanation">${question.explanation}</div>`;
+                feedback.className = 'feedback incorrect';
+                input.style.borderColor = 'var(--accent-incorrect)';
+            }
+
+            input.disabled = true;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                document.querySelector('.question-card.active').classList.remove('active');
+                currentQuestion++;
+                document.querySelectorAll('.question-card')[currentQuestion].classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                document.querySelector('.question-card.active').classList.remove('active');
+                currentQuestion--;
+                document.querySelectorAll('.question-card')[currentQuestion].classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.querySelector('.progress-fill').style.width = progress + '%';
+        }
+
+        function showResults() {
+            document.getElementById('questions-container').style.display = 'none';
+            document.getElementById('results-screen').classList.add('active');
+
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('final-score').textContent = percentage + '%';
+
+            let message = '';
+            if (percentage === 100) {
+                message = '🎯 Perfect score! You\'ve mastered substitution!';
+            } else if (percentage >= 80) {
+                message = '🌟 Excellent work! You\'re very close to mastering this topic.';
+            } else if (percentage >= 60) {
+                message = '👍 Good effort! Review the explanations to strengthen your skills.';
+            } else if (percentage >= 40) {
+                message = '💡 Keep practising! Substitution takes practice to master.';
+            } else {
+                message = '📚 Review the formula substitution process and try again!';
+            }
+
+            document.getElementById('score-message').textContent = message + ` You got ${score} out of ${questions.length} correct.`;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = [];
+            document.getElementById('questions-container').style.display = 'block';
+            document.getElementById('results-screen').classList.remove('active');
+            initQuiz();
+        }
+
+        // Initialize on load
+        initQuiz();
+    </script>
+</body>
+</html>
