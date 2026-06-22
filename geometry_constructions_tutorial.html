@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Geometrical Constructions — Interactive Tutorial</title>
+<style>
+  /* ── Design tokens ───────────────────────────────────────────────
+     Palette:
+       #F7F5F0  parchment (page bg)   — evokes drafting paper
+       #1B2D45  deep navy (headings)
+       #2E6DA4  compass blue (accent)
+       #E8531A  construction orange (highlights, correct)
+       #C0392B  ruler red (wrong)
+       #EAF2FB  tint blue (card bg)
+       #FFF8F5  tint warm (exercise bg)
+     Type:
+       Display  — 'Playfair Display' (mathematical authority)
+       Body     — 'Source Sans 3' (clean, legible at small sizes)
+       Mono/data — 'JetBrains Mono' (measurements, angles)
+  ─────────────────────────────────────────────────────────────────── */
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap');
+
+  :root {
+    --bg:        #F7F5F0;
+    --card:      #FFFFFF;
+    --card-blue: #EAF2FB;
+    --card-warm: #FFF8F5;
+    --navy:      #1B2D45;
+    --blue:      #2E6DA4;
+    --orange:    #E8531A;
+    --green:     #1A7A4A;
+    --red:       #C0392B;
+    --mid:       #5A6A7A;
+    --border:    #D6D0C8;
+    --shadow:    0 2px 12px rgba(27,45,69,.10);
+    --radius:    10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--navy);
+    color: #fff;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 28px,
+      rgba(46,109,164,.12) 28px, rgba(46,109,164,.12) 30px
+    );
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: .3rem .85rem;
+    border-radius: 2rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    position: relative;
+    margin-bottom: .6rem;
+  }
+  header p.sub {
+    color: rgba(255,255,255,.7);
+    font-size: 1.05rem;
+    position: relative;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* ── Nav ── */
+  nav.toc {
+    background: #fff;
+    border-bottom: 2px solid var(--border);
+    padding: .8rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.4rem;
+    justify-content: center;
+    font-size: .88rem;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+  }
+  nav.toc a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 600;
+    padding: .2rem .3rem;
+    border-radius: 4px;
+    transition: background .15s;
+  }
+  nav.toc a:hover { background: var(--card-blue); }
+
+  /* ── Layout ── */
+  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+  /* ── Sections ── */
+  section.module {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem 2.2rem;
+    margin-bottom: 2.4rem;
+    box-shadow: var(--shadow);
+  }
+  section.module h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--navy);
+    border-bottom: 3px solid var(--orange);
+    padding-bottom: .45rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  section.module h2 .num {
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    width: 1.85rem; height: 1.85rem;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  section.module h3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 1.4rem 0 .55rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-size: .88rem;
+  }
+  section.module p { margin-bottom: .7rem; color: #2d3b48; }
+  section.module ul, section.module ol {
+    padding-left: 1.5rem;
+    margin-bottom: .9rem;
+    color: #2d3b48;
+  }
+  section.module li { margin-bottom: .35rem; }
+
+  /* ── Info boxes ── */
+  .info-box {
+    background: var(--card-blue);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: .9rem 1.1rem;
+    margin: 1rem 0;
+    font-size: .95rem;
+  }
+  .info-box strong { color: var(--blue); }
+
+  .steps-box {
+    background: #F4FAF7;
+    border-left: 4px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: .9rem 1.1rem;
+    margin: 1rem 0;
+  }
+  .steps-box ol { padding-left: 1.3rem; }
+  .steps-box li { margin-bottom: .4rem; font-size: .95rem; }
+  .steps-box strong { color: var(--green); display: block; margin-bottom: .4rem; font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ── Key term ── */
+  .key {
+    display: inline-block;
+    background: var(--navy);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .82rem;
+    padding: .15rem .5rem;
+    border-radius: 4px;
+    margin: 0 2px;
+  }
+  .measure {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  /* ── SVG diagrams ── */
+  .diagram-wrap {
+    background: #FAFCFF;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .diagram-wrap figcaption {
+    font-size: .82rem;
+    color: var(--mid);
+    margin-top: .5rem;
+    font-style: italic;
+  }
+
+  /* ── Exercises ── */
+  .exercise-block {
+    background: var(--card-warm);
+    border: 1.5px solid #F5C7B0;
+    border-radius: var(--radius);
+    padding: 1.4rem 1.6rem;
+    margin-top: 1.6rem;
+  }
+  .exercise-block h4 {
+    color: var(--orange);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .exercise-block h4::before {
+    content: '✏️';
+    font-size: 1.1rem;
+  }
+  .q-item {
+    background: #fff;
+    border: 1px solid #EADDD3;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: .9rem;
+  }
+  .q-item p { margin-bottom: .55rem; font-size: .96rem; }
+  .q-item label {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    cursor: pointer;
+    padding: .35rem .5rem;
+    border-radius: 6px;
+    margin-bottom: .2rem;
+    font-size: .93rem;
+    transition: background .12s;
+    border: 1.5px solid transparent;
+  }
+  .q-item label:hover { background: #FFF0EA; }
+  .q-item input[type=radio] { accent-color: var(--orange); width: 1rem; height: 1rem; flex-shrink: 0; }
+  .q-item input[type=text], .q-item input[type=number] {
+    width: 100%;
+    padding: .45rem .75rem;
+    border: 1.5px solid #d0c5bb;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .95rem;
+    color: var(--navy);
+    background: #fff;
+    margin-top: .3rem;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .q-item input[type=text]:focus, .q-item input[type=number]:focus { border-color: var(--blue); }
+  .check-btn {
+    margin-top: .7rem;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: .5rem 1.3rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  .check-btn:hover { background: #1d5a8a; }
+  .check-btn:active { transform: scale(.97); }
+  .feedback {
+    margin-top: .55rem;
+    padding: .5rem .85rem;
+    border-radius: 6px;
+    font-size: .91rem;
+    font-weight: 600;
+    display: none;
+  }
+  .feedback.correct {
+    background: #D4EDDA; color: var(--green); border: 1px solid #b6ddc6;
+  }
+  .feedback.wrong {
+    background: #FDECEA; color: var(--red); border: 1px solid #f5c6cb;
+  }
+  .option-correct { background: #D4EDDA !important; border-color: var(--green) !important; }
+  .option-wrong   { background: #FDECEA !important; border-color: var(--red) !important; }
+
+  /* ── Scale drawing calculator widget ── */
+  .widget {
+    background: var(--card-blue);
+    border: 1.5px solid #b8d4ef;
+    border-radius: var(--radius);
+    padding: 1.2rem 1.5rem;
+    margin-top: 1.2rem;
+  }
+  .widget h4 { color: var(--blue); font-size: 1rem; margin-bottom: .8rem; font-weight: 600; }
+  .widget .row { display: flex; flex-wrap: wrap; gap: .7rem; align-items: flex-end; margin-bottom: .7rem; }
+  .widget label { font-size: .88rem; color: var(--mid); font-weight: 600; display: block; margin-bottom: .25rem; }
+  .widget input {
+    padding: .4rem .65rem;
+    border: 1.5px solid #aac6e0;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .95rem;
+    width: 120px;
+    outline: none;
+  }
+  .widget input:focus { border-color: var(--blue); }
+  .widget button {
+    background: var(--blue); color: #fff; border: none;
+    border-radius: 6px; padding: .45rem 1.1rem;
+    font-weight: 600; font-size: .88rem; cursor: pointer;
+    transition: background .15s;
+  }
+  .widget button:hover { background: #1d5a8a; }
+  .widget .result {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--orange);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: .3rem;
+    min-height: 1.4rem;
+  }
+
+  /* ── Progress bar ── */
+  #progress-bar-wrap {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,.92);
+    border-top: 1.5px solid var(--border);
+    padding: .5rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-size: .85rem; color: var(--mid);
+    z-index: 200;
+    backdrop-filter: blur(6px);
+  }
+  #prog-bar {
+    flex: 1; height: 8px;
+    background: var(--border);
+    border-radius: 99px; overflow: hidden;
+  }
+  #prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--orange));
+    border-radius: 99px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+  #prog-label { white-space: nowrap; font-weight: 600; color: var(--blue); }
+
+  @media (max-width: 600px) {
+    section.module { padding: 1.3rem 1rem; }
+    nav.toc { font-size: .78rem; gap: .3rem .9rem; }
+    .widget .row { flex-direction: column; align-items: stretch; }
+    .widget input { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">Grade 9 · Mathematics</span>
+  <h1>Geometrical Constructions</h1>
+  <p class="sub">Measure lines &amp; angles · Construct figures · Scale drawings · Triangle constructions</p>
+</header>
+
+<nav class="toc" aria-label="Jump to section">
+  <a href="#s1">1 · Measuring</a>
+  <a href="#s2">2 · Constructing Figures</a>
+  <a href="#s3">3 · Bisectors</a>
+  <a href="#s4">4 · Scale Drawings</a>
+  <a href="#s5">5 · Triangle from 3 Sides</a>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 1 — Measuring Lines & Angles
+══════════════════════════════════════════════════════ -->
+<section class="module" id="s1">
+  <h2><span class="num">1</span> Measuring Lines and Angles</h2>
+
+  <h3>Measuring Lines</h3>
+  <p>A <strong>line segment</strong> is a part of a line with two definite endpoints. Its length is measured using a <strong>ruler</strong> (also called a straightedge with markings).</p>
+  <div class="info-box">
+    <strong>Key Rule:</strong> Always place the zero mark of the ruler exactly at one endpoint, keep the ruler flat, and read off the measurement at the other endpoint. Measurements are usually given in millimetres (mm) or centimetres (cm).
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 440 90" width="440" height="90" xmlns="http://www.w3.org/2000/svg" aria-label="Line segment AB measuring 6 cm">
+      <!-- Ruler body -->
+      <rect x="30" y="48" width="380" height="26" rx="3" fill="#FFF8E1" stroke="#c0a000" stroke-width="1.2"/>
+      <!-- Tick marks -->
+      <g stroke="#777" stroke-width="1">
+        <!-- cm ticks with labels -->
+        <line x1="30" y1="48" x2="30" y2="64"/><text x="28" y="76" font-size="8" fill="#555" text-anchor="middle">0</text>
+        <line x1="92" y1="48" x2="92" y2="62"/><text x="92" y="76" font-size="8" fill="#555" text-anchor="middle">1</text>
+        <line x1="154" y1="48" x2="154" y2="62"/><text x="154" y="76" font-size="8" fill="#555" text-anchor="middle">2</text>
+        <line x1="216" y1="48" x2="216" y2="62"/><text x="216" y="76" font-size="8" fill="#555" text-anchor="middle">3</text>
+        <line x1="278" y1="48" x2="278" y2="62"/><text x="278" y="76" font-size="8" fill="#555" text-anchor="middle">4</text>
+        <line x1="340" y1="48" x2="340" y2="62"/><text x="340" y="76" font-size="8" fill="#555" text-anchor="middle">5</text>
+        <line x1="402" y1="48" x2="402" y2="62"/><text x="402" y="76" font-size="8" fill="#555" text-anchor="middle">6</text>
+        <!-- mm ticks (selected) -->
+        <line x1="56" y1="48" x2="56" y2="56"/>
+        <line x1="68" y1="48" x2="68" y2="56"/>
+        <line x1="80" y1="48" x2="80" y2="56"/>
+      </g>
+      <!-- The segment AB -->
+      <line x1="30" y1="35" x2="402" y2="35" stroke="#2E6DA4" stroke-width="2.5"/>
+      <circle cx="30" cy="35" r="4" fill="#E8531A"/>
+      <circle cx="402" cy="35" r="4" fill="#E8531A"/>
+      <text x="26" y="28" font-size="12" fill="#1B2D45" font-weight="bold" text-anchor="middle">A</text>
+      <text x="406" y="28" font-size="12" fill="#1B2D45" font-weight="bold" text-anchor="middle">B</text>
+      <!-- Measurement label -->
+      <text x="216" y="20" font-size="10" fill="#E8531A" text-anchor="middle" font-weight="bold">AB = 6 cm</text>
+      <text x="392" y="84" font-size="8" fill="#999" text-anchor="end">cm</text>
+    </svg>
+    <figcaption>Line segment AB with length 6 cm measured on a ruler</figcaption>
+  </div>
+
+  <h3>Measuring Angles</h3>
+  <p>An <strong>angle</strong> is formed when two rays share a common endpoint called the <strong>vertex</strong>. Angles are measured in <strong>degrees (°)</strong> using a <span class="key">protractor</span>.</p>
+  <div class="steps-box">
+    <strong>How to measure an angle with a protractor</strong>
+    <ol>
+      <li>Place the <strong>centre hole</strong> of the protractor exactly on the <strong>vertex</strong> of the angle.</li>
+      <li>Align the <strong>baseline (0°)</strong> of the protractor with one arm of the angle.</li>
+      <li>Read the scale where the <strong>second arm</strong> of the angle crosses the protractor.</li>
+      <li>Choose the correct scale (inner or outer) — start from 0° on the arm you aligned.</li>
+    </ol>
+  </div>
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 280 180" width="280" height="180" xmlns="http://www.w3.org/2000/svg" aria-label="Angle of 50 degrees">
+      <!-- Protractor semicircle -->
+      <path d="M 40 140 A 100 100 0 0 1 240 140" fill="#FFFDE7" stroke="#c0a000" stroke-width="1.5"/>
+      <!-- Baseline -->
+      <line x1="30" y1="140" x2="250" y2="140" stroke="#aaa" stroke-width="1"/>
+      <!-- Degree ticks (every 30°) -->
+      <g stroke="#888" stroke-width="1" font-size="9" fill="#666">
+        <line x1="40" y1="140" x2="38" y2="128"/><text x="32" y="126">0</text>
+        <line x1="90" y1="54" x2="82" y2="47"/><text x="66" y="46">60</text>
+        <line x1="140" y1="40" x2="140" y2="30"/><text x="131" y="28">90</text>
+        <line x1="190" y1="54" x2="198" y2="47"/><text x="194" y="46">120</text>
+        <line x1="240" y1="140" x2="242" y2="128"/><text x="236" y="126">180</text>
+        <!-- 50° tick -->
+        <line x1="74.4" y1="88.3" x2="68" y2="83" stroke="#E8531A" stroke-width="1.5"/>
+        <text x="52" y="80" fill="#E8531A" font-weight="bold">50</text>
+      </g>
+      <!-- Angle arms -->
+      <line x1="140" y1="140" x2="30" y2="140" stroke="#2E6DA4" stroke-width="2"/>
+      <line x1="140" y1="140" x2="78" y2="81" stroke="#E8531A" stroke-width="2"/>
+      <!-- Vertex -->
+      <circle cx="140" cy="140" r="3.5" fill="#1B2D45"/>
+      <!-- Arc showing angle -->
+      <path d="M 170 140 A 30 30 0 0 0 155.8 122.3" fill="none" stroke="#E8531A" stroke-width="2" stroke-dasharray="4 2"/>
+      <text x="167" y="118" font-size="12" fill="#E8531A" font-weight="bold">50°</text>
+    </svg>
+    <figcaption>Protractor showing an angle of 50°</figcaption>
+  </div>
+
+  <div class="info-box">
+    <strong>Angle Types:</strong><br/>
+    Acute: <span class="measure">0° – 90°</span> &nbsp;|&nbsp;
+    Right: <span class="measure">90°</span> &nbsp;|&nbsp;
+    Obtuse: <span class="measure">90° – 180°</span> &nbsp;|&nbsp;
+    Straight: <span class="measure">180°</span> &nbsp;|&nbsp;
+    Reflex: <span class="measure">180° – 360°</span>
+  </div>
+
+  <!-- ── Exercises 1 ── -->
+  <div class="exercise-block">
+    <h4>Exercises — Section 1</h4>
+
+    <div class="q-item" id="q1">
+      <p><strong>Q1.</strong> A line segment PQ measures 4.5 cm. A second segment RS starts at the 2 cm mark and ends at the 6.5 cm mark on the same ruler. Which segment is longer?</p>
+      <label><input type="radio" name="q1" value="PQ"> PQ (4.5 cm)</label>
+      <label><input type="radio" name="q1" value="RS"> RS (4.5 cm)</label>
+      <label><input type="radio" name="q1" value="equal"> They are equal in length</label>
+      <label><input type="radio" name="q1" value="PQ2"> PQ is longer than RS</label>
+      <button class="check-btn" onclick="checkMC('q1','equal','Both PQ = 4.5 cm and RS = 6.5 − 2 = 4.5 cm, so they are equal.')">Check Answer</button>
+      <div class="feedback" id="q1-fb"></div>
+    </div>
+
+    <div class="q-item" id="q2">
+      <p><strong>Q2.</strong> An angle is formed between two arms. The protractor is placed correctly and the second arm crosses the protractor at 130° (reading from 0°). What type of angle is this?</p>
+      <label><input type="radio" name="q2" value="acute"> Acute</label>
+      <label><input type="radio" name="q2" value="right"> Right</label>
+      <label><input type="radio" name="q2" value="obtuse"> Obtuse</label>
+      <label><input type="radio" name="q2" value="reflex"> Reflex</label>
+      <button class="check-btn" onclick="checkMC('q2','obtuse','130° lies between 90° and 180°, so it is an obtuse angle.')">Check Answer</button>
+      <div class="feedback" id="q2-fb"></div>
+    </div>
+
+    <div class="q-item" id="q3">
+      <p><strong>Q3.</strong> When using a protractor, which point must be placed exactly on the vertex of the angle?</p>
+      <label><input type="radio" name="q3" value="edge"> The outer edge</label>
+      <label><input type="radio" name="q3" value="centre"> The centre hole / centre mark</label>
+      <label><input type="radio" name="q3" value="90"> The 90° mark</label>
+      <label><input type="radio" name="q3" value="top"> The top of the protractor</label>
+      <button class="check-btn" onclick="checkMC('q3','centre','The centre hole (centre mark) of the protractor must be placed exactly at the vertex of the angle.')">Check Answer</button>
+      <div class="feedback" id="q3-fb"></div>
+    </div>
+
+    <div class="q-item" id="q4">
+      <p><strong>Q4.</strong> An angle measures 90°. What special name does this angle have? Type your answer below.</p>
+      <input type="text" id="q4-input" placeholder="Type here…" />
+      <button class="check-btn" onclick="checkText('q4','right','A 90° angle is called a right angle.')">Check Answer</button>
+      <div class="feedback" id="q4-fb"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 2 — Simple Geometrical Figures
+══════════════════════════════════════════════════════ -->
+<section class="module" id="s2">
+  <h2><span class="num">2</span> Constructing Simple Geometrical Figures</h2>
+
+  <p>Simple geometrical figures — such as triangles, rectangles, and parallelograms — can be constructed from <strong>given data</strong> (lengths of sides and sizes of angles) using a <span class="key">ruler</span>, <span class="key">protractor</span>, and <span class="key">set squares</span>.</p>
+
+  <h3>Constructing a Triangle (Given Side + Two Angles)</h3>
+  <div class="steps-box">
+    <strong>Example: Construct △ABC with AB = 7 cm, ∠A = 60°, ∠B = 50°</strong>
+    <ol>
+      <li>Draw base line AB = <span class="measure">7 cm</span> using a ruler.</li>
+      <li>At point A, use a protractor to mark an angle of <span class="measure">60°</span> and draw a ray.</li>
+      <li>At point B, use a protractor to mark an angle of <span class="measure">50°</span> and draw a ray in the opposite direction.</li>
+      <li>The intersection of the two rays is point C. Label it.</li>
+      <li>The third angle ∠C = 180° − 60° − 50° = <span class="measure">70°</span>.</li>
+    </ol>
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 380 200" width="380" height="200" xmlns="http://www.w3.org/2000/svg" aria-label="Triangle ABC with base 7cm, angle A 60 degrees, angle B 50 degrees">
+      <!-- Triangle -->
+      <polygon points="30,165 310,165 180,52" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+      <!-- Labels -->
+      <text x="20" y="180" font-size="13" fill="#1B2D45" font-weight="bold">A</text>
+      <text x="312" y="180" font-size="13" fill="#1B2D45" font-weight="bold">B</text>
+      <text x="176" y="46" font-size="13" fill="#1B2D45" font-weight="bold">C</text>
+      <!-- Angle arcs -->
+      <path d="M 60 165 A 28 28 0 0 0 49.4 137.5" fill="none" stroke="#E8531A" stroke-width="1.5"/>
+      <text x="60" y="148" font-size="11" fill="#E8531A">60°</text>
+      <path d="M 282 165 A 28 28 0 0 1 295 138" fill="none" stroke="#E8531A" stroke-width="1.5"/>
+      <text x="263" y="149" font-size="11" fill="#E8531A">50°</text>
+      <text x="168" y="75" font-size="11" fill="#E8531A">70°</text>
+      <!-- Dimension -->
+      <line x1="30" y1="178" x2="310" y2="178" stroke="#888" stroke-width="1" stroke-dasharray="3 2"/>
+      <text x="170" y="193" font-size="11" fill="#2E6DA4" text-anchor="middle">AB = 7 cm</text>
+    </svg>
+    <figcaption>△ABC constructed from given data: AB = 7 cm, ∠A = 60°, ∠B = 50°</figcaption>
+  </div>
+
+  <h3>Using a Set Square</h3>
+  <p>A <strong>set square</strong> is a triangular drawing tool. It is used to:</p>
+  <ul>
+    <li>Draw <strong>perpendicular lines</strong> (lines at 90°) quickly.</li>
+    <li>Draw <strong>parallel lines</strong> when slid along a ruler.</li>
+    <li>The 45° set square has angles <span class="measure">45° – 45° – 90°</span>.</li>
+    <li>The 30–60° set square has angles <span class="measure">30° – 60° – 90°</span>.</li>
+  </ul>
+
+  <!-- ── Exercises 2 ── -->
+  <div class="exercise-block">
+    <h4>Exercises — Section 2</h4>
+
+    <div class="q-item" id="q5">
+      <p><strong>Q5.</strong> In △PQR, ∠P = 70° and ∠Q = 65°. What is the size of ∠R?</p>
+      <input type="number" id="q5-input" placeholder="Degrees…" min="0" max="180"/>
+      <button class="check-btn" onclick="checkNumber('q5', 45, 'Angles in a triangle sum to 180°. ∠R = 180° − 70° − 65° = 45°.')">Check Answer</button>
+      <div class="feedback" id="q5-fb"></div>
+    </div>
+
+    <div class="q-item" id="q6">
+      <p><strong>Q6.</strong> Which tool would you primarily use to draw a line <em>perpendicular</em> to an existing line quickly during construction?</p>
+      <label><input type="radio" name="q6" value="compass"> Compass</label>
+      <label><input type="radio" name="q6" value="setsquare"> Set square</label>
+      <label><input type="radio" name="q6" value="protractor"> Protractor alone</label>
+      <label><input type="radio" name="q6" value="ruler"> Ruler alone</label>
+      <button class="check-btn" onclick="checkMC('q6','setsquare','A set square (placed against a ruler) is the quickest tool for drawing perpendicular lines during constructions.')">Check Answer</button>
+      <div class="feedback" id="q6-fb"></div>
+    </div>
+
+    <div class="q-item" id="q7">
+      <p><strong>Q7.</strong> To construct △ABC with AB = 8 cm, ∠A = 45°, ∠B = 90°, a student measures ∠C. What should ∠C be?</p>
+      <input type="number" id="q7-input" placeholder="Degrees…" min="0" max="180"/>
+      <button class="check-btn" onclick="checkNumber('q7', 45, '∠C = 180° − 45° − 90° = 45°. This is actually an isosceles right triangle.')">Check Answer</button>
+      <div class="feedback" id="q7-fb"></div>
+    </div>
+
+    <div class="q-item" id="q8">
+      <p><strong>Q8.</strong> A rectangle has two pairs of equal sides and all angles are:</p>
+      <label><input type="radio" name="q8" value="60"> 60°</label>
+      <label><input type="radio" name="q8" value="90"> 90°</label>
+      <label><input type="radio" name="q8" value="45"> 45°</label>
+      <label><input type="radio" name="q8" value="varies"> They vary</label>
+      <button class="check-btn" onclick="checkMC('q8','90','By definition, all four angles in a rectangle are right angles (90°).')">Check Answer</button>
+      <div class="feedback" id="q8-fb"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 3 — Angle Bisectors & Perpendicular Bisectors
+══════════════════════════════════════════════════════ -->
+<section class="module" id="s3">
+  <h2><span class="num">3</span> Angle Bisectors &amp; Perpendicular Bisectors</h2>
+
+  <h3>Angle Bisector</h3>
+  <p>An <strong>angle bisector</strong> is a ray that divides an angle into <strong>two equal halves</strong>.</p>
+  <div class="steps-box">
+    <strong>Constructing an angle bisector with a protractor</strong>
+    <ol>
+      <li>Measure the full angle using a protractor. Say the angle is <span class="measure">80°</span>.</li>
+      <li>Divide by 2: half-angle = <span class="measure">40°</span>.</li>
+      <li>From the vertex, draw a ray at <span class="measure">40°</span> from one arm. This is the bisector.</li>
+    </ol>
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 320 190" width="320" height="190" xmlns="http://www.w3.org/2000/svg" aria-label="Angle bisector dividing 80 degree angle into two 40 degree parts">
+      <!-- Two arms of angle -->
+      <line x1="60" y1="150" x2="280" y2="150" stroke="#2E6DA4" stroke-width="2"/>
+      <line x1="60" y1="150" x2="200" y2="30" stroke="#2E6DA4" stroke-width="2"/>
+      <!-- Bisector -->
+      <line x1="60" y1="150" x2="255" y2="58" stroke="#E8531A" stroke-width="2" stroke-dasharray="7 4"/>
+      <!-- Arcs -->
+      <path d="M 130 150 A 70 70 0 0 0 102 98.6" fill="none" stroke="#aaa" stroke-width="1.2"/>
+      <path d="M 145 150 A 85 85 0 0 0 111 87" fill="none" stroke="#aaa" stroke-width="1.2"/>
+      <!-- Labels -->
+      <text x="128" y="138" font-size="11" fill="#2E6DA4">40°</text>
+      <text x="110" y="103" font-size="11" fill="#2E6DA4">40°</text>
+      <text x="260" y="52" font-size="11" fill="#E8531A" font-weight="bold">Bisector</text>
+      <circle cx="60" cy="150" r="3.5" fill="#1B2D45"/>
+      <text x="44" y="164" font-size="12" fill="#1B2D45" font-weight="bold">V</text>
+    </svg>
+    <figcaption>Angle bisector divides an 80° angle into two equal 40° parts</figcaption>
+  </div>
+
+  <h3>Perpendicular Bisector</h3>
+  <p>The <strong>perpendicular bisector</strong> of a line segment is a line that:</p>
+  <ul>
+    <li>Crosses the segment at its <strong>midpoint</strong>, and</li>
+    <li>Is perpendicular to it (makes a <span class="measure">90°</span> angle).</li>
+  </ul>
+
+  <div class="steps-box">
+    <strong>Constructing a perpendicular bisector with ruler &amp; protractor</strong>
+    <ol>
+      <li>Draw segment AB. Measure its length and find the midpoint M.</li>
+      <li>Mark point M on the segment.</li>
+      <li>Place the protractor at M, aligned with AB, and mark <span class="measure">90°</span> on both sides.</li>
+      <li>Draw a line through M at 90° to AB. This is the perpendicular bisector.</li>
+    </ol>
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 320 190" width="320" height="190" xmlns="http://www.w3.org/2000/svg" aria-label="Perpendicular bisector of segment AB at midpoint M">
+      <!-- Segment AB -->
+      <line x1="40" y1="110" x2="280" y2="110" stroke="#2E6DA4" stroke-width="2.5"/>
+      <!-- Perpendicular bisector -->
+      <line x1="160" y1="20" x2="160" y2="180" stroke="#E8531A" stroke-width="2" stroke-dasharray="7 4"/>
+      <!-- Right angle mark -->
+      <rect x="162" y="100" width="14" height="14" fill="none" stroke="#1B2D45" stroke-width="1.5"/>
+      <!-- Labels -->
+      <text x="28" y="106" font-size="13" fill="#1B2D45" font-weight="bold">A</text>
+      <text x="284" y="106" font-size="13" fill="#1B2D45" font-weight="bold">B</text>
+      <circle cx="160" cy="110" r="4" fill="#E8531A"/>
+      <text x="162" y="128" font-size="12" fill="#1B2D45" font-weight="bold">M</text>
+      <text x="168" y="38" font-size="11" fill="#E8531A" font-weight="bold">⊥ bisector</text>
+      <!-- AM = MB annotation -->
+      <line x1="40" y1="98" x2="160" y2="98" stroke="#888" stroke-width="1"/>
+      <line x1="160" y1="98" x2="280" y2="98" stroke="#888" stroke-width="1"/>
+      <text x="100" y="92" font-size="10" fill="#888" text-anchor="middle">AM</text>
+      <text x="220" y="92" font-size="10" fill="#888" text-anchor="middle">MB</text>
+    </svg>
+    <figcaption>Perpendicular bisector of AB passes through midpoint M at 90°</figcaption>
+  </div>
+
+  <!-- ── Exercises 3 ── -->
+  <div class="exercise-block">
+    <h4>Exercises — Section 3</h4>
+
+    <div class="q-item" id="q9">
+      <p><strong>Q9.</strong> An angle measures 124°. If you draw its bisector, what is the size of each half?</p>
+      <input type="number" id="q9-input" placeholder="Degrees…" min="0" max="180"/>
+      <button class="check-btn" onclick="checkNumber('q9', 62, '124° ÷ 2 = 62°. Each half equals 62°.')">Check Answer</button>
+      <div class="feedback" id="q9-fb"></div>
+    </div>
+
+    <div class="q-item" id="q10">
+      <p><strong>Q10.</strong> A line segment XY is 12 cm long. Where is its midpoint?</p>
+      <label><input type="radio" name="q10" value="3cm"> 3 cm from X</label>
+      <label><input type="radio" name="q10" value="6cm"> 6 cm from X</label>
+      <label><input type="radio" name="q10" value="4cm"> 4 cm from X</label>
+      <label><input type="radio" name="q10" value="8cm"> 8 cm from X</label>
+      <button class="check-btn" onclick="checkMC('q10','6cm','The midpoint is at half the length: 12 ÷ 2 = 6 cm from X (and 6 cm from Y).')">Check Answer</button>
+      <div class="feedback" id="q10-fb"></div>
+    </div>
+
+    <div class="q-item" id="q11">
+      <p><strong>Q11.</strong> A perpendicular bisector makes what angle with the original line segment?</p>
+      <label><input type="radio" name="q11" value="45"> 45°</label>
+      <label><input type="radio" name="q11" value="60"> 60°</label>
+      <label><input type="radio" name="q11" value="90"> 90°</label>
+      <label><input type="radio" name="q11" value="180"> 180°</label>
+      <button class="check-btn" onclick="checkMC('q11','90','By definition, a perpendicular bisector is perpendicular (90°) to the segment it bisects.')">Check Answer</button>
+      <div class="feedback" id="q11-fb"></div>
+    </div>
+
+    <div class="q-item" id="q12">
+      <p><strong>Q12.</strong> The angle bisector of a right angle (90°) creates two equal angles. What is the size of each?</p>
+      <input type="number" id="q12-input" placeholder="Degrees…" min="0" max="90"/>
+      <button class="check-btn" onclick="checkNumber('q12', 45, '90° ÷ 2 = 45°. Each resulting angle is 45°.')">Check Answer</button>
+      <div class="feedback" id="q12-fb"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 4 — Scale Drawings
+══════════════════════════════════════════════════════ -->
+<section class="module" id="s4">
+  <h2><span class="num">4</span> Scale Drawings</h2>
+
+  <p>A <strong>scale drawing</strong> is an accurate drawing of a real object where all measurements are reduced (or enlarged) by the same factor called the <strong>scale</strong>.</p>
+
+  <div class="info-box">
+    <strong>Scale Format:</strong> A scale is written as a ratio, e.g. <span class="measure">1 : 100</span>, which means 1 unit on the drawing represents 100 units in real life. So 1 cm on the drawing = 100 cm (1 m) in real life.
+  </div>
+
+  <h3>Reading a Scale Drawing</h3>
+  <p>To find the <strong>real measurement</strong> from a drawing:</p>
+  <div class="steps-box">
+    <strong>Formula</strong>
+    <ol>
+      <li>Measure the length on the drawing (in cm).</li>
+      <li>Multiply by the scale factor: <strong>Real length = Drawing length × Scale</strong></li>
+      <li>Convert units if needed.</li>
+    </ol>
+  </div>
+  <p><strong>Example:</strong> A room on a scale drawing measures <span class="measure">4.5 cm</span>. The scale is <span class="measure">1 : 200</span>.<br/>
+  Real length = 4.5 × 200 = <span class="measure">900 cm = 9 m</span>.</p>
+
+  <h3>Making a Scale Drawing</h3>
+  <div class="steps-box">
+    <strong>Steps</strong>
+    <ol>
+      <li>Choose an appropriate scale (e.g., 1 : 50).</li>
+      <li>Divide all real measurements by the scale factor to get drawing measurements.</li>
+      <li>Draw accurately using a ruler and protractor, labelling the scale used.</li>
+    </ol>
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 380 160" width="380" height="160" xmlns="http://www.w3.org/2000/svg" aria-label="Scale drawing of a room">
+      <!-- Room outline -->
+      <rect x="40" y="25" width="180" height="120" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+      <!-- Dimensions on drawing -->
+      <line x1="40" y1="154" x2="220" y2="154" stroke="#888" stroke-width="1"/>
+      <line x1="40" y1="150" x2="40" y2="158" stroke="#888" stroke-width="1"/>
+      <line x1="220" y1="150" x2="220" y2="158" stroke="#888" stroke-width="1"/>
+      <text x="130" y="168" font-size="11" fill="#2E6DA4" text-anchor="middle">9 cm on drawing</text>
+
+      <line x1="228" y1="25" x2="228" y2="145" stroke="#888" stroke-width="1"/>
+      <line x1="224" y1="25" x2="232" y2="25" stroke="#888" stroke-width="1"/>
+      <line x1="224" y1="145" x2="232" y2="145" stroke="#888" stroke-width="1"/>
+      <text x="256" y="92" font-size="11" fill="#2E6DA4" text-anchor="middle">6 cm</text>
+
+      <!-- Scale label -->
+      <text x="40" y="18" font-size="11" fill="#E8531A" font-weight="bold">Scale: 1 : 100</text>
+
+      <!-- Real dimensions -->
+      <text x="310" y="60" font-size="13" fill="#1B2D45" font-weight="bold">Real sizes:</text>
+      <text x="310" y="82" font-size="11" fill="#888">Width = 9 m</text>
+      <text x="310" y="100" font-size="11" fill="#888">Height = 6 m</text>
+    </svg>
+    <figcaption>Scale drawing of a room at scale 1 : 100</figcaption>
+  </div>
+
+  <!-- Interactive widget -->
+  <div class="widget">
+    <h4>🔢 Scale Drawing Calculator</h4>
+    <div class="row">
+      <div>
+        <label>Drawing length (cm)</label>
+        <input type="number" id="w-draw" placeholder="e.g. 4.5" step="0.1" min="0"/>
+      </div>
+      <div>
+        <label>Scale (1 : ?)</label>
+        <input type="number" id="w-scale" placeholder="e.g. 200" step="1" min="1"/>
+      </div>
+      <button onclick="calcScale()">Calculate</button>
+    </div>
+    <div class="result" id="w-result"></div>
+  </div>
+
+  <!-- ── Exercises 4 ── -->
+  <div class="exercise-block">
+    <h4>Exercises — Section 4</h4>
+
+    <div class="q-item" id="q13">
+      <p><strong>Q13.</strong> A garden path measures 3 cm on a scale drawing with scale 1 : 50. What is the real length of the path?</p>
+      <label><input type="radio" name="q13" value="100cm"> 100 cm (1 m)</label>
+      <label><input type="radio" name="q13" value="150cm"> 150 cm (1.5 m)</label>
+      <label><input type="radio" name="q13" value="53cm"> 53 cm</label>
+      <label><input type="radio" name="q13" value="300cm"> 300 cm (3 m)</label>
+      <button class="check-btn" onclick="checkMC('q13','150cm','Real length = 3 × 50 = 150 cm = 1.5 m.')">Check Answer</button>
+      <div class="feedback" id="q13-fb"></div>
+    </div>
+
+    <div class="q-item" id="q14">
+      <p><strong>Q14.</strong> A real wall is 8 m long. Using a scale of 1 : 200, how long will it be on the drawing? (Give answer in cm.)</p>
+      <input type="number" id="q14-input" placeholder="cm…" step="0.1" min="0"/>
+      <button class="check-btn" onclick="checkNumber('q14', 4, '8 m = 800 cm. Drawing length = 800 ÷ 200 = 4 cm.')">Check Answer</button>
+      <div class="feedback" id="q14-fb"></div>
+    </div>
+
+    <div class="q-item" id="q15">
+      <p><strong>Q15.</strong> A scale is written as 1 : 500. This means 1 cm on the drawing equals how many metres in real life?</p>
+      <input type="number" id="q15-input" placeholder="metres…" step="0.1" min="0"/>
+      <button class="check-btn" onclick="checkNumber('q15', 5, '1 cm × 500 = 500 cm = 5 m.')">Check Answer</button>
+      <div class="feedback" id="q15-fb"></div>
+    </div>
+
+    <div class="q-item" id="q16">
+      <p><strong>Q16.</strong> Which of the following describes a scale of 1 : 1?</p>
+      <label><input type="radio" name="q16" value="enlarged"> The drawing is twice the real size</label>
+      <label><input type="radio" name="q16" value="actualsize"> The drawing is the same size as the real object</label>
+      <label><input type="radio" name="q16" value="half"> The drawing is half the real size</label>
+      <label><input type="radio" name="q16" value="tenth"> The drawing is one-tenth the real size</label>
+      <button class="check-btn" onclick="checkMC('q16','actualsize','A scale of 1 : 1 means 1 unit on the drawing = 1 unit in real life, so the drawing is actual size.')">Check Answer</button>
+      <div class="feedback" id="q16-fb"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════
+     SECTION 5 — Triangle from 3 Sides (Ruler & Compasses)
+══════════════════════════════════════════════════════ -->
+<section class="module" id="s5">
+  <h2><span class="num">5</span> Constructing a Triangle Given Three Sides</h2>
+
+  <div class="info-box">
+    <strong>Examiner's Rule:</strong> When constructing a triangle given <em>three sides</em>, you <strong>must use a ruler and compasses only</strong> — no protractors or set squares for this construction.
+  </div>
+
+  <p>Suppose you need to construct △ABC with sides <span class="measure">AB = 7 cm</span>, <span class="measure">BC = 5 cm</span>, <span class="measure">CA = 6 cm</span>.</p>
+
+  <div class="steps-box">
+    <strong>Step-by-step construction (ruler &amp; compasses only)</strong>
+    <ol>
+      <li><strong>Draw the base:</strong> Draw AB = <span class="measure">7 cm</span> using a ruler.</li>
+      <li><strong>Arc from A:</strong> Open the compasses to <span class="measure">6 cm</span> (= CA). Place the compass point at A and draw an arc above the line.</li>
+      <li><strong>Arc from B:</strong> Open the compasses to <span class="measure">5 cm</span> (= BC). Place the compass point at B and draw an arc to intersect the first arc.</li>
+      <li><strong>Mark C:</strong> The intersection point of the two arcs is vertex C.</li>
+      <li><strong>Complete the triangle:</strong> Join A to C and B to C with a ruler.</li>
+    </ol>
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 420 230" width="420" height="230" xmlns="http://www.w3.org/2000/svg" aria-label="Construction of triangle ABC with AB=7cm BC=5cm CA=6cm using compasses">
+      <!-- Arcs (construction marks) -->
+      <!-- Arc from A, radius 6 -->
+      <path d="M 75 155 A 120 120 0 0 1 185 47" fill="none" stroke="#E8531A" stroke-width="1.2" stroke-dasharray="5 3" opacity=".8"/>
+      <!-- Arc from B, radius 5 -->
+      <path d="M 305 55 A 100 100 0 0 0 230 155" fill="none" stroke="#2E6DA4" stroke-width="1.2" stroke-dasharray="5 3" opacity=".8"/>
+      <!-- Triangle -->
+      <polygon points="55,165 335,165 205,55" fill="rgba(46,109,164,.08)" stroke="#1B2D45" stroke-width="2"/>
+      <!-- Vertices -->
+      <circle cx="55" cy="165" r="4" fill="#1B2D45"/>
+      <circle cx="335" cy="165" r="4" fill="#1B2D45"/>
+      <circle cx="205" cy="55" r="5" fill="#E8531A"/>
+      <!-- Labels -->
+      <text x="38" y="180" font-size="14" fill="#1B2D45" font-weight="bold">A</text>
+      <text x="339" y="180" font-size="14" fill="#1B2D45" font-weight="bold">B</text>
+      <text x="201" y="46" font-size="14" fill="#E8531A" font-weight="bold">C</text>
+      <!-- Side labels -->
+      <text x="195" y="186" font-size="11" fill="#2E6DA4" text-anchor="middle">AB = 7 cm</text>
+      <text x="111" y="112" font-size="11" fill="#E8531A" transform="rotate(-46,111,112)">CA = 6 cm</text>
+      <text x="296" y="116" font-size="11" fill="#2E6DA4" transform="rotate(40,296,116)">BC = 5 cm</text>
+      <!-- Compass arc labels -->
+      <text x="68" y="98" font-size="10" fill="#E8531A">Arc from A</text>
+      <text x="295" y="78" font-size="10" fill="#2E6DA4" text-anchor="end">Arc from B</text>
+      <!-- Compass symbol hints -->
+      <text x="10" y="14" font-size="11" fill="#888">⊙ = compass arc</text>
+    </svg>
+    <figcaption>Construction of △ABC: two arcs intersect at C, which is then joined to A and B</figcaption>
+  </div>
+
+  <div class="info-box">
+    <strong>Remember:</strong> Always leave your <em>construction arcs visible</em> in an exam — erasing them costs marks! They are your evidence of method.
+  </div>
+
+  <h3>Triangle Inequality</h3>
+  <p>For any triangle, the sum of any two sides must be <strong>greater than</strong> the third side. If this condition is not met, the arcs will not intersect and no triangle can be formed.</p>
+  <p>Check: <span class="measure">6 + 5 = 11 &gt; 7</span> ✔ &nbsp;|&nbsp; <span class="measure">7 + 5 = 12 &gt; 6</span> ✔ &nbsp;|&nbsp; <span class="measure">7 + 6 = 13 &gt; 5</span> ✔</p>
+
+  <!-- ── Exercises 5 ── -->
+  <div class="exercise-block">
+    <h4>Exercises — Section 5</h4>
+
+    <div class="q-item" id="q17">
+      <p><strong>Q17.</strong> When constructing a triangle given three sides, which instruments should you use?</p>
+      <label><input type="radio" name="q17" value="proto"> Ruler and protractor only</label>
+      <label><input type="radio" name="q17" value="set"> Ruler and set square only</label>
+      <label><input type="radio" name="q17" value="rc"> Ruler and compasses only</label>
+      <label><input type="radio" name="q17" value="all"> Any combination of all tools</label>
+      <button class="check-btn" onclick="checkMC('q17','rc','The rule states: ruler and compasses only must be used when constructing a triangle from three given side lengths.')">Check Answer</button>
+      <div class="feedback" id="q17-fb"></div>
+    </div>
+
+    <div class="q-item" id="q18">
+      <p><strong>Q18.</strong> In the construction of △ABC with AB = 7 cm, BC = 5 cm, CA = 6 cm — what radius do you set the compasses to when drawing the arc from point A?</p>
+      <label><input type="radio" name="q18" value="7"> 7 cm (= AB)</label>
+      <label><input type="radio" name="q18" value="5"> 5 cm (= BC)</label>
+      <label><input type="radio" name="q18" value="6"> 6 cm (= CA)</label>
+      <label><input type="radio" name="q18" value="12"> 12 cm</label>
+      <button class="check-btn" onclick="checkMC('q18','6','The arc from A represents all possible positions of C, so its radius = CA = 6 cm.')">Check Answer</button>
+      <div class="feedback" id="q18-fb"></div>
+    </div>
+
+    <div class="q-item" id="q19">
+      <p><strong>Q19.</strong> Can a triangle be formed with sides 3 cm, 4 cm, and 9 cm? (Apply the triangle inequality.)</p>
+      <label><input type="radio" name="q19" value="yes"> Yes</label>
+      <label><input type="radio" name="q19" value="no"> No</label>
+      <button class="check-btn" onclick="checkMC('q19','no','3 + 4 = 7, which is NOT greater than 9. The triangle inequality fails, so no triangle can be formed.')">Check Answer</button>
+      <div class="feedback" id="q19-fb"></div>
+    </div>
+
+    <div class="q-item" id="q20">
+      <p><strong>Q20.</strong> After constructing a triangle with compasses in an exam, should you erase the construction arcs?</p>
+      <label><input type="radio" name="q20" value="yes"> Yes, always erase them for a neat drawing</label>
+      <label><input type="radio" name="q20" value="no"> No, leave them visible as evidence of method</label>
+      <label><input type="radio" name="q20" value="partial"> Only erase arcs outside the triangle</label>
+      <label><input type="radio" name="q20" value="optional"> It is optional — the examiner won't care</label>
+      <button class="check-btn" onclick="checkMC('q20','no','Construction arcs must be left visible. They show the examiner that you used the correct method and earn you method marks.')">Check Answer</button>
+      <div class="feedback" id="q20-fb"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- Progress bar -->
+<div id="progress-bar-wrap" aria-live="polite">
+  <span>Progress</span>
+  <div id="prog-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div id="prog-fill"></div>
+  </div>
+  <span id="prog-label">0 / 20 answered</span>
+</div>
+
+<script>
+// ── Utility: track answered questions ──────────────────────────────────────
+const answered = new Set();
+const TOTAL = 20;
+
+function updateProgress() {
+  const pct = Math.round((answered.size / TOTAL) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-bar').setAttribute('aria-valuenow', pct);
+  document.getElementById('prog-label').textContent = answered.size + ' / ' + TOTAL + ' answered';
+}
+
+// ── Multiple-choice check ──────────────────────────────────────────────────
+function checkMC(qid, correct, explanation) {
+  const selected = document.querySelector(`input[name="${qid}"]:checked`);
+  const fb = document.getElementById(qid + '-fb');
+  if (!selected) {
+    fb.style.display = 'block';
+    fb.className = 'feedback wrong';
+    fb.textContent = 'Please select an answer.';
+    return;
+  }
+  const labels = document.querySelectorAll(`#${qid} label`);
+  labels.forEach(lbl => {
+    lbl.classList.remove('option-correct', 'option-wrong');
+    if (lbl.querySelector('input').value === correct) lbl.classList.add('option-correct');
+    else if (lbl.querySelector('input').checked) lbl.classList.add('option-wrong');
+    lbl.querySelector('input').disabled = true;
+  });
+  fb.style.display = 'block';
+  if (selected.value === correct) {
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ Correct! ' + explanation;
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ Not quite. ' + explanation;
+  }
+  answered.add(qid);
+  updateProgress();
+}
+
+// ── Text input check ────────────────────────────────────────────────────────
+function checkText(qid, correct, explanation) {
+  const input = document.getElementById(qid + '-input');
+  const fb = document.getElementById(qid + '-fb');
+  const val = input.value.trim().toLowerCase();
+  fb.style.display = 'block';
+  if (val.includes(correct.toLowerCase())) {
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ Correct! ' + explanation;
+    input.style.borderColor = 'var(--green)';
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ Try again. ' + explanation;
+    input.style.borderColor = 'var(--red)';
+  }
+  answered.add(qid);
+  updateProgress();
+}
+
+// ── Number input check ──────────────────────────────────────────────────────
+function checkNumber(qid, correct, explanation) {
+  const input = document.getElementById(qid + '-input');
+  const fb = document.getElementById(qid + '-fb');
+  const val = parseFloat(input.value);
+  fb.style.display = 'block';
+  if (!isNaN(val) && Math.abs(val - correct) < 0.05) {
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ Correct! ' + explanation;
+    input.style.borderColor = 'var(--green)';
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ Not quite. ' + explanation;
+    input.style.borderColor = 'var(--red)';
+  }
+  answered.add(qid);
+  updateProgress();
+}
+
+// ── Scale drawing widget ─────────────────────────────────────────────────────
+function calcScale() {
+  const draw = parseFloat(document.getElementById('w-draw').value);
+  const scale = parseFloat(document.getElementById('w-scale').value);
+  const result = document.getElementById('w-result');
+  if (isNaN(draw) || isNaN(scale) || scale <= 0) {
+    result.textContent = 'Please enter valid numbers.';
+    return;
+  }
+  const realCm = draw * scale;
+  const realM = realCm / 100;
+  result.textContent = `Real length = ${draw} × ${scale} = ${realCm} cm = ${realM} m`;
+}
+</script>
+</body>
+</html>
