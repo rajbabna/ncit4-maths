@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exponent Rules - 20 MCQs</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.0/katex.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.0/katex.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .container {
+            background: #0f3460;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .question-card {
+            background: #16213e;
+            border-left: 4px solid #667eea;
+        }
+
+        body.dark-mode .option {
+            background: #1a3a52;
+            color: #f0f0f0;
+            border: 2px solid #444;
+        }
+
+        body.dark-mode .option:hover {
+            background: #2a4a62;
+        }
+
+        body.dark-mode .option.selected {
+            border-color: #667eea;
+            background: #2a4a62;
+        }
+
+        body.dark-mode .feedback.correct {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        body.dark-mode .feedback.incorrect {
+            background: rgba(244, 67, 54, 0.2);
+            color: #ff6b6b;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        body.dark-mode .progress-bar {
+            background: #444;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            gap: 20px;
+        }
+
+        .stat-box {
+            flex: 1;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        body.dark-mode .stat-box {
+            background: #1a3a52;
+            border-left-color: #667eea;
+        }
+
+        .stat-box .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-box .label {
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        body.dark-mode .stat-box .label {
+            color: #aaa;
+        }
+
+        .questions-container {
+            margin-top: 30px;
+        }
+
+        .question-card {
+            background: #f9f9f9;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-number {
+            font-size: 0.9em;
+            color: #999;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        body.dark-mode .question-number {
+            color: #aaa;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            text-align: left;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f5ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #f0f5ff;
+        }
+
+        .option.correct {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .option.incorrect {
+            background: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4caf50;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        body.dark-mode .btn-secondary {
+            background: #1a3a52;
+            color: #f0f0f0;
+            border-color: #444;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e0e0e0;
+        }
+
+        body.dark-mode .btn-secondary:hover:not(:disabled) {
+            background: #2a4a62;
+        }
+
+        .completion-screen {
+            display: none;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        .completion-screen.show {
+            display: block;
+        }
+
+        .completion-screen h2 {
+            font-size: 2em;
+            margin: 30px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0;
+        }
+
+        .performance-message {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #666;
+        }
+
+        body.dark-mode .performance-message {
+            color: #aaa;
+        }
+
+        .result-summary {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        body.dark-mode .result-summary {
+            background: #1a3a52;
+        }
+
+        .result-summary p {
+            margin: 10px 0;
+            font-size: 1.05em;
+        }
+
+        .katex-display {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+    <div class="container">
+        <div class="header">
+            <h1>Exponent Rules</h1>
+            <p>Test Your Understanding with 20 Questions</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="value" id="currentQuestion">1</div>
+                <div class="label">Current Question</div>
+            </div>
+            <div class="stat-box">
+                <div class="value" id="correctCount">0</div>
+                <div class="label">Correct</div>
+            </div>
+            <div class="stat-box">
+                <div class="value" id="scorePercentage">0%</div>
+                <div class="label">Score</div>
+            </div>
+        </div>
+
+        <div class="questions-container" id="questionsContainer"></div>
+
+        <div class="completion-screen" id="completionScreen">
+            <h2>Quiz Complete! 🎉</h2>
+            <div class="score-display" id="finalScore">0/20</div>
+            <div class="performance-message" id="performanceMessage"></div>
+            <div class="result-summary">
+                <p><strong>Correct Answers:</strong> <span id="summaryCorrect">0</span></p>
+                <p><strong>Incorrect Answers:</strong> <span id="summaryIncorrect">0</span></p>
+                <p><strong>Final Score:</strong> <span id="summaryPercentage">0%</span></p>
+            </div>
+            <button class="btn btn-primary" onclick="restartQuiz()">Restart Quiz</button>
+        </div>
+
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>← Previous</button>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Simplify: $2^3 \\times 2^4$",
+                options: ["$2^7$", "$2^{12}$", "$4^7$", "$2^1$"],
+                correct: 0,
+                rule: "Multiplication Rule: $a^m \\times a^n = a^{m+n}$"
+            },
+            {
+                question: "What is the value of $3^2 \\times 3^3$?",
+                options: ["$3^5 = 243$", "$3^6 = 729$", "$9^5$", "$6^5 = 7776$"],
+                correct: 0,
+                rule: "Apply multiplication rule: $3^{2+3} = 3^5 = 243$"
+            },
+            {
+                question: "Simplify: $\\frac{5^7}{5^3}$",
+                options: ["$5^{10}$", "$5^4$", "$25^4$", "$5^{2.33}$"],
+                correct: 1,
+                rule: "Division Rule: $a^m \\div a^n = a^{m-n}$, so $5^{7-3} = 5^4$"
+            },
+            {
+                question: "What is $\\frac{x^6}{x^2}$?",
+                options: ["$x^8$", "$x^4$", "$x^3$", "$x^{12}$"],
+                correct: 1,
+                rule: "Division rule: $x^{6-2} = x^4$"
+            },
+            {
+                question: "Evaluate $(2^3)^2$",
+                options: ["$2^5$", "$2^6 = 64$", "$4^3 = 64$", "$2^9$"],
+                correct: 1,
+                rule: "Power of a Power: $(a^m)^n = a^{mn}$, so $(2^3)^2 = 2^6 = 64$"
+            },
+            {
+                question: "Simplify $(a^4)^3$",
+                options: ["$a^7$", "$a^{12}$", "$a^{64}$", "$a^1$"],
+                correct: 1,
+                rule: "Apply power of power rule: $a^{4 \\times 3} = a^{12}$"
+            },
+            {
+                question: "What is $5^0$?",
+                options: ["$0$", "$5$", "$1$", "Undefined"],
+                correct: 2,
+                rule: "Zero Index: $a^0 = 1$ for any non-zero $a$"
+            },
+            {
+                question: "Evaluate $(7^0) + (3^0)$",
+                options: ["$0$", "$1$", "$2$", "$10$"],
+                correct: 2,
+                rule: "Both terms equal 1, so $1 + 1 = 2$"
+            },
+            {
+                question: "What does $4^{-2}$ equal?",
+                options: ["$-8$", "$\\frac{1}{16}$", "$16$", "$-16$"],
+                correct: 1,
+                rule: "Negative Index: $a^{-n} = \\frac{1}{a^n}$, so $4^{-2} = \\frac{1}{16}$"
+            },
+            {
+                question: "Simplify $3^{-3}$",
+                options: ["$\\frac{1}{9}$", "$\\frac{1}{27}$", "$-27$", "$27$"],
+                correct: 1,
+                rule: "Negative index: $3^{-3} = \\frac{1}{3^3} = \\frac{1}{27}$"
+            },
+            {
+                question: "What is $8^{1/3}$?",
+                options: ["$2$", "$4$", "$8$", "$\\frac{8}{3}$"],
+                correct: 0,
+                rule: "Fractional Index: $a^{1/n} = \\sqrt[n]{a}$, so $8^{1/3} = \\sqrt[3]{8} = 2$"
+            },
+            {
+                question: "Evaluate $27^{1/3}$",
+                options: ["$3$", "$9$", "$81$", "$\\frac{27}{3}$"],
+                correct: 0,
+                rule: "Fractional index: $27^{1/3} = \\sqrt[3]{27} = 3$"
+            },
+            {
+                question: "What is $16^{1/2}$?",
+                options: ["$2$", "$4$", "$8$", "$16$"],
+                correct: 1,
+                rule: "Fractional index: $16^{1/2} = \\sqrt{16} = 4$"
+            },
+            {
+                question: "Simplify $8^{2/3}$",
+                options: ["$2$", "$4$", "$6$", "$16$"],
+                correct: 1,
+                rule: "General fractional index: $8^{2/3} = (\\sqrt[3]{8})^2 = 2^2 = 4$"
+            },
+            {
+                question: "Evaluate $27^{2/3}$",
+                options: ["$3$", "$6$", "$9$", "$27$"],
+                correct: 2,
+                rule: "Fractional index: $27^{2/3} = (\\sqrt[3]{27})^2 = 3^2 = 9$"
+            },
+            {
+                question: "What is $2^{-3}$?",
+                options: ["$\\frac{1}{8}$", "$\\frac{1}{6}$", "$-8$", "$8$"],
+                correct: 0,
+                rule: "Negative index: $2^{-3} = \\frac{1}{2^3} = \\frac{1}{8}$"
+            },
+            {
+                question: "Combine into a single power: $x^4 \\times x^5 \\div x^2$",
+                options: ["$x^9$", "$x^7$", "$x^{11}$", "$x^{20}$"],
+                correct: 1,
+                rule: "Multiply first: $x^{4+5} = x^9$, then divide: $x^{9-2} = x^7$"
+            },
+            {
+                question: "Simplify $\\frac{(2^3)^2}{2^4}$",
+                options: ["$2^2 = 4$", "$2^6 = 64$", "$2^{10} = 1024$", "$2^5 = 32$"],
+                correct: 0,
+                rule: "Power of power: $(2^3)^2 = 2^6$, then divide: $\\frac{2^6}{2^4} = 2^2 = 4$"
+            },
+            {
+                question: "What is the value of $\\left(\\frac{1}{2}\\right)^{-2}$?",
+                options: ["$\\frac{1}{4}$", "$4$", "$2$", "$-4$"],
+                correct: 1,
+                rule: "Negative index: $\\left(\\frac{1}{2}\\right)^{-2} = 2^2 = 4$"
+            },
+            {
+                question: "Evaluate $100^{1/2} \\times 10^0$",
+                options: ["$0$", "$10$", "$100$", "$1000$"],
+                correct: 1,
+                rule: "$100^{1/2} = 10$ and $10^0 = 1$, so $10 \\times 1 = 10$"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+        let answered = new Array(questions.length).fill(false);
+
+        function init() {
+            loadProgress();
+            renderQuestions();
+            renderCurrentQuestion();
+            updateStats();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = questions.map((q, idx) => `
+                <div class="question-card" id="question-${idx}">
+                    <div class="question-number">Question ${idx + 1} of ${questions.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options" id="options-${idx}">
+                        ${q.options.map((opt, optIdx) => `
+                            <div class="option" onclick="selectOption(${idx}, ${optIdx})">
+                                ${String.fromCharCode(65 + optIdx)}) ${opt}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${idx}"></div>
+                </div>
+            `).join('');
+        }
+
+        function renderCurrentQuestion() {
+            document.querySelectorAll('.question-card').forEach((card, idx) => {
+                card.classList.remove('active');
+                if (idx === currentQuestion) {
+                    card.classList.add('active');
+                }
+            });
+
+            const q = questions[currentQuestion];
+            const optionsContainer = document.getElementById(`options-${currentQuestion}`);
+            const options = optionsContainer.querySelectorAll('.option');
+            
+            options.forEach((opt, idx) => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+                if (answered[currentQuestion]) {
+                    if (idx === q.correct) {
+                        opt.classList.add('correct');
+                    } else if (idx === answers[currentQuestion]) {
+                        opt.classList.add('incorrect');
+                    }
+                } else if (idx === answers[currentQuestion]) {
+                    opt.classList.add('selected');
+                }
+            });
+
+            const feedback = document.getElementById(`feedback-${currentQuestion}`);
+            if (answered[currentQuestion]) {
+                feedback.classList.add('show');
+                if (answers[currentQuestion] === q.correct) {
+                    feedback.classList.add('correct');
+                    feedback.classList.remove('incorrect');
+                    feedback.innerHTML = `✓ Correct! ${q.rule}`;
+                } else {
+                    feedback.classList.add('incorrect');
+                    feedback.classList.remove('correct');
+                    feedback.innerHTML = `✗ Incorrect. The correct answer is ${String.fromCharCode(65 + q.correct)}). ${q.rule}`;
+                }
+            } else {
+                feedback.classList.remove('show');
+            }
+
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').innerHTML = currentQuestion === questions.length - 1 ? 'Submit' : 'Next →';
+            document.getElementById('currentQuestion').textContent = currentQuestion + 1;
+        }
+
+        function selectOption(qIdx, optIdx) {
+            if (answered[qIdx]) return;
+            
+            answers[qIdx] = optIdx;
+            answered[qIdx] = true;
+            
+            const optionsContainer = document.getElementById(`options-${qIdx}`);
+            const options = optionsContainer.querySelectorAll('.option');
+            const q = questions[qIdx];
+            
+            options.forEach((opt, idx) => {
+                opt.classList.remove('selected');
+                if (idx === q.correct) {
+                    opt.classList.add('correct');
+                } else if (idx === optIdx) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            const feedback = document.getElementById(`feedback-${qIdx}`);
+            feedback.classList.add('show');
+            if (optIdx === q.correct) {
+                feedback.classList.add('correct');
+                feedback.classList.remove('incorrect');
+                feedback.innerHTML = `✓ Correct! ${q.rule}`;
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.classList.remove('correct');
+                feedback.innerHTML = `✗ Incorrect. The correct answer is ${String.fromCharCode(65 + q.correct)}). ${q.rule}`;
+            }
+
+            updateStats();
+            saveProgress();
+
+            setTimeout(() => {
+                if (currentQuestion < questions.length - 1) {
+                    nextQuestion();
+                }
+            }, 1500);
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderCurrentQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (allAnswered()) {
+                showCompletion();
+            } else {
+                alert('Please answer the current question before submitting.');
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderCurrentQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function updateStats() {
+            const correct = answers.reduce((sum, ans, idx) => {
+                return sum + (answered[idx] && ans === questions[idx].correct ? 1 : 0);
+            }, 0);
+            
+            const percentage = Math.round((correct / questions.length) * 100);
+            
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('scorePercentage').textContent = percentage + '%';
+            document.getElementById('progressFill').style.width = ((currentQuestion + 1) / questions.length) * 100 + '%';
+        }
+
+        function allAnswered() {
+            return answered.every(a => a === true);
+        }
+
+        function showCompletion() {
+            const correct = answers.reduce((sum, ans, idx) => {
+                return sum + (answered[idx] && ans === questions[idx].correct ? 1 : 0);
+            }, 0);
+            
+            const percentage = Math.round((correct / questions.length) * 100);
+            let message = '';
+
+            if (percentage === 100) {
+                message = "Perfect Score! You've mastered exponent rules! 🌟";
+            } else if (percentage >= 80) {
+                message = "Excellent work! You have a strong understanding of exponent rules! 🎯";
+            } else if (percentage >= 60) {
+                message = "Good effort! Review the rules you found challenging. 📚";
+            } else {
+                message = "Keep practicing! Review the exponent rules and try again. 💪";
+            }
+
+            document.getElementById('finalScore').textContent = `${correct}/${questions.length}`;
+            document.getElementById('performanceMessage').textContent = message;
+            document.getElementById('summaryCorrect').textContent = correct;
+            document.getElementById('summaryIncorrect').textContent = questions.length - correct;
+            document.getElementById('summaryPercentage').textContent = percentage + '%';
+
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('completionScreen').classList.add('show');
+            document.querySelector('.navigation').style.display = 'none';
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = new Array(questions.length).fill(null);
+            answered = new Array(questions.length).fill(false);
+            
+            document.getElementById('completionScreen').classList.remove('show');
+            document.getElementById('questionsContainer').style.display = 'block';
+            document.querySelector('.navigation').style.display = 'flex';
+            
+            renderCurrentQuestion();
+            updateStats();
+            saveProgress();
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        }
+
+        function saveProgress() {
+            localStorage.setItem('exponent_answers', JSON.stringify(answers));
+            localStorage.setItem('exponent_answered', JSON.stringify(answered));
+            localStorage.setItem('exponent_current', currentQuestion);
+        }
+
+        function loadProgress() {
+            const savedAnswers = localStorage.getItem('exponent_answers');
+            const savedAnswered = localStorage.getItem('exponent_answered');
+            const savedCurrent = localStorage.getItem('exponent_current');
+
+            if (savedAnswers) answers = JSON.parse(savedAnswers);
+            if (savedAnswered) answered = JSON.parse(savedAnswered);
+            if (savedCurrent) currentQuestion = parseInt(savedCurrent);
+        }
+
+        // Load theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+        updateThemeButton();
+
+        // Render KaTeX
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.querySelectorAll('.question-text, .option, .rule, .feedback').forEach(elem => {
+                    if (elem.innerHTML.includes('$')) {
+                        elem.innerHTML = elem.innerHTML.replace(/\$\$(.*?)\$\$/g, (match, math) => {
+                            return `<div class="katex-display">${katex.renderToString(math)}</div>`;
+                        }).replace(/\$(.*?)\$/g, (match, math) => {
+                            try {
+                                return katex.renderToString(math);
+                            } catch(e) {
+                                return match;
+                            }
+                        });
+                    }
+                });
+            }, 100);
+        });
+
+        init();
+    </script>
+</body>
+</html>
