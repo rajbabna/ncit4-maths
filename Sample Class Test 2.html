@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCIT Level 4 Mathematics Assessment - Set 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.5em;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        .set-badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .course-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+
+        .course-info-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .course-info-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .instructions {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .instructions ul {
+            list-style-position: inside;
+            color: #34495e;
+        }
+
+        .instructions li {
+            margin: 5px 0;
+        }
+
+        .section {
+            margin: 40px 0;
+            page-break-after: auto;
+        }
+
+        .section-header {
+            background: #16a085;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .section-intro {
+            color: #555;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .question {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .option {
+            margin: 8px 0 8px 30px;
+            color: #34495e;
+            position: relative;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            width: 8px;
+            height: 8px;
+            background: #16a085;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .marks {
+            float: right;
+            background: #e74c3c;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .answer-space {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #bdc3c7;
+            min-height: 40px;
+            color: #95a5a6;
+        }
+
+        .sub-question {
+            margin-left: 30px;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-left: 3px solid #16a085;
+        }
+
+        .sub-question-text {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .line {
+            border-bottom: 1px solid #bdc3c7;
+            margin: 10px 0;
+            height: 30px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #bdc3c7;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+
+        .print-button {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .btn-print {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-download {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .marks-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .marks-box {
+            background: #16a085;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .marks-box .label {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .marks-box .value {
+            font-size: 1.8em;
+        }
+
+        .equation {
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f5f5f5;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            .print-button {
+                display: none;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            .answer-space {
+                min-height: 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .course-info {
+                grid-template-columns: 1fr;
+            }
+
+            .marks-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>NCIT LEVEL 4 ASSESSMENT</h1>
+            <h2>Mathematics</h2>
+            <div class="set-badge">ALTERNATIVE SET - Paper 2</div>
+        </div>
+
+        <!-- Course Information -->
+        <div class="course-info">
+            <div class="course-info-item">
+                <span class="course-info-label">Course:</span>
+                <span>NCIT Level 4</span>
+            </div>
+            <div class="course-info-item">
+                <span class="course-info-label">Duration:</span>
+                <span>2 hours</span>
+            </div>
+            <div class="course-info-item">
+                <span class="course-info-label">Total Marks:</span>
+                <span>50</span>
+            </div>
+            <div class="course-info-item">
+                <span class="course-info-label">Date:</span>
+                <span>___________________</span>
+            </div>
+        </div>
+
+        <!-- Marks Summary -->
+        <div class="marks-summary">
+            <div class="marks-box">
+                <div class="label">Section A</div>
+                <div class="value">15</div>
+            </div>
+            <div class="marks-box">
+                <div class="label">Section B</div>
+                <div class="value">10</div>
+            </div>
+            <div class="marks-box">
+                <div class="label">Section C</div>
+                <div class="value">10</div>
+            </div>
+            <div class="marks-box">
+                <div class="label">Section D</div>
+                <div class="value">15</div>
+            </div>
+        </div>
+
+        <!-- Print/Download Buttons -->
+        <div class="print-button">
+            <button class="btn btn-print" onclick="window.print()">🖨️ Print</button>
+            <button class="btn btn-download" onclick="downloadHTML()">📥 Download as HTML</button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>INSTRUCTIONS</h3>
+            <ul>
+                <li>Answer ALL questions</li>
+                <li>This paper consists of FOUR sections: MCQ (15 marks), Structured A (10 marks), Structured B (10 marks), and Structured C (15 marks)</li>
+                <li>Show all working where applicable</li>
+                <li>Use of calculator is permitted</li>
+            </ul>
+        </div>
+
+        <!-- SECTION A: MCQ -->
+        <div class="section">
+            <div class="section-header">SECTION A: MULTIPLE CHOICE QUESTIONS (15 marks)</div>
+            <div class="section-intro">Answer ALL 15 questions. Each question carries 1 mark.</div>
+
+            <!-- MCQ 1 -->
+            <div class="question">
+                <div class="question-text">1. Which of the following sets contains only odd numbers? <span class="marks">1 mark</span></div>
+                <div class="option">A) {2, 4, 6, 8}</div>
+                <div class="option">B) {1, 3, 5, 7, 9}</div>
+                <div class="option">C) {0, 1, 2, 3}</div>
+                <div class="option">D) {10, 12, 14}</div>
+            </div>
+
+            <!-- MCQ 2 -->
+            <div class="question">
+                <div class="question-text">2. Given P = {a, e, i, o, u} and Q = {a, e, i}, which statement is true? <span class="marks">1 mark</span></div>
+                <div class="option">A) P ⊂ Q</div>
+                <div class="option">B) Q ⊂ P</div>
+                <div class="option">C) P = Q</div>
+                <div class="option">D) P ∩ Q = ∅</div>
+            </div>
+
+            <!-- MCQ 3 -->
+            <div class="question">
+                <div class="question-text">3. If X = {1, 2, 3, 4, 5} and Y = {4, 5, 6, 7}, find n(X ∪ Y). <span class="marks">1 mark</span></div>
+                <div class="option">A) 5</div>
+                <div class="option">B) 7</div>
+                <div class="option">C) 9</div>
+                <div class="option">D) 10</div>
+            </div>
+
+            <!-- MCQ 4 -->
+            <div class="question">
+                <div class="question-text">4. The set of natural numbers is represented as: <span class="marks">1 mark</span></div>
+                <div class="option">A) {..., -2, -1, 0, 1, 2, ...}</div>
+                <div class="option">B) {0, 1, 2, 3, 4, ...}</div>
+                <div class="option">C) {1, 2, 3, 4, ...}</div>
+                <div class="option">D) {1/2, 1/3, 1/4, ...}</div>
+            </div>
+
+            <!-- MCQ 5 -->
+            <div class="question">
+                <div class="question-text">5. Expand and simplify: 5(2x - 3) + 2(x + 4) = <span class="marks">1 mark</span></div>
+                <div class="option">A) 10x - 15 + 2x + 8</div>
+                <div class="option">B) 12x - 7</div>
+                <div class="option">C) 12x + 23</div>
+                <div class="option">D) 7x - 7</div>
+            </div>
+
+            <!-- MCQ 6 -->
+            <div class="question">
+                <div class="question-text">6. Factorise completely: 15m² - 10m <span class="marks">1 mark</span></div>
+                <div class="option">A) 5m(3m - 2)</div>
+                <div class="option">B) m(15m - 10)</div>
+                <div class="option">C) 5(3m² - 2m)</div>
+                <div class="option">D) 15m(m - 1)</div>
+            </div>
+
+            <!-- MCQ 7 -->
+            <div class="question">
+                <div class="question-text">7. Simplify: (3xy)² ÷ 9y = <span class="marks">1 mark</span></div>
+                <div class="option">A) 3xy</div>
+                <div class="option">B) xy²</div>
+                <div class="option">C) 9x²y²</div>
+                <div class="option">D) x²y</div>
+            </div>
+
+            <!-- MCQ 8 -->
+            <div class="question">
+                <div class="question-text">8. What is the solution to: 3(x - 2) = 15? <span class="marks">1 mark</span></div>
+                <div class="option">A) x = 5</div>
+                <div class="option">B) x = 7</div>
+                <div class="option">C) x = -5</div>
+                <div class="option">D) x = 9</div>
+            </div>
+
+            <!-- MCQ 9 -->
+            <div class="question">
+                <div class="question-text">9. Solve: 2x/5 = 10 <span class="marks">1 mark</span></div>
+                <div class="option">A) x = 4</div>
+                <div class="option">B) x = 25</div>
+                <div class="option">C) x = 2.5</div>
+                <div class="option">D) x = 50</div>
+            </div>
+
+            <!-- MCQ 10 -->
+            <div class="question">
+                <div class="question-text">10. Solve simultaneously: 3x + y = 11 and x + y = 5. Find y. <span class="marks">1 mark</span></div>
+                <div class="option">A) y = 2</div>
+                <div class="option">B) y = 3</div>
+                <div class="option">C) y = 4</div>
+                <div class="option">D) y = 5</div>
+            </div>
+
+            <!-- MCQ 11 -->
+            <div class="question">
+                <div class="question-text">11. Which is a solution to x² - 4x - 5 = 0? <span class="marks">1 mark</span></div>
+                <div class="option">A) x = 2</div>
+                <div class="option">B) x = 5</div>
+                <div class="option">C) x = 1</div>
+                <div class="option">D) x = 0</div>
+            </div>
+
+            <!-- MCQ 12 -->
+            <div class="question">
+                <div class="question-text">12. Solve: 2x - 5 ≥ 3 <span class="marks">1 mark</span></div>
+                <div class="option">A) x ≥ 1</div>
+                <div class="option">B) x ≥ 4</div>
+                <div class="option">C) x ≤ 4</div>
+                <div class="option">D) x ≤ -1</div>
+            </div>
+
+            <!-- MCQ 13 -->
+            <div class="question">
+                <div class="question-text">13. A card is drawn from a standard deck of 52 cards. What is the probability of drawing a King? <span class="marks">1 mark</span></div>
+                <div class="option">A) 1/52</div>
+                <div class="option">B) 1/13</div>
+                <div class="option">C) 4/52 or 1/13</div>
+                <div class="option">D) 1/4</div>
+            </div>
+
+            <!-- MCQ 14 -->
+            <div class="question">
+                <div class="question-text">14. A coin is tossed three times. What is the probability of getting exactly 2 heads? <span class="marks">1 mark</span></div>
+                <div class="option">A) 1/8</div>
+                <div class="option">B) 2/8</div>
+                <div class="option">C) 3/8</div>
+                <div class="option">D) 4/8</div>
+            </div>
+
+            <!-- MCQ 15 -->
+            <div class="question">
+                <div class="question-text">15. Two events have probabilities P(A) = 0.3 and P(B) = 0.5. If independent, P(A and B) = <span class="marks">1 mark</span></div>
+                <div class="option">A) 0.8</div>
+                <div class="option">B) 0.15</div>
+                <div class="option">C) 0.2</div>
+                <div class="option">D) 0.35</div>
+            </div>
+        </div>
+
+        <!-- SECTION B -->
+        <div class="section">
+            <div class="section-header">SECTION B: STRUCTURED QUESTION A (10 marks)</div>
+
+            <div class="question">
+                <div class="question-text">Question 1: Sets and Operations</div>
+                <p style="margin: 15px 0; font-size: 0.95em;">
+                    <strong>Given:</strong> μ = {2, 3, 4, 5, 6, 7, 8, 9, 10}, M = {multiples of 2}, N = {multiples of 3}
+                </p>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(a) List the elements of set M. <span class="marks">2 marks</span></div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(b) List the elements of set N. <span class="marks">2 marks</span></div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(c) Find M ∩ N. <span class="marks">2 marks</span></div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(d) Find (M ∪ N)'. <span class="marks">2 marks</span></div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(e) Find n(M ∩ N). <span class="marks">2 marks</span></div>
+                    <div class="line"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION C -->
+        <div class="section">
+            <div class="section-header">SECTION C: STRUCTURED QUESTION B (10 marks)</div>
+
+            <div class="question">
+                <div class="question-text">Question 2: Algebra and Equations</div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(a) Expand: 2(3a - 4b) - 3(2a - b) and simplify. <span class="marks">3 marks</span></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(b) Factorise: 4x²y - 6xy + 2xy² <span class="marks">2 marks</span></div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(c) Simplify the algebraic fraction: (2x² + 8x)/(2x + 8) <span class="marks">3 marks</span></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(d) Solve: 3(2x - 1) = 2(x + 5) <span class="marks">2 marks</span></div>
+                    <div class="line"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION D -->
+        <div class="section">
+            <div class="section-header">SECTION D: STRUCTURED QUESTION C (15 marks)</div>
+
+            <div class="question">
+                <div class="question-text">Question 3: Comprehensive Problem Solving</div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(a) Solve the simultaneous linear equations: <span class="marks">5 marks</span></div>
+                    <div class="equation">4x - y = 10<br>2x + 3y = 12</div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(b) Solve x² + 3x - 10 = 0 using either factorisation or the quadratic formula. <span class="marks">4 marks</span></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="sub-question">
+                    <div class="sub-question-text">(c) A box contains 6 white balls and 4 red balls. Three balls are drawn randomly one after another with replacement.</div>
+                    <div style="margin-top: 15px; margin-left: 20px;">
+                        <div class="sub-question-text">(i) Draw a tree diagram for the first two draws showing all outcomes and probabilities. <span class="marks">3 marks</span></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+                    <div style="margin-top: 15px; margin-left: 20px;">
+                        <div class="sub-question-text">(ii) Find the probability that at least one red ball is drawn in the first two draws. <span class="marks">3 marks</span></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            END OF PAPER
+        </div>
+    </div>
+
+    <script>
+        function downloadHTML() {
+            const html = document.documentElement.outerHTML;
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'NCIT_Level4_Mathematics_TestPaper_Set2.html';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
