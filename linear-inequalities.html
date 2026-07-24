@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solving Simple Linear Inequalities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12141c;
+    --bg-panel: #1b1e29;
+    --line: #2a2e3d;
+    --ink: #edeef3;
+    --muted: #9096ac;
+    --blue: #5b8cff;
+    --blue-dim: #5b8cff33;
+    --amber: #ffb454;
+    --amber-dim: #ffb45433;
+    --green: #6fd6a3;
+    --red-soft: #ff8a80;
+    --radius: 14px;
+    --maxw: 780px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--blue-dim);color:var(--ink);}
+  a{color:var(--blue);}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em; line-height:1.15;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 72px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(2.1rem, 5vw, 3.4rem);
+    margin:0 0 20px;
+    max-width:11ch;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--blue);
+  }
+  .hero p.lede{
+    font-size:1.1rem;
+    color:var(--muted);
+    max-width:52ch;
+    margin:0 0 40px;
+  }
+
+  /* hero number line */
+  .hero-line{margin-top:8px;}
+  .nline{width:100%; height:auto; display:block;}
+  .nline .axis{stroke:var(--line); stroke-width:2;}
+  .nline .tick{stroke:var(--muted); stroke-width:1.5;}
+  .nline .ticklabel{fill:var(--muted); font-family:'JetBrains Mono',monospace; font-size:13px;}
+  .nline .ray{stroke:var(--blue); stroke-width:4; stroke-linecap:round;}
+  .nline .dot-open{fill:var(--bg); stroke:var(--blue); stroke-width:3;}
+  .nline .dot-closed{fill:var(--blue); stroke:var(--blue); stroke-width:3;}
+  .nline .caption{fill:var(--blue); font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:600;}
+
+  /* ---------- SECTIONS ---------- */
+  section.lesson{
+    padding:64px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .section-tag{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--blue);
+    font-size:13px;
+    margin-bottom:10px;
+    letter-spacing:0.02em;
+  }
+  section.lesson h2{
+    font-size:clamp(1.5rem, 3vw, 2rem);
+    margin:0 0 18px;
+  }
+  section.lesson > .wrap > p{
+    color:var(--muted);
+    max-width:62ch;
+    margin-bottom:28px;
+  }
+
+  /* symbol cards */
+  .symbol-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+    gap:14px;
+    margin-top:8px;
+  }
+  .symbol-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 18px;
+  }
+  .symbol-card .sym{
+    font-family:'JetBrains Mono', monospace;
+    font-size:2rem;
+    color:var(--blue);
+    font-weight:600;
+  }
+  .symbol-card .name{font-weight:600; margin-top:6px;}
+  .symbol-card .desc{color:var(--muted); font-size:0.9rem; margin-top:4px;}
+
+  /* side by side compare */
+  .compare{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-top:8px;
+  }
+  @media (max-width:600px){ .compare{grid-template-columns:1fr;} }
+  .compare .panel{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+  }
+  .compare .panel .label{
+    font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:12px; font-weight:600;
+  }
+  .step-row{
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.05rem;
+    padding:8px 0;
+    border-bottom:1px dashed var(--line);
+    display:flex; align-items:center; gap:10px;
+  }
+  .step-row:last-child{border-bottom:none;}
+  .step-row .note{
+    font-family:'Inter', sans-serif;
+    font-size:0.78rem;
+    color:var(--muted);
+    margin-left:auto;
+  }
+
+  /* ---------- FLIP RULE SIGNATURE WIDGET ---------- */
+  .flip-widget{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px 24px 24px;
+    margin-top:8px;
+  }
+  .flip-eq{
+    font-family:'JetBrains Mono', monospace;
+    font-size:clamp(1.3rem, 4vw, 1.8rem);
+    text-align:center;
+    display:flex;
+    align-items:baseline;
+    justify-content:center;
+    gap:10px;
+    margin:6px 0 22px;
+    flex-wrap:wrap;
+  }
+  .flip-eq .sym-anim{
+    display:inline-block;
+    transition:transform .35s cubic-bezier(.4,1.6,.4,1), color .35s ease;
+    color:var(--blue);
+  }
+  .flip-eq .sym-anim.flipped{
+    transform:scaleY(-1);
+    color:var(--amber);
+  }
+  .flip-controls{
+    display:flex; align-items:center; gap:16px; justify-content:center; margin-bottom:18px;
+  }
+  .flip-controls input[type=range]{
+    width:220px; accent-color:var(--blue);
+  }
+  .flip-readout{
+    font-family:'JetBrains Mono', monospace;
+    min-width:70px;
+    text-align:center;
+    font-weight:600;
+    font-size:1.05rem;
+  }
+  .flip-note{
+    text-align:center;
+    font-size:0.92rem;
+    color:var(--muted);
+    min-height:24px;
+    transition:color .3s ease;
+  }
+  .flip-note.warn{color:var(--amber);}
+
+  /* worked examples */
+  .example{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px 24px;
+    margin-bottom:18px;
+  }
+  .example .ex-title{
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.05rem;
+    color:var(--blue);
+    margin-bottom:14px;
+    font-weight:600;
+  }
+  .example .ex-title .op-flip{color:var(--amber);}
+
+  /* exercises */
+  .exercise{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 22px;
+    margin-bottom:16px;
+  }
+  .exercise .q-num{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .exercise .q-body{
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.15rem;
+    margin:8px 0 16px;
+  }
+  .exercise .answer-row{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  }
+  .exercise input[type=text]{
+    background:var(--bg);
+    border:1px solid var(--line);
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    font-size:1rem;
+    padding:9px 12px;
+    border-radius:8px;
+    width:160px;
+  }
+  .exercise input[type=text]:focus{outline:2px solid var(--blue); outline-offset:1px;}
+  button{
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:0.9rem;
+    padding:9px 16px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+    transition:background .2s ease, border-color .2s ease;
+  }
+  button:hover{border-color:var(--blue);}
+  button:focus-visible{outline:2px solid var(--blue); outline-offset:2px;}
+  button.check-btn{background:var(--blue); border-color:var(--blue); color:#0c0e14;}
+  button.check-btn:hover{background:#7aa0ff;}
+  button.reveal-btn{color:var(--muted);}
+  .feedback{
+    margin-top:12px;
+    font-size:0.92rem;
+    min-height:20px;
+  }
+  .feedback.correct{color:var(--green);}
+  .feedback.incorrect{color:var(--red-soft);}
+  .solution{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+    display:none;
+  }
+  .solution.shown{display:block;}
+  .solution .sol-steps{color:var(--muted); font-size:0.92rem; margin-bottom:10px;}
+  .solution .sol-steps .mono{color:var(--ink);}
+
+  footer{
+    padding:48px 0 80px;
+    text-align:center;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+
+  .skip-link{position:absolute; left:-999px;}
+  .skip-link:focus{left:24px; top:16px; background:var(--blue); color:#0c0e14; padding:8px 14px; border-radius:8px; z-index:10;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">A short lesson</div>
+    <h1>An equation has one answer.<br>An <em>inequality</em> has a neighborhood.</h1>
+    <p class="lede">Solving <span class="mono">2x + 3 &lt; 11</span> doesn't land on a single number — it lands on every number that makes the statement true. This lesson shows you how to find that neighborhood, and the one rule that trips almost everyone up at least once.</p>
+    <div class="hero-line">
+      <svg class="nline" viewBox="0 0 700 90" role="img" aria-label="Number line showing the solution x is greater than 2, with an open circle at 2 and shading to the right">
+        <line class="axis" x1="20" y1="50" x2="680" y2="50"/>
+        <g class="tick">
+          <line x1="120" y1="44" x2="120" y2="56"/>
+          <line x1="220" y1="44" x2="220" y2="56"/>
+          <line x1="320" y1="44" x2="320" y2="56"/>
+          <line x1="420" y1="44" x2="420" y2="56"/>
+          <line x1="520" y1="44" x2="520" y2="56"/>
+        </g>
+        <g class="ticklabel" text-anchor="middle">
+          <text x="120" y="76">0</text>
+          <text x="220" y="76">1</text>
+          <text x="320" y="76">2</text>
+          <text x="420" y="76">3</text>
+          <text x="520" y="76">4</text>
+        </g>
+        <line class="ray" x1="320" y1="50" x2="660" y2="50"/>
+        <polygon points="660,42 678,50 660,58" fill="#5b8cff"/>
+        <circle class="dot-open" cx="320" cy="50" r="7"/>
+        <text class="caption" x="320" y="30" text-anchor="middle">x &gt; 2</text>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 1: WHAT IS AN INEQUALITY -->
+  <section class="lesson">
+    <div class="wrap">
+      <div class="section-tag">01</div>
+      <h2>The four symbols</h2>
+      <p>Every linear inequality uses one of these. Notice the two on the right include "or equal to" — that changes whether the boundary point counts.</p>
+      <div class="symbol-grid">
+        <div class="symbol-card">
+          <div class="sym">&lt;</div>
+          <div class="name">Less than</div>
+          <div class="desc">Boundary not included. Open circle on a number line.</div>
+        </div>
+        <div class="symbol-card">
+          <div class="sym">&gt;</div>
+          <div class="name">Greater than</div>
+          <div class="desc">Boundary not included. Open circle on a number line.</div>
+        </div>
+        <div class="symbol-card">
+          <div class="sym">&le;</div>
+          <div class="name">Less than or equal to</div>
+          <div class="desc">Boundary included. Closed (filled) circle.</div>
+        </div>
+        <div class="symbol-card">
+          <div class="sym">&ge;</div>
+          <div class="name">Greater than or equal to</div>
+          <div class="desc">Boundary included. Closed (filled) circle.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2: SAME RULES AS EQUATIONS -->
+  <section class="lesson">
+    <div class="wrap">
+      <div class="section-tag">02</div>
+      <h2>Adding and subtracting work exactly like equations</h2>
+      <p>For addition and subtraction, an inequality behaves precisely like an equation. Do the same thing to both sides, and the inequality symbol never changes.</p>
+      <div class="compare">
+        <div class="panel">
+          <div class="label">Equation</div>
+          <div class="step-row">x + 5 = 12</div>
+          <div class="step-row">x + 5 − 5 = 12 − 5 <span class="note">subtract 5</span></div>
+          <div class="step-row">x = 7</div>
+        </div>
+        <div class="panel">
+          <div class="label">Inequality</div>
+          <div class="step-row">x + 5 &gt; 12</div>
+          <div class="step-row">x + 5 − 5 &gt; 12 − 5 <span class="note">subtract 5</span></div>
+          <div class="step-row">x &gt; 7</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3: THE FLIP RULE -->
+  <section class="lesson">
+    <div class="wrap">
+      <div class="section-tag">03</div>
+      <h2>The one rule that's different</h2>
+      <p>When you multiply or divide <em>both sides</em> by a <strong>negative</strong> number, the inequality flips direction. Drag the multiplier below and watch it happen to <span class="mono">x &lt; 4</span>.</p>
+
+      <div class="flip-widget">
+        <div class="flip-eq">
+          <span id="flipLeftMult" class="mono">1</span><span class="mono">·x</span>
+          <span id="flipSym" class="sym-anim">&lt;</span>
+          <span id="flipRightVal" class="mono">4</span>
+        </div>
+        <div class="flip-controls">
+          <span class="mono" style="color:var(--muted); font-size:0.85rem;">−5</span>
+          <input type="range" id="flipSlider" min="-5" max="5" step="1" value="1" aria-label="Multiplier applied to both sides of x is less than 4">
+          <span class="mono" style="color:var(--muted); font-size:0.85rem;">5</span>
+        </div>
+        <div class="flip-readout">multiply by <span id="flipMultLabel">1</span></div>
+        <div id="flipNote" class="flip-note">Multiplying by a positive number: the symbol stays put.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4: WORKED EXAMPLES -->
+  <section class="lesson">
+    <div class="wrap">
+      <div class="section-tag">04</div>
+      <h2>Worked examples</h2>
+      <p>Three examples, each adding one more thing to watch for.</p>
+
+      <div class="example">
+        <div class="ex-title">Example 1 — no flip needed: 3x − 4 ≤ 11</div>
+        <div class="step-row">3x − 4 ≤ 11</div>
+        <div class="step-row">3x ≤ 15 <span class="note">add 4 to both sides</span></div>
+        <div class="step-row">x ≤ 5 <span class="note">divide both sides by 3 (positive)</span></div>
+      </div>
+
+      <div class="example">
+        <div class="ex-title">Example 2 — dividing by a <span class="op-flip">negative</span>: −2x + 1 &gt; 9</div>
+        <div class="step-row">−2x + 1 &gt; 9</div>
+        <div class="step-row">−2x &gt; 8 <span class="note">subtract 1 from both sides</span></div>
+        <div class="step-row">x &lt; −4 <span class="note">divide by −2 → symbol flips</span></div>
+      </div>
+
+      <div class="example">
+        <div class="ex-title">Example 3 — variable on both sides: 5x + 2 &lt; 2x + 14</div>
+        <div class="step-row">5x + 2 &lt; 2x + 14</div>
+        <div class="step-row">3x + 2 &lt; 14 <span class="note">subtract 2x from both sides</span></div>
+        <div class="step-row">3x &lt; 12 <span class="note">subtract 2</span></div>
+        <div class="step-row">x &lt; 4 <span class="note">divide by 3 (positive)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5: EXERCISES -->
+  <section class="lesson" id="exercises">
+    <div class="wrap">
+      <div class="section-tag">05</div>
+      <h2>Your turn</h2>
+      <p>Solve each inequality for x and type your answer in the box — for example <span class="mono">x &gt; 3</span> or <span class="mono">3 &lt; x</span> (either order is fine). Use <span class="mono">&lt;=</span> and <span class="mono">&gt;=</span> for ≤ and ≥. Then check your work.</p>
+
+      <div id="exerciseList"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">Solving simple linear inequalities · practice generated locally, nothing leaves this page</div>
+</footer>
+
+<script>
+(function(){
+  /* ---------------- FLIP WIDGET ---------------- */
+  const slider = document.getElementById('flipSlider');
+  const leftMult = document.getElementById('flipLeftMult');
+  const sym = document.getElementById('flipSym');
+  const rightVal = document.getElementById('flipRightVal');
+  const multLabel = document.getElementById('flipMultLabel');
+  const note = document.getElementById('flipNote');
+
+  function updateFlip(){
+    const m = parseInt(slider.value, 10);
+    multLabel.textContent = m;
+
+    if(m === 0){
+      leftMult.textContent = '0';
+      rightVal.textContent = '0';
+      sym.textContent = '?';
+      sym.classList.remove('flipped');
+      note.textContent = "Multiplying by zero destroys the inequality — never divide by zero.";
+      note.classList.add('warn');
+      return;
+    }
+
+    leftMult.textContent = m;
+    rightVal.textContent = (4 * m).toString();
+
+    if(m < 0){
+      sym.textContent = '>';
+      sym.classList.add('flipped');
+      note.textContent = "Multiplying by a negative number: the symbol flips.";
+      note.classList.add('warn');
+    } else {
+      sym.textContent = '<';
+      sym.classList.remove('flipped');
+      note.textContent = "Multiplying by a positive number: the symbol stays put.";
+      note.classList.remove('warn');
+    }
+  }
+  slider.addEventListener('input', updateFlip);
+  updateFlip();
+
+  /* ---------------- INEQUALITY PARSER ---------------- */
+  // Returns a predicate f(x) -> boolean, or null if unparseable.
+  function parseInequality(raw){
+    if(!raw) return null;
+    let s = raw.trim().toLowerCase()
+      .replace(/≤/g,'<=').replace(/≥/g,'>=')
+      .replace(/=</g,'<=').replace(/=>/g,'>=')
+      .replace(/\s+/g,'');
+    if(s === '') return null;
+
+    // x OP number
+    let m = s.match(/^x(<=|>=|<|>)(-?\d+(\.\d+)?)$/);
+    if(m){
+      const op = m[1], n = parseFloat(m[2]);
+      return makePredicate(op, n);
+    }
+    // number OP x  -> flip comparison direction
+    m = s.match(/^(-?\d+(\.\d+)?)(<=|>=|<|>)x$/);
+    if(m){
+      const n = parseFloat(m[1]);
+      const op = flipOp(m[3]);
+      return makePredicate(op, n);
+    }
+    return null;
+  }
+  function flipOp(op){
+    return {'<':'>', '>':'<', '<=':'>=', '>=':'<='}[op];
+  }
+  function makePredicate(op, n){
+    switch(op){
+      case '<': return x => x < n;
+      case '>': return x => x > n;
+      case '<=': return x => x <= n;
+      case '>=': return x => x >= n;
+    }
+  }
+  function sameSolutionSet(userStr, correctStr){
+    const f1 = parseInequality(userStr);
+    const f2 = parseInequality(correctStr);
+    if(!f1 || !f2) return false;
+    // Sample a wide, dense range of test points, including the boundary itself.
+    const boundaryMatch = correctStr.replace(/\s+/g,'').match(/(-?\d+(\.\d+)?)/);
+    const boundary = boundaryMatch ? parseFloat(boundaryMatch[1]) : 0;
+    const testPoints = [];
+    for(let v = boundary - 10; v <= boundary + 10; v += 0.5) testPoints.push(Number(v.toFixed(2)));
+    testPoints.push(boundary);
+    return testPoints.every(v => f1(v) === f2(v));
+  }
+
+  /* ---------------- EXERCISES DATA ---------------- */
+  const exercises = [
+    {
+      q: "x + 6 > 10",
+      answer: "x > 4",
+      steps: ["x + 6 &gt; 10", "x &gt; 10 − 6  <span class=\"note\">subtract 6</span>", "x &gt; 4"]
+    },
+    {
+      q: "2x − 3 ≤ 9",
+      answer: "x <= 6",
+      steps: ["2x − 3 ≤ 9", "2x ≤ 12  <span class=\"note\">add 3</span>", "x ≤ 6  <span class=\"note\">divide by 2</span>"]
+    },
+    {
+      q: "−3x > 12",
+      answer: "x < -4",
+      steps: ["−3x &gt; 12", "x &lt; −4  <span class=\"note\">divide by −3, symbol flips</span>"]
+    },
+    {
+      q: "4x + 1 < 2x + 9",
+      answer: "x < 4",
+      steps: ["4x + 1 &lt; 2x + 9", "2x + 1 &lt; 9  <span class=\"note\">subtract 2x</span>", "2x &lt; 8  <span class=\"note\">subtract 1</span>", "x &lt; 4  <span class=\"note\">divide by 2</span>"]
+    },
+    {
+      q: "5 − x ≥ 2",
+      answer: "x <= 3",
+      steps: ["5 − x ≥ 2", "−x ≥ 2 − 5  <span class=\"note\">subtract 5</span>", "−x ≥ −3", "x ≤ 3  <span class=\"note\">divide by −1, symbol flips</span>"]
+    },
+    {
+      q: "7 < 3x − 2",
+      answer: "x > 3",
+      steps: ["7 &lt; 3x − 2", "9 &lt; 3x  <span class=\"note\">add 2</span>", "3 &lt; x  <span class=\"note\">divide by 3</span>", "x &gt; 3  <span class=\"note\">same statement, x on the left</span>"]
+    }
+  ];
+
+  const list = document.getElementById('exerciseList');
+  exercises.forEach((ex, i) => {
+    const card = document.createElement('div');
+    card.className = 'exercise';
+    const inputId = 'ans-' + i;
+    card.innerHTML = `
+      <div class="q-num">Question ${i+1}</div>
+      <div class="q-body">${ex.q}</div>
+      <div class="answer-row">
+        <input type="text" id="${inputId}" placeholder="e.g. x > 3" autocomplete="off" spellcheck="false">
+        <button class="check-btn" type="button" data-idx="${i}">Check</button>
+        <button class="reveal-btn" type="button" data-idx="${i}">Show solution</button>
+      </div>
+      <div class="feedback" id="fb-${i}" role="status"></div>
+      <div class="solution" id="sol-${i}">
+        <div class="sol-steps">${ex.steps.map(s => `<div>${s}</div>`).join('')}</div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+
+  list.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    const idx = parseInt(btn.dataset.idx, 10);
+    const ex = exercises[idx];
+
+    if(btn.classList.contains('check-btn')){
+      const input = document.getElementById('ans-' + idx);
+      const fb = document.getElementById('fb-' + idx);
+      const val = input.value;
+      const parsedOk = parseInequality(val) !== null;
+      if(!parsedOk){
+        fb.textContent = "I couldn't read that — try a form like x > 3 or x <= -2.";
+        fb.className = 'feedback incorrect';
+        return;
+      }
+      if(sameSolutionSet(val, ex.answer)){
+        fb.textContent = "Correct.";
+        fb.className = 'feedback correct';
+      } else {
+        fb.textContent = "Not quite — check your steps, or show the solution below.";
+        fb.className = 'feedback incorrect';
+      }
+    }
+
+    if(btn.classList.contains('reveal-btn')){
+      const sol = document.getElementById('sol-' + idx);
+      const showing = sol.classList.toggle('shown');
+      btn.textContent = showing ? 'Hide solution' : 'Show solution';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
