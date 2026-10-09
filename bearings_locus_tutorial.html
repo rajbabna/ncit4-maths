@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bearings &amp; Locus — Interactive Tutorial</title>
+<style>
+  /* ── Design tokens ───────────────────────────────────────────────
+     Palette: drafting-paper theme shared with the Maths I series
+        #F7F5F0  parchment (page bg)
+        #1B2D45  deep navy (headings)
+        #2E6DA4  compass blue (accent)
+        #E8531A  construction orange (highlights, correct)
+        #C0392B  ruler red (wrong)
+        #EAF2FB  tint blue (card bg)
+        #FFF8F5  tint warm (exercise bg)
+     Type:
+        Display — 'Playfair Display'
+        Body    — 'Source Sans 3'
+        Data    — 'JetBrains Mono' (bearings, angles, measurements)
+  ─────────────────────────────────────────────────────────────────── */
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap');
+
+  :root {
+    --bg:        #F7F5F0;
+    --card:      #FFFFFF;
+    --card-blue: #EAF2FB;
+    --card-warm: #FFF8F5;
+    --navy:      #1B2D45;
+    --blue:      #2E6DA4;
+    --orange:    #E8531A;
+    --green:     #1A7A4A;
+    --red:       #C0392B;
+    --mid:       #5A6A7A;
+    --border:    #D6D0C8;
+    --shadow:    0 2px 12px rgba(27,45,69,.10);
+    --radius:    10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--navy);
+    color: #fff;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 28px,
+      rgba(46,109,164,.12) 28px, rgba(46,109,164,.12) 30px
+    );
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--orange);
+    color: #fff;
+    font-weight: 600;
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: .3rem .85rem;
+    border-radius: 2rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    position: relative;
+    margin-bottom: .6rem;
+  }
+  header p.sub {
+    color: rgba(255,255,255,.7);
+    font-size: 1.05rem;
+    position: relative;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ── Nav ── */
+  nav.toc {
+    background: #fff;
+    border-bottom: 2px solid var(--border);
+    padding: .8rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.4rem;
+    justify-content: center;
+    font-size: .88rem;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+  }
+  nav.toc a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 600;
+    padding: .2rem .3rem;
+    border-radius: 4px;
+    transition: background .15s;
+  }
+  nav.toc a:hover { background: var(--card-blue); }
+
+  /* ── Layout ── */
+  main { max-width: 880px; margin: 0 auto; padding: 2.5rem 1.5rem 6rem; }
+
+  .part-band {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: #fff;
+    background: linear-gradient(90deg, var(--navy), var(--blue));
+    padding: .55rem 1.2rem;
+    border-radius: var(--radius);
+    margin: 0 0 1.4rem;
+    letter-spacing: .02em;
+  }
+
+  /* ── Sections ── */
+  section.module {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem 2.2rem;
+    margin-bottom: 2.4rem;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 70px;
+  }
+  section.module h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy);
+    border-bottom: 3px solid var(--orange);
+    padding-bottom: .45rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  section.module h2 .num {
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    width: 1.85rem; height: 1.85rem;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  section.module h3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 1.5rem 0 .55rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  section.module p { margin-bottom: .7rem; color: #2d3b48; }
+  section.module ul, section.module ol {
+    padding-left: 1.5rem;
+    margin-bottom: .9rem;
+    color: #2d3b48;
+  }
+  section.module li { margin-bottom: .35rem; }
+
+  /* ── Info boxes ── */
+  .info-box {
+    background: var(--card-blue);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: .9rem 1.1rem;
+    margin: 1rem 0;
+    font-size: .95rem;
+  }
+  .info-box strong { color: var(--blue); }
+
+  .warn-box {
+    background: #FDECEA;
+    border-left: 4px solid var(--red);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: .9rem 1.1rem;
+    margin: 1rem 0;
+    font-size: .95rem;
+  }
+  .warn-box strong { color: var(--red); }
+
+  .steps-box {
+    background: #F4FAF7;
+    border-left: 4px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: .9rem 1.1rem;
+    margin: 1rem 0;
+  }
+  .steps-box ol { padding-left: 1.3rem; }
+  .steps-box li { margin-bottom: .4rem; font-size: .95rem; }
+  .steps-box strong { color: var(--green); display: block; margin-bottom: .4rem; font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ── Key term / measurement ── */
+  .key {
+    display: inline-block;
+    background: var(--navy);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .82rem;
+    padding: .15rem .5rem;
+    border-radius: 4px;
+    margin: 0 2px;
+  }
+  .measure {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  /* ── SVG diagrams ── */
+  .diagram-wrap {
+    background: #FAFCFF;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .diagram-wrap figcaption {
+    font-size: .82rem;
+    color: var(--mid);
+    margin-top: .5rem;
+    font-style: italic;
+  }
+
+  /* ── Interactive lab ── */
+  .lab {
+    background: var(--card-blue);
+    border: 1.5px solid #b8d4ef;
+    border-radius: var(--radius);
+    padding: 1.2rem 1.4rem;
+    margin: 1.2rem 0;
+  }
+  .lab h4 { color: var(--blue); font-size: 1rem; margin-bottom: .7rem; font-weight: 600; }
+  .lab .controls { display: flex; flex-wrap: wrap; gap: .7rem 1.2rem; align-items: center; margin-top: .8rem; }
+  .lab .controls label { font-size: .86rem; color: var(--mid); font-weight: 600; }
+  .lab input[type=range] { accent-color: var(--orange); width: 190px; max-width: 100%; vertical-align: middle; }
+  .lab .readout {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--orange);
+    font-weight: 500;
+    min-width: 3.4rem;
+    display: inline-block;
+  }
+  .lab .stage { text-align: center; }
+  .lab button {
+    background: var(--blue); color: #fff; border: none;
+    border-radius: 6px; padding: .42rem 1rem;
+    font-weight: 600; font-size: .85rem; cursor: pointer;
+    transition: background .15s;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .lab button:hover { background: #1d5a8a; }
+  .lab button.ghost { background: #fff; color: var(--blue); border: 1.5px solid var(--blue); }
+  .lab .note { font-size: .85rem; color: var(--mid); margin-top: .6rem; }
+
+  .widget {
+    background: var(--card-blue);
+    border: 1.5px solid #b8d4ef;
+    border-radius: var(--radius);
+    padding: 1.2rem 1.5rem;
+    margin-top: 1.2rem;
+  }
+  .widget h4 { color: var(--blue); font-size: 1rem; margin-bottom: .8rem; font-weight: 600; }
+  .widget .row { display: flex; flex-wrap: wrap; gap: .7rem; align-items: flex-end; margin-bottom: .7rem; }
+  .widget label { font-size: .88rem; color: var(--mid); font-weight: 600; display: block; margin-bottom: .25rem; }
+  .widget input {
+    padding: .4rem .65rem;
+    border: 1.5px solid #aac6e0;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .95rem;
+    width: 130px;
+    outline: none;
+  }
+  .widget input:focus { border-color: var(--blue); }
+  .widget button {
+    background: var(--blue); color: #fff; border: none;
+    border-radius: 6px; padding: .45rem 1.1rem;
+    font-weight: 600; font-size: .88rem; cursor: pointer;
+    transition: background .15s;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .widget button:hover { background: #1d5a8a; }
+  .widget .result {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--orange);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: .3rem;
+    min-height: 1.4rem;
+  }
+
+  /* ── Exercises ── */
+  .exercise-block {
+    background: var(--card-warm);
+    border: 1.5px solid #F5C7B0;
+    border-radius: var(--radius);
+    padding: 1.4rem 1.6rem;
+    margin-top: 1.6rem;
+  }
+  .exercise-block h4 {
+    color: var(--orange);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .q-item {
+    background: #fff;
+    border: 1px solid #EADDD3;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: .9rem;
+  }
+  .q-item p { margin-bottom: .55rem; font-size: .96rem; }
+  .q-item label.opt {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    cursor: pointer;
+    padding: .35rem .5rem;
+    border-radius: 6px;
+    margin-bottom: .2rem;
+    font-size: .93rem;
+    transition: background .12s;
+    border: 1.5px solid transparent;
+  }
+  .q-item label.opt:hover { background: #FFF0EA; }
+  .q-item input[type=radio] { accent-color: var(--orange); width: 1rem; height: 1rem; flex-shrink: 0; }
+  .q-item input[type=text], .q-item input[type=number] {
+    width: 100%;
+    padding: .45rem .75rem;
+    border: 1.5px solid #d0c5bb;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .95rem;
+    color: var(--navy);
+    background: #fff;
+    margin-top: .3rem;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .q-item input[type=text]:focus, .q-item input[type=number]:focus { border-color: var(--blue); }
+  .check-btn {
+    margin-top: .7rem;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: .5rem 1.3rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  .check-btn:hover { background: #1d5a8a; }
+  .check-btn:active { transform: scale(.97); }
+  .feedback {
+    margin-top: .55rem;
+    padding: .5rem .85rem;
+    border-radius: 6px;
+    font-size: .91rem;
+    font-weight: 600;
+    display: none;
+  }
+  .feedback.correct { background: #D4EDDA; color: var(--green); border: 1px solid #b6ddc6; }
+  .feedback.wrong   { background: #FDECEA; color: var(--red); border: 1px solid #f5c6cb; }
+  .option-correct { background: #D4EDDA !important; border-color: var(--green) !important; }
+  .option-wrong   { background: #FDECEA !important; border-color: var(--red) !important; }
+
+  /* ── Tables ── */
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: .92rem;
+  }
+  table.data th, table.data td {
+    border: 1px solid var(--border);
+    padding: .5rem .7rem;
+    text-align: left;
+  }
+  table.data th { background: var(--navy); color: #fff; font-weight: 600; }
+  table.data td:first-child { font-weight: 600; }
+  table.data tr:nth-child(even) td { background: #F7FAFD; }
+  table.data .mono { font-family: 'JetBrains Mono', monospace; color: var(--orange); }
+
+  /* ── Recap cards ── */
+  .recap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: .9rem;
+    margin: 1rem 0;
+  }
+  .recap-card {
+    background: var(--card-blue);
+    border: 1.5px solid #b8d4ef;
+    border-radius: var(--radius);
+    padding: .9rem 1.1rem;
+  }
+  .recap-card h5 { color: var(--blue); font-size: .92rem; margin-bottom: .35rem; }
+  .recap-card p { font-size: .88rem; margin: 0; color: #2d3b48; }
+
+  /* ── Exam answers ── */
+  details.answer {
+    background: #F4FAF7;
+    border: 1.5px solid #b9ddc9;
+    border-radius: 8px;
+    padding: .7rem 1rem;
+    margin-top: .6rem;
+    font-size: .92rem;
+  }
+  details.answer summary { cursor: pointer; font-weight: 600; color: var(--green); }
+  details.answer[open] summary { margin-bottom: .5rem; }
+
+  /* ── Progress bar ── */
+  #progress-bar-wrap {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,.92);
+    border-top: 1.5px solid var(--border);
+    padding: .5rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-size: .85rem; color: var(--mid);
+    z-index: 200;
+    backdrop-filter: blur(6px);
+  }
+  #prog-bar {
+    flex: 1; height: 8px;
+    background: var(--border);
+    border-radius: 99px; overflow: hidden;
+  }
+  #prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--orange));
+    border-radius: 99px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+  #prog-label { white-space: nowrap; font-weight: 600; color: var(--blue); }
+
+  @media (max-width: 600px) {
+    section.module { padding: 1.3rem 1rem; }
+    nav.toc { font-size: .78rem; gap: .3rem .9rem; }
+    .widget .row { flex-direction: column; align-items: stretch; }
+    .widget input { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">Maths I · Geometry</span>
+  <h1>Bearings &amp; Locus</h1>
+  <p class="sub">Read three-figure bearings, locate points by intersecting loci, and master every standard locus — with interactive compass and locus labs.</p>
+</header>
+
+<nav class="toc">
+  <a href="#m1">1 · Bearings</a>
+  <a href="#m2">2 · Measuring</a>
+  <a href="#m3">3 · Back Bearings</a>
+  <a href="#m4">4 · Scale &amp; Trig</a>
+  <a href="#m5">5 · What is a Locus?</a>
+  <a href="#m6">6 · The Four Loci</a>
+  <a href="#m7">7 · Intersecting Loci</a>
+  <a href="#m8">8 · Recap &amp; Practice</a>
+</nav>
+
+<main>
+
+<div class="part-band">Part A — Three-figure Bearings</div>
+
+<!-- ══════════════════ MODULE 1 ══════════════════ -->
+<section class="module" id="m1">
+  <h2><span class="num">1</span> What is a Bearing?</h2>
+
+  <p>A <strong>bearing</strong> is a way of describing a direction using an angle measured from <strong>North</strong>. Bearings are used in navigation, surveying, aviation and map work.</p>
+
+  <div class="info-box">
+    <strong>Three rules of bearings</strong>
+    <ul style="margin:.5rem 0 0">
+      <li>Measured from <strong>North</strong>, turning <strong>clockwise</strong>.</li>
+      <li>Always written with <strong>three figures</strong> — <span class="measure">047°</span>, not <span class="measure">47°</span>.</li>
+      <li>Between <span class="measure">000°</span> and <span class="measure">360°</span> inclusive.</li>
+    </ul>
+  </div>
+
+  <h3>North line</h3>
+  <p>Every point has its own North line, drawn straight up the page. A bearing is always measured from the North line <em>at the point you are looking from</em>.</p>
+
+  <h3>Compass directions and bearings</h3>
+  <table class="data">
+    <thead><tr><th>Direction</th><th>Bearing</th><th>Direction</th><th>Bearing</th></tr></thead>
+    <tbody>
+      <tr><td>North</td><td class="mono">000°</td><td>South</td><td class="mono">180°</td></tr>
+      <tr><td>North-East</td><td class="mono">045°</td><td>South-West</td><td class="mono">225°</td></tr>
+      <tr><td>East</td><td class="mono">090°</td><td>West</td><td class="mono">270°</td></tr>
+      <tr><td>South-East</td><td class="mono">135°</td><td>North-West</td><td class="mono">315°</td></tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 300 220" width="300" height="220" xmlns="http://www.w3.org/2000/svg" aria-label="Diagram showing a bearing of 060 degrees measured clockwise from north from point A to point B">
+      <line x1="80" y1="20" x2="80" y2="180" stroke="#5A6A7A" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="70" y="18" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45" font-weight="bold">N</text>
+      <line x1="80" y1="120" x2="230" y2="120" stroke="#D6D0C8" stroke-width="1"/>
+      <path d="M80 60 A 60 60 0 0 1 132 90" fill="none" stroke="#E8531A" stroke-width="2"/>
+      <text x="118" y="108" font-family="JetBrains Mono, monospace" font-size="13" fill="#E8531A" font-weight="bold">60°</text>
+      <line x1="80" y1="120" x2="196" y2="35" stroke="#2E6DA4" stroke-width="3"/>
+      <circle cx="80" cy="120" r="5" fill="#1B2D45"/>
+      <text x="66" y="137" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">A</text>
+      <circle cx="196" cy="35" r="5" fill="#1B2D45"/>
+      <text x="204" y="33" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">B</text>
+      <text x="150" y="205" font-family="Source Sans 3, sans-serif" font-size="13" fill="#5A6A7A" font-style="italic">The bearing of B from A is 060°</text>
+    </svg>
+    <figcaption>Bearings are measured clockwise from the North line at the starting point.</figcaption>
+  </div>
+
+  <div class="warn-box">
+    <strong>“Of B from A”</strong> — the bearing is measured at <strong>A</strong> (the “from” point) and points towards <strong>B</strong>. Swapping A and B gives a different bearing!
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>Write the bearing for the direction <strong>South-East</strong> correct to three figures.</p>
+      <label class="opt"><input type="radio" name="q1" value="45"> 45°</label>
+      <label class="opt"><input type="radio" name="q1" value="135"> 135°</label>
+      <label class="opt"><input type="radio" name="q1" value="225"> 225°</label>
+      <button class="check-btn" onclick="checkMC('q1','135','South-East is halfway between South (180°) and East (090°), i.e. 135°.')">Check</button>
+      <div class="feedback" id="q1-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A bearing is measured from North in which direction?</p>
+      <label class="opt"><input type="radio" name="q2" value="anticlockwise"> Anticlockwise</label>
+      <label class="opt"><input type="radio" name="q2" value="clockwise"> Clockwise</label>
+      <label class="opt"><input type="radio" name="q2" value="either"> Either direction</label>
+      <button class="check-btn" onclick="checkMC('q2','clockwise','Bearings are always measured clockwise from North, so the numbers increase as you turn right.')">Check</button>
+      <div class="feedback" id="q2-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 2 ══════════════════ -->
+<section class="module" id="m2">
+  <h2><span class="num">2</span> Measuring &amp; Drawing Bearings</h2>
+
+  <p>To find the bearing of one point from another on a diagram, you use a <strong>protractor</strong>.</p>
+
+  <div class="steps-box">
+    <strong>Method</strong>
+    <ol>
+      <li>Draw a <strong>North line</strong> at the point you are measuring from.</li>
+      <li>Place the protractor’s <strong>centre</strong> on that point.</li>
+      <li>Line up the <strong>0° mark</strong> with the North line (not the East–West line).</li>
+      <li>Read the scale going <strong>clockwise</strong> to the line joining the two points.</li>
+      <li>Write the answer as <strong>three figures</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="warn-box">
+    <strong>Common mistakes:</strong> measuring anticlockwise · using the wrong protractor scale (inner instead of outer) · forgetting the leading zero (<span class="measure">47°</span> instead of <span class="measure">047°</span>) · measuring from the wrong North line.
+  </div>
+
+  <div class="lab">
+    <h4>🧭 Interactive compass — explore any bearing</h4>
+    <div class="stage">
+      <svg id="dial-svg" viewBox="0 0 260 260" width="260" height="260" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive compass dial whose needle points at the chosen bearing">
+        <circle cx="130" cy="130" r="112" fill="#FAFCFF" stroke="#D6D0C8" stroke-width="1.5"/>
+        <circle cx="130" cy="130" r="104" fill="none" stroke="#E4E9EE" stroke-width="1"/>
+        <g id="dial-ticks"></g>
+        <g id="dial-cardinals" font-family="JetBrains Mono, monospace" font-size="13" font-weight="bold" fill="#1B2D45" text-anchor="middle">
+          <text x="130" y="26">N</text>
+          <text x="244" y="135">E</text>
+          <text x="130" y="249">S</text>
+          <text x="16" y="135">W</text>
+        </g>
+        <g id="dial-needle" transform="rotate(45 130 130)">
+          <line x1="130" y1="130" x2="130" y2="38" stroke="#2E6DA4" stroke-width="4" stroke-linecap="round"/>
+          <polygon points="130,30 124,44 136,44" fill="#E8531A"/>
+        </g>
+        <circle cx="130" cy="130" r="6" fill="#1B2D45"/>
+      </svg>
+    </div>
+    <div class="controls">
+      <label for="dial-slider">Bearing:</label>
+      <input type="range" id="dial-slider" min="0" max="360" value="45" oninput="updateDial()">
+      <span class="readout" id="dial-readout">045°</span>
+      <span style="color:var(--mid);font-size:.88rem;">→ <strong id="dial-name">North-East</strong></span>
+    </div>
+    <p class="note">Slide to any value from <span class="measure">000°</span> to <span class="measure">360°</span> and watch how the needle always turns clockwise from North.</p>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>When drawing a bearing, the protractor’s 0° mark must line up with the ______.</p>
+      <label class="opt"><input type="radio" name="q3" value="ew"> East–West line</label>
+      <label class="opt"><input type="radio" name="q3" value="north"> North line at the starting point</label>
+      <label class="opt"><input type="radio" name="q3" value="join"> Line joining the two points</label>
+      <button class="check-btn" onclick="checkMC('q3','north','Bearings are measured from North, so the 0° mark sits on the North line.')">Check</button>
+      <div class="feedback" id="q3-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 3 ══════════════════ -->
+<section class="module" id="m3">
+  <h2><span class="num">3</span> Back Bearings (Reciprocal Bearings)</h2>
+
+  <p>If you know the bearing of <strong>B from A</strong>, the bearing of <strong>A from B</strong> is called the <strong>back bearing</strong> (or reciprocal bearing).</p>
+
+  <div class="info-box">
+    <strong>Rule:</strong> Add 180° if the bearing is less than 180°; subtract 180° if it is 180° or more.
+    <p style="margin:.5rem 0 0"><span class="measure">060° &nbsp;→&nbsp; 060 + 180 = 240°</span> &nbsp;&nbsp; <span class="measure">300° &nbsp;→&nbsp; 300 − 180 = 120°</span></p>
+  </div>
+
+  <div class="widget">
+    <h4>↩️ Back-bearing calculator</h4>
+    <div class="row">
+      <div>
+        <label for="bb-in">Bearing of B from A</label>
+        <input type="number" id="bb-in" min="0" max="360" step="1" value="60">
+      </div>
+      <button onclick="computeBack()">Find back bearing</button>
+    </div>
+    <div class="result" id="bb-out"></div>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>The bearing of a lighthouse from a boat is <span class="measure">072°</span>. Write the bearing of the boat from the lighthouse.</p>
+      <input type="number" id="q4-input" placeholder="e.g. 123" inputmode="numeric">
+      <button class="check-btn" onclick="checkNumber('q4',252,'072° is less than 180°, so add 180°: 072 + 180 = 252°.')">Check</button>
+      <div class="feedback" id="q4-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>The bearing of P from Q is <span class="measure">295°</span>. Write the bearing of Q from P.</p>
+      <input type="number" id="q5-input" placeholder="e.g. 123" inputmode="numeric">
+      <button class="check-btn" onclick="checkNumber('q5',115,'295° is 180° or more, so subtract 180°: 295 − 180 = 115°.')">Check</button>
+      <div class="feedback" id="q5-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 4 ══════════════════ -->
+<section class="module" id="m4">
+  <h2><span class="num">4</span> Bearings with Scale Drawing &amp; Trigonometry</h2>
+
+  <p>Bearings questions often give distances as well as directions. You can solve them by <strong>accurate scale drawing</strong> or by <strong>trigonometry</strong>.</p>
+
+  <h3>Method A — Scale drawing</h3>
+  <div class="steps-box">
+    <strong>Steps</strong>
+    <ol>
+      <li>Choose a scale, e.g. <span class="measure">1 cm : 5 km</span>.</li>
+      <li>Draw a North line at the start point and mark the first bearing with a protractor.</li>
+      <li>Measure the given distance along it using your scale.</li>
+      <li>Draw a North line at the new point and mark the next bearing.</li>
+      <li>Join the final points; measure the required length/angle and convert back using the scale.</li>
+    </ol>
+  </div>
+
+  <h3>Method B — Trigonometry</h3>
+  <p>Bearings create triangles. Turn the bearings into <strong>interior angles</strong>, then use:</p>
+  <ul>
+    <li><strong>Pythagoras’ theorem</strong> when the angle between the two paths is 90°.</li>
+    <li><strong>Cosine rule</strong> <span class="key">a² = b² + c² − 2bc·cos A</span> for the side opposite a known angle.</li>
+    <li><strong>Sine rule</strong> <span class="key">a / sin A = b / sin B</span> for finding a missing angle or side.</li>
+  </ul>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 340 220" width="340" height="220" xmlns="http://www.w3.org/2000/svg" aria-label="Triangle O P Q where O to P is a bearing of 030 degrees and O to Q is a bearing of 100 degrees">
+      <line x1="170" y1="30" x2="170" y2="185" stroke="#5A6A7A" stroke-width="1.2" stroke-dasharray="5 4"/>
+      <text x="160" y="26" font-family="JetBrains Mono, monospace" font-size="12" fill="#1B2D45" font-weight="bold">N</text>
+      <line x1="170" y1="150" x2="262" y2="79" stroke="#2E6DA4" stroke-width="2.5"/>
+      <line x1="170" y1="150" x2="86" y2="88" stroke="#1A7A4A" stroke-width="2.5"/>
+      <line x1="262" y1="79" x2="86" y2="88" stroke="#E8531A" stroke-width="2.5" stroke-dasharray="7 4"/>
+      <circle cx="170" cy="150" r="5" fill="#1B2D45"/><text x="176" y="165" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">O</text>
+      <circle cx="262" cy="79" r="5" fill="#1B2D45"/><text x="268" y="76" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">P</text>
+      <circle cx="86" cy="88" r="5" fill="#1B2D45"/><text x="70" y="84" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">Q</text>
+      <path d="M170 108 A 42 42 0 0 1 195 122" fill="none" stroke="#2E6DA4" stroke-width="1.6"/>
+      <text x="196" y="118" font-family="JetBrains Mono, monospace" font-size="12" fill="#2E6DA4">30°</text>
+      <path d="M139 128 A 42 42 0 0 0 152 104" fill="none" stroke="#1A7A4A" stroke-width="1.6"/>
+      <text x="112" y="126" font-family="JetBrains Mono, monospace" font-size="12" fill="#1A7A4A">100°</text>
+      <text x="120" y="207" font-family="Source Sans 3, sans-serif" font-size="12.5" fill="#5A6A7A" font-style="italic">Angle POQ = 100° − 30° = 70°</text>
+    </svg>
+    <figcaption>Subtract the two bearings at the same point to get the angle between the paths.</figcaption>
+  </div>
+
+  <div class="info-box">
+    <strong>Worked example.</strong> A ship sails 7 km from O on a bearing of <span class="measure">030°</span> to P, then another ship leaves O and sails 10 km on a bearing of <span class="measure">100°</span> to Q. Find PQ.
+    <p style="margin:.5rem 0 0">Angle POQ = 100° − 30° = 70°. Using the cosine rule:<br>
+    <span class="measure">PQ² = 7² + 10² − 2(7)(10)cos 70° = 49 + 100 − 47.9 = 101.1</span><br>
+    <span class="measure">PQ ≈ 10.1 km</span></p>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>A is 8 km from O on a bearing of <span class="measure">060°</span>. B is 5 km from O on a bearing of <span class="measure">150°</span>. Find the distance AB, in km (1 d.p.).</p>
+      <input type="number" id="q6-input" step="0.1" placeholder="e.g. 4.2">
+      <button class="check-btn" onclick="checkNumber('q6',9.43,'The angle between the paths is 150° − 60° = 90°, so use Pythagoras: AB = √(8² + 5²) = √89 ≈ 9.4 km.')">Check</button>
+      <div class="feedback" id="q6-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>Bearings measured at the same point are <span class="measure">045°</span> and <span class="measure">130°</span>. What is the angle between the two paths?</p>
+      <label class="opt"><input type="radio" name="q7" value="175"> 175°</label>
+      <label class="opt"><input type="radio" name="q7" value="85"> 85°</label>
+      <label class="opt"><input type="radio" name="q7" value="95"> 95°</label>
+      <button class="check-btn" onclick="checkMC('q7','85','Subtract the smaller bearing from the larger: 130° − 45° = 85°.')">Check</button>
+      <div class="feedback" id="q7-fb"></div>
+    </div>
+  </div>
+</section>
+
+<div class="part-band">Part B — Locus</div>
+
+<!-- ══════════════════ MODULE 5 ══════════════════ -->
+<section class="module" id="m5">
+  <h2><span class="num">5</span> What is a Locus?</h2>
+
+  <p>A <strong>locus</strong> (plural <strong>loci</strong>) is the <strong>set of all points</strong> that satisfy a given condition — or, in other words, the <strong>path traced by a moving point</strong> obeying a rule.</p>
+
+  <div class="info-box">
+    <strong>Think of it like this:</strong> a goat tied to a post by a rope walks wherever the rope allows. The path its boundary traces is a locus — in this case a circle.
+  </div>
+
+  <p>There are four standard <strong>two-dimensional</strong> loci you must know. Each one has a simple name and a simple construction.</p>
+
+  <table class="data">
+    <thead><tr><th>Condition</th><th>Locus (2-D)</th><th>In 3-D</th></tr></thead>
+    <tbody>
+      <tr><td>At a given distance from a <strong>point</strong></td><td>Circle</td><td>Sphere</td></tr>
+      <tr><td>At a given distance from a <strong>straight line</strong></td><td>Two parallel lines</td><td>Cylinder (tube)</td></tr>
+      <tr><td>Equidistant from <strong>two points</strong></td><td>Perpendicular bisector</td><td>Perpendicular bisecting plane</td></tr>
+      <tr><td>Equidistant from <strong>two intersecting lines</strong></td><td>Two angle bisectors</td><td>Two bisecting planes</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>A locus is best described as…</p>
+      <label class="opt"><input type="radio" name="q8" value="one"> a single point</label>
+      <label class="opt"><input type="radio" name="q8" value="set"> the set of all points satisfying a condition</label>
+      <label class="opt"><input type="radio" name="q8" value="line"> always a straight line</label>
+      <button class="check-btn" onclick="checkMC('q8','set','A locus is the set of every point that obeys the given rule — it may be a curve or several lines.')">Check</button>
+      <div class="feedback" id="q8-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>The locus of points at a constant distance <em>r</em> from a fixed point O is a…</p>
+      <label class="opt"><input type="radio" name="q9" value="circle"> circle of radius r, centre O</label>
+      <label class="opt"><input type="radio" name="q9" value="line"> straight line through O</label>
+      <label class="opt"><input type="radio" name="q9" value="two"> pair of parallel lines</label>
+      <button class="check-btn" onclick="checkMC('q9','circle','Every point a fixed distance from O lies on the circle with centre O and radius r. In 3-D it becomes a sphere.')">Check</button>
+      <div class="feedback" id="q9-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 6 ══════════════════ -->
+<section class="module" id="m6">
+  <h2><span class="num">6</span> The Four Loci — Animated</h2>
+  <p>Press <strong>Play</strong> in each lab and watch the moving point <em>trace out</em> the locus.</p>
+
+  <!-- Locus 1 -->
+  <h3>6.1 · Fixed distance from a point → a circle</h3>
+  <p>The locus of points a distance <span class="measure">r</span> from a fixed point <strong>A</strong> is the <strong>circle</strong> with centre A and radius r.</p>
+  <div class="lab">
+    <h4>🎯 Locus lab 1 — the circle</h4>
+    <div class="stage">
+      <svg viewBox="0 0 240 240" width="240" height="240" xmlns="http://www.w3.org/2000/svg" aria-label="A point moving around a circle centred on point A">
+        <circle cx="120" cy="120" r="70" fill="none" stroke="#E8531A" stroke-width="2.5" stroke-dasharray="7 5"/>
+        <circle cx="120" cy="120" r="4.5" fill="#1B2D45"/>
+        <text x="126" y="134" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">A</text>
+        <line x1="120" y1="120" x2="190" y2="120" stroke="#2E6DA4" stroke-width="1.3" stroke-dasharray="4 3"/>
+        <text x="145" y="114" font-family="JetBrains Mono, monospace" font-size="12" fill="#2E6DA4">r</text>
+        <circle id="dot1" cx="120" cy="50" r="6" fill="#E8531A"/>
+      </svg>
+    </div>
+    <div class="controls">
+      <button onclick="toggleLab('lab1', this)">▶ Play</button>
+    </div>
+    <p class="note">A moving point stays exactly <em>r</em> from A → it traces a circle. In 3-D, a ball can move anywhere on the surface of a sphere.</p>
+  </div>
+
+  <!-- Locus 2 -->
+  <h3>6.2 · Fixed distance from a straight line → two parallel lines</h3>
+  <p>The locus of points a distance <span class="measure">d</span> from a line <strong>l</strong> is <strong>two lines parallel to l</strong>, one on each side, each distance d away.</p>
+  <div class="lab">
+    <h4>📏 Locus lab 2 — parallel lines</h4>
+    <div class="stage">
+      <svg viewBox="0 0 240 240" width="240" height="240" xmlns="http://www.w3.org/2000/svg" aria-label="A point moving along two parallel lines at a fixed distance above and below a line l">
+        <line x1="20" y1="150" x2="220" y2="150" stroke="#1B2D45" stroke-width="3"/>
+        <text x="196" y="168" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">l</text>
+        <line x1="20" y1="105" x2="220" y2="105" stroke="#E8531A" stroke-width="2.5" stroke-dasharray="7 5"/>
+        <line x1="20" y1="195" x2="220" y2="195" stroke="#E8531A" stroke-width="2.5" stroke-dasharray="7 5"/>
+        <line x1="60" y1="105" x2="60" y2="150" stroke="#2E6DA4" stroke-width="1.3" stroke-dasharray="4 3"/>
+        <text x="64" y="132" font-family="JetBrains Mono, monospace" font-size="12" fill="#2E6DA4">d</text>
+        <circle id="dot2" cx="30" cy="105" r="6" fill="#E8531A"/>
+      </svg>
+    </div>
+    <div class="controls"><button onclick="toggleLab('lab2', this)">▶ Play</button></div>
+    <p class="note">Both red lines form the locus — a point above or below <em>l</em> is allowed. In 3-D this becomes the surface of a cylinder.</p>
+  </div>
+
+  <!-- Locus 3 -->
+  <h3>6.3 · Equidistant from two points → perpendicular bisector</h3>
+  <p>The locus of points the same distance from two fixed points <strong>A</strong> and <strong>B</strong> is the <strong>perpendicular bisector</strong> of AB.</p>
+  <div class="lab">
+    <h4>⚖️ Locus lab 3 — perpendicular bisector</h4>
+    <div class="stage">
+      <svg viewBox="0 0 240 240" width="240" height="240" xmlns="http://www.w3.org/2000/svg" aria-label="A point moving along the perpendicular bisector of segment AB">
+        <line x1="120" y1="25" x2="120" y2="215" stroke="#E8531A" stroke-width="2.5" stroke-dasharray="7 5"/>
+        <line x1="70" y1="120" x2="170" y2="120" stroke="#2E6DA4" stroke-width="2.5"/>
+        <path d="M120 112 L128 112 L128 120" fill="none" stroke="#2E6DA4" stroke-width="1.3"/>
+        <circle cx="70" cy="120" r="5" fill="#1B2D45"/><text x="52" y="124" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">A</text>
+        <circle cx="170" cy="120" r="5" fill="#1B2D45"/><text x="180" y="124" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">B</text>
+        <line x1="120" y1="60" x2="70" y2="120" stroke="#B8C4CF" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <line x1="120" y1="60" x2="170" y2="120" stroke="#B8C4CF" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <circle id="dot3" cx="120" cy="30" r="6" fill="#E8531A"/>
+      </svg>
+    </div>
+    <div class="controls"><button onclick="toggleLab('lab3', this)">▶ Play</button></div>
+    <p class="note">Construction: draw arcs of equal radius from A and B; the line through the two crossing points is the locus.</p>
+  </div>
+
+  <!-- Locus 4 -->
+  <h3>6.4 · Equidistant from two intersecting lines → angle bisectors</h3>
+  <p>The locus of points the same distance from two lines that cross is the <strong>pair of angle bisectors</strong> of the angles between them.</p>
+  <div class="lab">
+    <h4>✂️ Locus lab 4 — angle bisectors</h4>
+    <div class="stage">
+      <svg viewBox="0 0 240 240" width="240" height="240" xmlns="http://www.w3.org/2000/svg" aria-label="A point moving along the angle bisectors of two intersecting lines">
+        <line x1="20" y1="189" x2="220" y2="65" stroke="#1B2D45" stroke-width="2"/>
+        <line x1="20" y1="65" x2="220" y2="189" stroke="#1B2D45" stroke-width="2"/>
+        <line x1="120" y1="15" x2="120" y2="225" stroke="#E8531A" stroke-width="2.2" stroke-dasharray="7 5"/>
+        <line x1="20" y1="127" x2="220" y2="127" stroke="#1A7A4A" stroke-width="2.2" stroke-dasharray="7 5"/>
+        <circle cx="120" cy="127" r="5" fill="#1B2D45"/>
+        <circle id="dot4" cx="120" cy="27" r="6" fill="#E8531A"/>
+      </svg>
+    </div>
+    <div class="controls"><button onclick="toggleLab('lab4', this)">▶ Play</button></div>
+    <p class="note">The point is the same perpendicular distance from both lines — that is exactly what “equidistant from two lines” means.</p>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>The locus of points equidistant from two fixed points A and B is…</p>
+      <label class="opt"><input type="radio" name="q10" value="ab"> the line AB</label>
+      <label class="opt"><input type="radio" name="q10" value="pb"> the perpendicular bisector of AB</label>
+      <label class="opt"><input type="radio" name="q10" value="par"> two lines parallel to AB</label>
+      <button class="check-btn" onclick="checkMC('q10','pb','Every point on the perpendicular bisector is the same distance from A and from B.')">Check</button>
+      <div class="feedback" id="q10-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>The locus of points a fixed distance from a straight line is…</p>
+      <label class="opt"><input type="radio" name="q11" value="one"> one parallel line</label>
+      <label class="opt"><input type="radio" name="q11" value="circle"> a circle</label>
+      <label class="opt"><input type="radio" name="q11" value="two"> two parallel lines, one on each side</label>
+      <button class="check-btn" onclick="checkMC('q11','two','The distance is measured perpendicularly, so there is a parallel line on BOTH sides of the given line.')">Check</button>
+      <div class="feedback" id="q11-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>The locus of points equidistant from two intersecting straight lines is…</p>
+      <label class="opt"><input type="radio" name="q12" value="bis"> the two angle bisectors</label>
+      <label class="opt"><input type="radio" name="q12" value="para"> two parallel lines</label>
+      <label class="opt"><input type="radio" name="q12" value="circ"> a circle</label>
+      <button class="check-btn" onclick="checkMC('q12','bis','The two angle bisectors are exactly the points that are the same distance from both lines.')">Check</button>
+      <div class="feedback" id="q12-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>In <strong>three dimensions</strong>, the locus of points a fixed distance from a fixed point is a…</p>
+      <label class="opt"><input type="radio" name="q13" value="circle"> circle</label>
+      <label class="opt"><input type="radio" name="q13" value="sphere"> sphere</label>
+      <label class="opt"><input type="radio" name="q13" value="cyl"> cylinder</label>
+      <button class="check-btn" onclick="checkMC('q13','sphere','In 3-D the point can move in every direction, tracing the surface of a sphere.')">Check</button>
+      <div class="feedback" id="q13-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 7 ══════════════════ -->
+<section class="module" id="m7">
+  <h2><span class="num">7</span> Intersecting Loci</h2>
+
+  <p>To locate a point that must satisfy <strong>two conditions at once</strong>, draw each locus separately. The point(s) where the loci <strong>intersect</strong> satisfy both conditions.</p>
+
+  <div class="steps-box">
+    <strong>Method of intersecting loci</strong>
+    <ol>
+      <li>Translate each condition into a locus (circle, parallel lines, bisector…).</li>
+      <li>Draw the <strong>first locus</strong> accurately with compasses and ruler.</li>
+      <li>Draw the <strong>second locus</strong> on the same diagram.</li>
+      <li>Mark the <strong>intersection point(s)</strong> — these are the required positions.</li>
+      <li>If the question says “shade the region”, shade the area that satisfies <em>all</em> the conditions.</li>
+    </ol>
+  </div>
+
+  <div class="lab">
+    <h4>🔵 Intersecting-loci explorer</h4>
+    <p style="font-size:.9rem;color:#2d3b48;margin-bottom:.4rem;">Find the point(s) that are a distance <strong>r₁ from A</strong> <em>and</em> <strong>r₂ from B</strong>.</p>
+    <div class="stage">
+      <svg id="inter-svg" viewBox="0 0 380 280" width="380" height="280" xmlns="http://www.w3.org/2000/svg" aria-label="Two circles centred on A and B whose intersection points show positions satisfying both distance conditions">
+        <circle id="cA" cx="110" cy="140" r="80" fill="rgba(46,109,164,.08)" stroke="#2E6DA4" stroke-width="2"/>
+        <circle id="cB" cx="270" cy="140" r="60" fill="rgba(26,122,74,.08)" stroke="#1A7A4A" stroke-width="2"/>
+        <line x1="110" y1="140" x2="270" y2="140" stroke="#D6D0C8" stroke-width="1" stroke-dasharray="4 4"/>
+        <circle id="p1" cx="0" cy="0" r="0" fill="#E8531A"/>
+        <circle id="p2" cx="0" cy="0" r="0" fill="#E8531A"/>
+        <circle cx="110" cy="140" r="5" fill="#1B2D45"/><text x="98" y="160" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">A</text>
+        <circle cx="270" cy="140" r="5" fill="#1B2D45"/><text x="278" y="160" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">B</text>
+      </svg>
+    </div>
+    <div class="controls">
+      <label for="rA">r₁ from A:</label>
+      <input type="range" id="rA" min="20" max="150" value="80" oninput="updateIntersect()">
+      <span class="readout" id="rA-out">80</span>
+      <label for="rB">r₂ from B:</label>
+      <input type="range" id="rB" min="20" max="150" value="60" oninput="updateIntersect()">
+      <span class="readout" id="rB-out">60</span>
+    </div>
+    <div class="result" id="inter-msg" style="font-family:'JetBrains Mono',monospace;color:var(--orange);font-weight:600;margin-top:.6rem;"></div>
+    <p class="note">The two orange dots are the positions that are the right distance from <em>both</em> A and B. When the circles only touch, there is exactly one such point.</p>
+  </div>
+
+  <h3>Worked example — intersecting loci</h3>
+  <p>A treasure is buried <span class="measure">4 m</span> from a tree T and <span class="measure">6 m</span> from a rock R, where T and R are 9 m apart.</p>
+  <ul>
+    <li>Locus 1: circle, centre T, radius 4 m.</li>
+    <li>Locus 2: circle, centre R, radius 6 m.</li>
+    <li>The circles cross at <strong>two points</strong>, so there are two possible treasure sites. You would need a third condition to choose between them.</li>
+  </ul>
+
+  <div class="info-box">
+    <strong>Region / shading questions.</strong> When you see words like “<em>within</em>”, “<em>less than</em>”, “<em>closer to</em>”, the answer is a shaded region rather than a single line. Example: “within 3 cm of A but more than 2 cm from line l” means <em>inside</em> the circle of radius 3 cm centred on A, <em>and</em> outside the two lines parallel to l at distance 2 cm.
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>A point is 5 cm from P and 7 cm from Q. To find its possible positions you draw…</p>
+      <label class="opt"><input type="radio" name="q14" value="par"> two pairs of parallel lines</label>
+      <label class="opt"><input type="radio" name="q14" value="circles"> two circles and mark where they intersect</label>
+      <label class="opt"><input type="radio" name="q14" value="bis"> one angle bisector</label>
+      <button class="check-btn" onclick="checkMC('q14','circles','“A fixed distance from a point” is a circle, so the two conditions give two circles; their intersections are the answers.')">Check</button>
+      <div class="feedback" id="q14-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A point is 3 cm from A and 3 cm from B, and A and B are 10 cm apart. How many possible positions are there?</p>
+      <input type="number" id="q15-input" placeholder="e.g. 2" inputmode="numeric">
+      <button class="check-btn" onclick="checkNumber('q15',0,'The circles have radii 3 cm + 3 cm = 6 cm, which is less than the 10 cm between the centres, so they do not meet — no such point exists.')">Check</button>
+      <div class="feedback" id="q15-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>To find a point equidistant from A and B <em>and</em> the same distance from two lines l₁ and l₂, which two loci do you draw?</p>
+      <label class="opt"><input type="radio" name="q16" value="a"> two circles</label>
+      <label class="opt"><input type="radio" name="q16" value="b"> the perpendicular bisector of AB and the angle bisector(s)</label>
+      <label class="opt"><input type="radio" name="q16" value="c"> two pairs of parallel lines</label>
+      <button class="check-btn" onclick="checkMC('q16','b','“Equidistant from two points” is the perpendicular bisector; “equidistant from two lines” is the angle bisector(s). Their intersection is the answer.')">Check</button>
+      <div class="feedback" id="q16-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 8 ══════════════════ -->
+<section class="module" id="m8">
+  <h2><span class="num">8</span> Recap &amp; Exam Practice</h2>
+
+  <h3>Summary sheet</h3>
+  <div class="recap-grid">
+    <div class="recap-card"><h5>Bearings</h5><p>Clockwise from North · three figures · 000°–360°.</p></div>
+    <div class="recap-card"><h5>Back bearing</h5><p>± 180°: add if &lt; 180°, subtract if ≥ 180°.</p></div>
+    <div class="recap-card"><h5>Angle between paths</h5><p>Subtract the two bearings taken at the same point.</p></div>
+    <div class="recap-card"><h5>Distance from a point</h5><p>Circle (2-D) / sphere (3-D).</p></div>
+    <div class="recap-card"><h5>Distance from a line</h5><p>Two parallel lines (2-D) / cylinder (3-D).</p></div>
+    <div class="recap-card"><h5>Equidistant from two points</h5><p>Perpendicular bisector.</p></div>
+    <div class="recap-card"><h5>Equidistant from two lines</h5><p>Two angle bisectors.</p></div>
+    <div class="recap-card"><h5>Two conditions</h5><p>Draw both loci; the intersection(s) is the answer.</p></div>
+  </div>
+
+  <h3>Exam-style questions</h3>
+
+  <div class="q-item" data-q>
+    <p><strong>Q1.</strong> The bearing of town B from town A is <span class="measure">118°</span>. Find the bearing of A from B.</p>
+    <input type="number" id="q17-input" placeholder="e.g. 123" inputmode="numeric">
+    <button class="check-btn" onclick="checkNumber('q17',298,'118° &lt; 180°, so add 180°: 118 + 180 = 298°.')">Check</button>
+    <div class="feedback" id="q17-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q2.</strong> A drone flies 6 km on a bearing of <span class="measure">040°</span>, then 8 km on a bearing of <span class="measure">130°</span>. How far is it from its starting point (1 d.p.)?</p>
+    <input type="number" id="q18-input" step="0.1" placeholder="e.g. 10.0">
+    <button class="check-btn" onclick="checkNumber('q18',10,'The angle between the two legs is 130° − 40° = 90°, so use Pythagoras: √(6² + 8²) = √100 = 10 km.')">Check</button>
+    <div class="feedback" id="q18-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q3.</strong> A goat is tethered to a post. Which locus does the boundary of the grass it can reach represent?</p>
+    <label class="opt"><input type="radio" name="q19" value="circle"> Circle (fixed distance from a point)</label>
+    <label class="opt"><input type="radio" name="q19" value="par"> Parallel lines</label>
+    <label class="opt"><input type="radio" name="q19" value="pb"> Perpendicular bisector</label>
+    <button class="check-btn" onclick="checkMC('q19','circle','The rope keeps the goat a fixed distance from the post, tracing a circle.')">Check</button>
+    <div class="feedback" id="q19-fb"></div>
+  </div>
+
+  <details class="answer">
+    <summary>Show full worked solutions</summary>
+    <p><strong>Q1.</strong> Back bearing: 118° + 180° = <span class="measure">298°</span>.</p>
+    <p><strong>Q2.</strong> Angle between legs = 130° − 40° = 90°. By Pythagoras, distance = √(6² + 8²) = √100 = <span class="measure">10.0 km</span>.</p>
+    <p><strong>Q3.</strong> Fixed distance from the post → a <strong>circle</strong> centred on the post.</p>
+  </details>
+</section>
+
+</main>
+
+<div id="progress-bar-wrap">
+  <span id="prog-label">0 / 0 answered</span>
+  <div id="prog-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="prog-fill"></div></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════
+//  Progress tracking
+// ══════════════════════════════════════════════════════════════════════════
+const answered = new Set();
+const TOTAL = document.querySelectorAll('.q-item[data-q]').length;
+
+function updateProgress() {
+  const pct = TOTAL ? Math.round((answered.size / TOTAL) * 100) : 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-bar').setAttribute('aria-valuenow', pct);
+  document.getElementById('prog-label').textContent = answered.size + ' / ' + TOTAL + ' answered';
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Quiz checks
+// ══════════════════════════════════════════════════════════════════════════
+function checkMC(qid, correct, explanation) {
+  const selected = document.querySelector('input[name="' + qid + '"]:checked');
+  const fb = document.getElementById(qid + '-fb');
+  if (!selected) {
+    fb.style.display = 'block';
+    fb.className = 'feedback wrong';
+    fb.textContent = 'Please select an answer.';
+    return;
+  }
+  document.querySelectorAll('input[name="' + qid + '"]').forEach(function (inp) {
+    const lbl = inp.closest('label');
+    if (!lbl) return;
+    lbl.classList.remove('option-correct', 'option-wrong');
+    if (inp.value === correct) lbl.classList.add('option-correct');
+    else if (inp.checked) lbl.classList.add('option-wrong');
+    inp.disabled = true;
+  });
+  fb.style.display = 'block';
+  if (selected.value === correct) {
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ Correct! ' + explanation;
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ Not quite. ' + explanation;
+  }
+  answered.add(qid);
+  updateProgress();
+}
+
+function checkText(qid, correct, explanation) {
+  const input = document.getElementById(qid + '-input');
+  const fb = document.getElementById(qid + '-fb');
+  const val = input.value.trim().toLowerCase();
+  fb.style.display = 'block';
+  if (val.includes(correct.toLowerCase())) {
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ Correct! ' + explanation;
+    input.style.borderColor = 'var(--green)';
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ Try again. ' + explanation;
+    input.style.borderColor = 'var(--red)';
+  }
+  answered.add(qid);
+  updateProgress();
+}
+
+function checkNumber(qid, correct, explanation) {
+  const input = document.getElementById(qid + '-input');
+  const fb = document.getElementById(qid + '-fb');
+  const val = parseFloat(input.value);
+  fb.style.display = 'block';
+  if (!isNaN(val) && Math.abs(val - correct) < 0.05) {
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ Correct! ' + explanation;
+    input.style.borderColor = 'var(--green)';
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ Not quite. ' + explanation;
+    input.style.borderColor = 'var(--red)';
+  }
+  answered.add(qid);
+  updateProgress();
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Interactive compass dial
+// ══════════════════════════════════════════════════════════════════════════
+(function buildCompass() {
+  const g = document.getElementById('dial-ticks');
+  const cx = 130, cy = 130;
+  let html = '';
+  for (let a = 0; a < 360; a += 10) {
+    const rad = a * Math.PI / 180;
+    const r1 = 104, r2 = (a % 30 === 0) ? 95 : 100;
+    const x1 = cx + r1 * Math.sin(rad), y1 = cy - r1 * Math.cos(rad);
+    const x2 = cx + r2 * Math.sin(rad), y2 = cy - r2 * Math.cos(rad);
+    const col = (a % 90 === 0) ? '#1B2D45' : '#9AA8B5';
+    const w = (a % 90 === 0) ? 2 : 1;
+    html += '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="' + col + '" stroke-width="' + w + '"/>';
+  }
+  g.innerHTML = html;
+})();
+
+const COMPASS = ['North','North-North-East','North-East','East-North-East','East','East-South-East',
+  'South-East','South-South-East','South','South-South-West','South-West','West-South-West',
+  'West','West-North-West','North-West','North-North-West'];
+
+function pad3(n) { return String(Math.round(n) % 360).padStart(3, '0'); }
+
+function updateDial() {
+  const b = +document.getElementById('dial-slider').value;
+  document.getElementById('dial-needle').setAttribute('transform', 'rotate(' + b + ' 130 130)');
+  document.getElementById('dial-readout').textContent = pad3(b) + '°';
+  document.getElementById('dial-name').textContent = COMPASS[Math.round((b % 360) / 22.5) % 16];
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Back-bearing calculator
+// ══════════════════════════════════════════════════════════════════════════
+function computeBack() {
+  let b = parseFloat(document.getElementById('bb-in').value);
+  const out = document.getElementById('bb-out');
+  if (isNaN(b)) { out.textContent = 'Enter a bearing between 000 and 360.'; return; }
+  b = ((b % 360) + 360) % 360;
+  const back = (b + 180) % 360;
+  const sign = b < 180 ? ' + 180°' : ' − 180°';
+  out.innerHTML = pad3(b) + '°' + sign + ' → <strong>' + pad3(back) + '°</strong>';
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Animated locus labs
+// ══════════════════════════════════════════════════════════════════════════
+const LABS = {
+  lab1: {
+    dot: 'dot1', t: 0, playing: false,
+    speed: 0.30,
+    path: function (t) {
+      const a = -Math.PI / 2 + t * 2 * Math.PI;
+      return { x: 120 + 70 * Math.cos(a), y: 120 + 70 * Math.sin(a) };
+    }
+  },
+  lab2: {
+    dot: 'dot2', t: 0, playing: false,
+    speed: 0.30,
+    path: function (t) {
+      if (t < 0.5) return { x: 30 + (t / 0.5) * 160, y: 105 };
+      return { x: 190 - ((t - 0.5) / 0.5) * 160, y: 195 };
+    }
+  },
+  lab3: {
+    dot: 'dot3', t: 0, playing: false,
+    speed: 0.30,
+    path: function (t) {
+      return { x: 120, y: 30 + t * 180 };
+    }
+  },
+  lab4: {
+    dot: 'dot4', t: 0, playing: false,
+    speed: 0.30,
+    path: function (t) {
+      return { x: 120, y: 27 + t * 200 };
+    }
+  }
+};
+
+function toggleLab(id, btn) {
+  const lab = LABS[id];
+  lab.playing = !lab.playing;
+  btn.textContent = lab.playing ? '❚❚ Pause' : '▶ Play';
+}
+
+let lastTs = 0;
+function loop(ts) {
+  if (!lastTs) lastTs = ts;
+  const dt = Math.min((ts - lastTs) / 1000, 0.05);
+  lastTs = ts;
+  for (const id in LABS) {
+    const lab = LABS[id];
+    if (!lab.playing) continue;
+    lab.t = (lab.t + dt * lab.speed) % 1;
+    const p = lab.path(lab.t);
+    const dot = document.getElementById(lab.dot);
+    if (dot) { dot.setAttribute('cx', p.x.toFixed(1)); dot.setAttribute('cy', p.y.toFixed(1)); }
+  }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Intersecting-loci explorer
+// ══════════════════════════════════════════════════════════════════════════
+const AX = 110, BX = 270, CY = 140;
+
+function updateIntersect() {
+  const r1 = +document.getElementById('rA').value;
+  const r2 = +document.getElementById('rB').value;
+  document.getElementById('rA-out').textContent = r1;
+  document.getElementById('rB-out').textContent = r2;
+
+  document.getElementById('cA').setAttribute('r', r1);
+  document.getElementById('cB').setAttribute('r', r2);
+
+  const d = BX - AX;
+  const a = (r1 * r1 - r2 * r2 + d * d) / (2 * d);
+  const h2 = r1 * r1 - a * a;
+  const p1 = document.getElementById('p1');
+  const p2 = document.getElementById('p2');
+  const msg = document.getElementById('inter-msg');
+
+  if (h2 < 0) {
+    p1.setAttribute('r', 0);
+    p2.setAttribute('r', 0);
+    msg.textContent = '✖ No intersection — no point is that distance from both A and B.';
+  } else if (h2 < 0.0001) {
+    const x = AX + a, y = CY;
+    p1.setAttribute('cx', x); p1.setAttribute('cy', y); p1.setAttribute('r', 6);
+    p2.setAttribute('r', 0);
+    msg.textContent = '● The circles touch at exactly one point.';
+  } else {
+    const h = Math.sqrt(h2);
+    const x = AX + a;
+    p1.setAttribute('cx', x); p1.setAttribute('cy', CY - h); p1.setAttribute('r', 6);
+    p2.setAttribute('cx', x); p2.setAttribute('cy', CY + h); p2.setAttribute('r', 6);
+    msg.textContent = '● Two possible positions (marked orange).';
+  }
+}
+
+// ── Initialise everything on load ──
+window.addEventListener('load', function () {
+  updateDial();
+  computeBack();
+  updateIntersect();
+  updateProgress();
+});
+</script>
+</body>
+</html>
