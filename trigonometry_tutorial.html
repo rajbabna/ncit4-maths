@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Trigonometry — Interactive Tutorial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+
+  /* ── Mintlify-aligned design tokens ──
+        Inter (UI prose) · Geist Mono (formulas/code)
+        mint accent only · flat surfaces · hairline borders
+  ─────────────────────────────────────────── */
+  :root {
+    --canvas:        #ffffff;
+    --surface:       #f7f7f7;
+    --surface-soft:  #fafafa;
+    --hairline:      #e5e5e5;
+    --hairline-soft: #ededed;
+    --ink:           #0a0a0a;
+    --charcoal:      #1c1c1e;
+    --slate:         #3a3a3c;
+    --steel:         #5a5a5c;
+    --stone:         #888888;
+    --muted:         #a8a8aa;
+    --mint:          #00d4a4;
+    --mint-deep:     #00b48a;
+    --mint-soft:     #7cebcb;
+    --tag:           #3772cf;
+    --error:         #d45656;
+    --warn:          #c37d0d;
+    --annotate:      #1ba673;
+    --orange:        #f55a3c;
+    --dark-from:     #1a3d4a;
+    --dark-to:       #2d5a4f;
+    --code-bg:       #1c1c1e;
+    --radius:        12px;
+    --radius-sm:     8px;
+    --shadow:        0 1px 2px rgba(0,0,0,.04);
+    --shadow-md:     0 4px 12px rgba(0,0,0,.08);
+    --shadow-lg:     0 24px 48px -8px rgba(0,0,0,.12);
+    --shadow-mint:   0 8px 24px rgba(0,212,164,.10);
+    --font-ui:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono:     'Geist Mono', 'SF Mono', Menlo, Consolas, monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-ui);
+    background: var(--canvas);
+    color: var(--charcoal);
+    line-height: 1.5;
+    font-size: 16px;
+  }
+
+  /* Atmospheric sky-gradient hero (Mintlify signature) */
+  header {
+    background: linear-gradient(180deg, #87a8c8 0%, #cfe0e8 45%, #f5e9d8 100%);
+    color: var(--ink);
+    padding: 4.5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(280px 130px at 18% 78%, rgba(255,255,255,.65), transparent 70%),
+      radial-gradient(360px 150px at 82% 28%, rgba(255,255,255,.55), transparent 70%),
+      radial-gradient(220px 110px at 62% 90%, rgba(255,255,255,.5), transparent 70%);
+    pointer-events: none;
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--canvas);
+    font-weight: 600;
+    font-size: .72rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: .32rem .9rem;
+    border-radius: 9999px;
+    margin-bottom: 1.1rem;
+    position: relative;
+  }
+  header h1 {
+    font-family: var(--font-ui);
+    font-size: clamp(2.1rem, 6vw, 3.4rem);
+    font-weight: 600;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    position: relative;
+    margin-bottom: .7rem;
+  }
+  header p.sub {
+    color: var(--slate);
+    font-size: 1.06rem;
+    line-height: 1.5;
+    position: relative;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  nav.toc {
+    background: var(--canvas);
+    border-bottom: 1px solid var(--hairline-soft);
+    padding: .85rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.6rem;
+    justify-content: center;
+    font-size: .86rem;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow);
+  }
+  nav.toc a { color: var(--steel); text-decoration: none; font-weight: 500; padding: .2rem .3rem; border-radius: 6px; transition: color .15s; }
+  nav.toc a:hover { color: var(--ink); }
+
+  main { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+  .part-band {
+    font-family: var(--font-ui);
+    font-size: .78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--canvas);
+    background: linear-gradient(135deg, var(--dark-from), var(--dark-to));
+    padding: .8rem 1.3rem;
+    border-radius: var(--radius);
+    margin: 0 0 1.4rem;
+  }
+
+  section.module {
+    background: var(--canvas);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    padding: 2rem 2.2rem;
+    margin-bottom: 2.2rem;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 70px;
+  }
+  section.module h2 {
+    font-family: var(--font-ui);
+    font-size: 1.6rem; font-weight: 600; color: var(--ink);
+    letter-spacing: -.5px;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: .6rem; margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: .7rem;
+  }
+  section.module h2 .num {
+    background: var(--mint); color: var(--ink);
+    font-family: var(--font-ui); font-size: .85rem; font-weight: 600;
+    width: 1.9rem; height: 1.9rem;
+    display: grid; place-items: center; border-radius: 9999px; flex-shrink: 0;
+  }
+  section.module h3 {
+    font-family: var(--font-ui); font-size: .78rem; font-weight: 600;
+    color: var(--steel); margin: 1.6rem 0 .6rem;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  section.module p { margin-bottom: .8rem; color: var(--charcoal); }
+  section.module ul, section.module ol { padding-left: 1.5rem; margin-bottom: .9rem; color: var(--charcoal); }
+  section.module li { margin-bottom: .35rem; }
+
+  .info-box { background: var(--surface); border-left: 3px solid var(--tag); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: .9rem 1.1rem; margin: 1rem 0; font-size: .95rem; }
+  .info-box strong { color: var(--tag); }
+  .warn-box { background: rgba(212,86,86,.08); border-left: 3px solid var(--error); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: .9rem 1.1rem; margin: 1rem 0; font-size: .95rem; }
+  .warn-box strong { color: var(--error); }
+  .steps-box { background: rgba(0,212,164,.08); border-left: 3px solid var(--mint); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: .9rem 1.1rem; margin: 1rem 0; }
+  .steps-box ol { padding-left: 1.3rem; }
+  .steps-box li { margin-bottom: .4rem; font-size: .95rem; }
+  .steps-box strong { color: var(--ink); display: block; margin-bottom: .4rem; font-size: .78rem; text-transform: uppercase; letter-spacing: .5px; }
+
+  .key { display: inline-block; background: var(--surface); color: var(--charcoal); font-family: var(--font-mono); font-size: .82rem; padding: .15rem .5rem; border-radius: 4px; border: 1px solid var(--hairline); margin: 0 2px; }
+  .measure { font-family: var(--font-mono); color: var(--tag); font-weight: 500; }
+
+  .diagram-wrap { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 1rem; margin: 1rem 0; text-align: center; overflow-x: auto; }
+  .diagram-wrap figcaption { font-size: .82rem; color: var(--stone); margin-top: .5rem; }
+
+  .formula {
+    display: block; background: var(--code-bg); border: 1px solid var(--code-bg);
+    border-radius: var(--radius-sm); padding: .75rem 1rem; margin: .7rem 0;
+    font-family: var(--font-mono); font-size: .95rem; color: #ffffff;
+  }
+  .formula b { color: var(--mint); }
+
+  .theorem { background: var(--surface-soft); border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 1.1rem 1.2rem; margin: 1rem 0; }
+  .theorem h4 { color: var(--ink); font-size: .95rem; font-weight: 600; margin-bottom: .3rem; }
+  .theorem .statement { font-weight: 600; color: var(--charcoal); display: block; margin-bottom: .5rem; }
+  .theorem .why { font-size: .9rem; color: var(--steel); }
+
+  .lab { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 1.2rem 1.4rem; margin: 1.2rem 0; }
+  .lab h4 { color: var(--ink); font-size: 1rem; margin-bottom: .7rem; font-weight: 600; }
+  .lab .controls { display: flex; flex-wrap: wrap; gap: .7rem 1.2rem; align-items: center; margin-top: .8rem; }
+  .lab .controls label { font-size: .86rem; color: var(--steel); font-weight: 500; }
+  .lab input[type=range] { accent-color: var(--mint-deep); width: 200px; max-width: 100%; vertical-align: middle; }
+  .lab .readout { font-family: var(--font-mono); color: var(--tag); font-weight: 500; min-width: 3.6rem; display: inline-block; }
+  .lab .stage { text-align: center; }
+  .lab button {
+    background: var(--ink); color: var(--canvas); border: none; border-radius: 9999px;
+    padding: .5rem 1.15rem; font-weight: 500; font-size: .85rem; cursor: pointer;
+    transition: background .15s; font-family: var(--font-ui);
+  }
+  .lab button:hover { background: var(--charcoal); }
+  .lab .note { font-size: .85rem; color: var(--steel); margin-top: .6rem; }
+  .lab .result { font-family: var(--font-mono); color: var(--tag); font-weight: 500; font-size: .95rem; margin-top: .6rem; line-height: 1.7; }
+
+  .widget { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 1.2rem 1.5rem; margin-top: 1.2rem; }
+  .widget h4 { color: var(--ink); font-size: 1rem; margin-bottom: .8rem; font-weight: 600; }
+  .widget .row { display: flex; flex-wrap: wrap; gap: .7rem; align-items: flex-end; margin-bottom: .7rem; }
+  .widget label { font-size: .86rem; color: var(--steel); font-weight: 500; display: block; margin-bottom: .25rem; }
+  .widget input, .widget select {
+    padding: .5rem .7rem; border: 1px solid var(--hairline); border-radius: var(--radius-sm);
+    font-family: var(--font-mono); font-size: .95rem; width: 130px;
+    outline: none; background: var(--canvas); color: var(--ink);
+  }
+  .widget select { width: 280px; }
+  .widget input:focus, .widget select:focus { border-color: var(--mint); }
+  .widget button {
+    background: var(--ink); color: var(--canvas); border: none; border-radius: 9999px;
+    padding: .5rem 1.15rem; font-weight: 500; font-size: .88rem; cursor: pointer;
+    transition: background .15s; font-family: var(--font-ui);
+  }
+  .widget button:hover { background: var(--charcoal); }
+  .widget .result { font-family: var(--font-mono); color: var(--tag); font-weight: 500; font-size: 1rem; margin-top: .3rem; line-height: 1.7; min-height: 1.4rem; }
+  .field-hidden { display: none !important; }
+
+  .exercise-block { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 1.4rem 1.6rem; margin-top: 1.6rem; }
+  .exercise-block h4 { color: var(--ink); font-family: var(--font-ui); font-weight: 600; font-size: 1.05rem; margin-bottom: 1rem; }
+  .q-item { background: var(--canvas); border: 1px solid var(--hairline-soft); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin-bottom: .9rem; }
+  .q-item p { margin-bottom: .55rem; font-size: .96rem; }
+  .q-item label.opt {
+    display: flex; align-items: center; gap: .55rem; cursor: pointer;
+    padding: .4rem .55rem; border-radius: 6px; margin-bottom: .2rem;
+    font-size: .93rem; transition: background .12s; border: 1px solid transparent;
+  }
+  .q-item label.opt:hover { background: rgba(0,212,164,.08); }
+  .q-item input[type=radio] { accent-color: var(--mint-deep); width: 1rem; height: 1rem; flex-shrink: 0; }
+  .q-item input[type=text], .q-item input[type=number] {
+    width: 100%; padding: .5rem .75rem; border: 1px solid var(--hairline);
+    border-radius: var(--radius-sm); font-family: var(--font-mono);
+    font-size: .95rem; color: var(--ink); background: var(--canvas);
+    margin-top: .3rem; outline: none; transition: border-color .15s;
+  }
+  .q-item input[type=text]:focus, .q-item input[type=number]:focus { border-color: var(--mint); }
+  .check-btn {
+    margin-top: .7rem; background: var(--ink); color: var(--canvas); border: none;
+    border-radius: 9999px; padding: .55rem 1.3rem; font-family: var(--font-ui);
+    font-weight: 500; font-size: .9rem; cursor: pointer; transition: background .15s, transform .1s;
+  }
+  .check-btn:hover { background: var(--charcoal); }
+  .check-btn:active { transform: scale(.97); }
+  .feedback { margin-top: .55rem; padding: .55rem .85rem; border-radius: var(--radius-sm); font-size: .91rem; font-weight: 500; display: none; }
+  .feedback.correct { background: rgba(0,212,164,.12); color: var(--mint-deep); border: 1px solid rgba(0,212,164,.35); }
+  .feedback.wrong   { background: rgba(212,86,86,.10); color: var(--error); border: 1px solid rgba(212,86,86,.30); }
+  .option-correct { background: rgba(0,212,164,.15) !important; border-color: var(--mint) !important; }
+  .option-wrong   { background: rgba(212,86,86,.12) !important; border-color: var(--error) !important; }
+
+  table.data { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .92rem; border: 1px solid var(--hairline); border-radius: var(--radius-sm); overflow: hidden; }
+  table.data th, table.data td { border-bottom: 1px solid var(--hairline-soft); padding: .55rem .75rem; text-align: left; }
+  table.data th { background: var(--surface); color: var(--ink); font-weight: 600; }
+  table.data td:first-child { font-weight: 600; }
+  table.data tr:nth-child(even) td { background: var(--surface-soft); }
+  table.data .mono { font-family: var(--font-mono); color: var(--tag); }
+
+  .recap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .9rem; margin: 1rem 0; }
+  .recap-card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: .9rem 1.1rem; }
+  .recap-card h5 { color: var(--ink); font-size: .9rem; font-weight: 600; margin-bottom: .35rem; }
+  .recap-card p { font-size: .88rem; margin: 0; color: var(--steel); }
+
+  details.answer { background: rgba(0,212,164,.06); border: 1px solid rgba(0,212,164,.30); border-radius: var(--radius-sm); padding: .7rem 1rem; margin-top: .6rem; font-size: .92rem; }
+  details.answer summary { cursor: pointer; font-weight: 600; color: var(--tag); }
+  details.answer[open] summary { margin-bottom: .5rem; }
+
+  #progress-bar-wrap {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,.92); border-top: 1px solid var(--hairline);
+    padding: .5rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+    font-size: .85rem; color: var(--steel); z-index: 200; backdrop-filter: blur(6px);
+  }
+  #prog-bar { flex: 1; height: 8px; background: var(--hairline); border-radius: 9999px; overflow: hidden; }
+  #prog-fill { height: 100%; background: linear-gradient(90deg, var(--mint-soft), var(--mint)); border-radius: 9999px; transition: width .4s ease; width: 0%; }
+  #prog-label { white-space: nowrap; font-weight: 600; color: var(--ink); }
+
+  @media (max-width: 600px) {
+    section.module { padding: 1.3rem 1rem; }
+    nav.toc { font-size: .78rem; gap: .3rem .9rem; }
+    .widget .row { flex-direction: column; align-items: stretch; }
+    .widget input, .widget select { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">Maths I · Geometry &amp; Measurement</span>
+  <h1>Trigonometry</h1>
+  <p class="sub">Pythagoras, SOHCAHTOA, elevations and depressions, bearings, the sine and cosine rules, and the area of any triangle — with live calculators.</p>
+</header>
+
+<nav class="toc">
+  <a href="#m1">1 · Pythagoras</a>
+  <a href="#m2">2 · SOHCAHTOA</a>
+  <a href="#m3">3 · Elevation &amp; Depression</a>
+  <a href="#m4">4 · Bearings</a>
+  <a href="#m5">5 · Sine Rule</a>
+  <a href="#m6">6 · Cosine Rule</a>
+  <a href="#m7">7 · Area ½ab sin C</a>
+  <a href="#m8">8 · Recap &amp; Practice</a>
+</nav>
+
+<main>
+
+<div class="part-band">Part A — Right-angled Triangles</div>
+
+<!-- ══════════════════ MODULE 1 ══════════════════ -->
+<section class="module" id="m1">
+  <h2><span class="num">1</span> Pythagoras’ Theorem</h2>
+
+  <p>In a <strong>right-angled triangle</strong>, the side opposite the right angle is the <strong>hypotenuse</strong> (the longest side). Pythagoras’ theorem relates the three sides:</p>
+
+  <span class="formula"><b>a² + b² = c²</b> &nbsp;&nbsp;where c is the hypotenuse</span>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 300 200" width="300" height="200" xmlns="http://www.w3.org/2000/svg" aria-label="A right-angled triangle with sides a, b and hypotenuse c labelled">
+      <polygon points="50,160 230,160 50,50" fill="#eef3fb" stroke="#3772cf" stroke-width="2"/>
+      <path d="M50 148 h12 v12" fill="none" stroke="#5a5a5c" stroke-width="1.7"/>
+      <text x="42" y="105" font-family="Geist Mono, monospace" font-size="13" fill="#1ba673">b</text>
+      <text x="140" y="178" font-family="Geist Mono, monospace" font-size="13" fill="#1ba673">a</text>
+      <text x="150" y="95" font-family="Geist Mono, monospace" font-size="13" fill="#f55a3c">c</text>
+      <text x="40" y="44" font-family="Geist Mono, monospace" font-size="11" fill="#888888">90°</text>
+    </svg>
+    <figcaption>Only the hypotenuse is opposite the right angle; the other two sides are the legs.</figcaption>
+  </div>
+
+  <div class="info-box">
+    <strong>How to use it.</strong>
+    <ul style="margin:.5rem 0 0">
+      <li>To find the <strong>hypotenuse</strong>: <span class="measure">c = √(a² + b²)</span> — add.</li>
+      <li>To find a <strong>shorter side</strong>: <span class="measure">a = √(c² − b²)</span> — subtract.</li>
+    </ul>
+  </div>
+
+  <div class="lab">
+    <h4>📐 Pythagoras calculator</h4>
+    <div class="controls">
+      <label for="py-a">Side a</label>
+      <input type="range" id="py-a" min="1" max="20" value="6" oninput="calcPyth()">
+      <span class="readout" id="py-a-out">6</span>
+      <label for="py-b">Side b</label>
+      <input type="range" id="py-b" min="1" max="20" value="8" oninput="calcPyth()">
+      <span class="readout" id="py-b-out">8</span>
+    </div>
+    <div class="result" id="py-out"></div>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>Find the hypotenuse of a right-angled triangle with legs 9 cm and 12 cm.</p>
+      <input type="number" id="q1-input" placeholder="e.g. 15">
+      <button class="check-btn" onclick="checkNumber('q1',15,'c = √(9² + 12²) = √(81 + 144) = √225 = 15 cm.')">Check</button>
+      <div class="feedback" id="q1-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A right-angled triangle has hypotenuse 13 m and one leg 5 m. Find the other leg.</p>
+      <input type="number" id="q2-input" placeholder="e.g. 12">
+      <button class="check-btn" onclick="checkNumber('q2',12,'Leg = √(13² − 5²) = √(169 − 25) = √144 = 12 m. Use subtraction for a shorter side.')">Check</button>
+      <div class="feedback" id="q2-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 2 ══════════════════ -->
+<section class="module" id="m2">
+  <h2><span class="num">2</span> SOHCAHTOA — Sides &amp; Angles</h2>
+
+  <p>For an acute angle θ in a right-angled triangle we label the sides relative to θ:</p>
+  <ul>
+    <li><strong>Hypotenuse (H)</strong> — opposite the right angle (always the longest).</li>
+    <li><strong>Opposite (O)</strong> — opposite the angle θ.</li>
+    <li><strong>Adjacent (A)</strong> — next to θ (and not the hypotenuse).</li>
+  </ul>
+
+  <span class="formula"><b>SOH</b> sin θ = O / H &nbsp;·&nbsp; <b>CAH</b> cos θ = A / H &nbsp;·&nbsp; <b>TOA</b> tan θ = O / A</span>
+
+  <div class="lab">
+    <h4>📊 SOHCAHTOA explorer</h4>
+    <div class="stage">
+      <svg id="tri-svg" viewBox="0 0 260 235" width="260" height="235" xmlns="http://www.w3.org/2000/svg" aria-label="A right-angled triangle whose angle can be changed with a slider">
+        <polygon id="tri-poly" points="40,220 139,220 139,121" fill="#eef3fb" stroke="#3772cf" stroke-width="2"/>
+        <path id="tri-right" d="M139 208 h12 v12" fill="none" stroke="#5a5a5c" stroke-width="1.7"/>
+        <path id="tri-arc" d="" fill="none" stroke="#f55a3c" stroke-width="1.7"/>
+        <text id="tri-theta" x="70" y="212" font-family="Geist Mono, monospace" font-size="12" fill="#f55a3c">45°</text>
+        <text id="tri-h" x="72" y="150" font-family="Geist Mono, monospace" font-size="12" fill="#f55a3c">H</text>
+        <text id="tri-o" x="146" y="175" font-family="Geist Mono, monospace" font-size="12" fill="#1ba673">O</text>
+        <text id="tri-a" x="90" y="234" font-family="Geist Mono, monospace" font-size="12" fill="#1ba673">A</text>
+      </svg>
+    </div>
+    <div class="controls">
+      <label for="tri-angle">Angle θ</label>
+      <input type="range" id="tri-angle" min="5" max="85" value="45" oninput="updateTri()">
+      <span class="readout" id="tri-angle-out">45°</span>
+    </div>
+    <div class="result" id="tri-out"></div>
+    <p class="note">The ratios sin θ, cos θ and tan θ depend only on the size of the angle — not on how big the triangle is.</p>
+  </div>
+
+  <div class="theorem">
+    <h4>i · Finding a side</h4>
+    <span class="statement">Choose the ratio that links the side you know to the side you want.</span>
+    <span class="why">e.g. given H and θ, use sin θ = O/H to find O; given A and θ, use cos θ = A/H to find H.</span>
+  </div>
+
+  <div class="theorem">
+    <h4>i · Finding an angle</h4>
+    <span class="statement">Use the inverse trig function, e.g. θ = sin⁻¹(O/H).</span>
+    <span class="why">Make sure your calculator is in <strong>DEGREE</strong> mode. Give angles to 1 decimal place.</span>
+  </div>
+
+  <div class="info-box">
+    <strong>Worked example.</strong> A ladder leans against a wall. Its foot is 2.5 m from the wall and it makes an angle of 68° with the ground. How long is the ladder?
+    <p style="margin:.5rem 0 0 0"><span class="measure">cos 68° = 2.5 / L  →  L = 2.5 / cos 68° ≈ 6.7 m</span> (1 d.p.)</p>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>In a right-angled triangle, the side opposite θ is 7 cm and the hypotenuse is 10 cm. Find θ, to 1 decimal place.</p>
+      <input type="number" id="q3-input" step="0.1" placeholder="e.g. 44.4">
+      <button class="check-btn" onclick="checkNumber('q3',44.4,'sin θ = 7/10 = 0.7, so θ = sin⁻¹(0.7) ≈ 44.4°.')">Check</button>
+      <div class="feedback" id="q3-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A right-angled triangle has an angle of <span class="measure">35°</span> and a hypotenuse of 20 cm. Find the side opposite the 35°, to 2 d.p.</p>
+      <input type="number" id="q4-input" step="0.01" placeholder="e.g. 11.47">
+      <button class="check-btn" onclick="checkNumber('q4',11.47,'O = H sin θ = 20 × sin 35° ≈ 11.47 cm.')">Check</button>
+      <div class="feedback" id="q4-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>Which ratio connects the side <strong>adjacent</strong> to θ with the <strong>hypotenuse</strong>?</p>
+      <label class="opt"><input type="radio" name="q5" value="sin"> sin θ</label>
+      <label class="opt"><input type="radio" name="q5" value="cos"> cos θ</label>
+      <label class="opt"><input type="radio" name="q5" value="tan"> tan θ</label>
+      <button class="check-btn" onclick="checkMC('q5','cos','CAH: cos θ = Adjacent / Hypotenuse.')">Check</button>
+      <div class="feedback" id="q5-fb"></div>
+    </div>
+  </div>
+</section>
+
+<div class="part-band">Part B — Trigonometric Problems in 2-D</div>
+
+<!-- ══════════════════ MODULE 3 ══════════════════ -->
+<section class="module" id="m3">
+  <h2><span class="num">3</span> Angles of Elevation &amp; Depression</h2>
+
+  <div class="theorem">
+    <h4>Angle of elevation</h4>
+    <span class="statement">The angle measured <em>upward</em> from the horizontal to an object above you.</span>
+  </div>
+  <div class="theorem">
+    <h4>Angle of depression</h4>
+    <span class="statement">The angle measured <em>downward</em> from the horizontal to an object below you.</span>
+  </div>
+
+  <div class="info-box">
+    <strong>Key fact:</strong> The angle of elevation from A to B equals the angle of depression from B to A — they are <strong>alternate angles</strong> between two horizontal lines.
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 440 210" width="440" height="210" xmlns="http://www.w3.org/2000/svg" aria-label="Angle of elevation from a point to the top of a tower, and the equal angle of depression from the top back to the point">
+      <line x1="40" y1="170" x2="400" y2="170" stroke="#0a0a0a" stroke-width="2"/>
+      <line x1="330" y1="170" x2="330" y2="45" stroke="#3772cf" stroke-width="3"/>
+      <line x1="330" y1="45" x2="40" y2="170" stroke="#f55a3c" stroke-width="2"/>
+      <line x1="330" y1="45" x2="90" y2="45" stroke="#888888" stroke-width="1.3" stroke-dasharray="6 4"/>
+      <path d="M70 170 A30 30 0 0 0 58 152" fill="none" stroke="#1ba673" stroke-width="1.7"/>
+      <text x="62" y="163" font-family="Geist Mono, monospace" font-size="11" fill="#1ba673">θ</text>
+      <path d="M330 70 A26 26 0 0 0 311 62" fill="none" stroke="#5a5a5c" stroke-width="1.7"/>
+      <text x="300" y="66" font-family="Geist Mono, monospace" font-size="11" fill="#5a5a5c">θ</text>
+      <text x="36" y="188" font-family="Geist Mono, monospace" font-size="12" fill="#0a0a0a">A</text>
+      <text x="336" y="42" font-family="Geist Mono, monospace" font-size="12" fill="#0a0a0a">B</text>
+      <text x="336" y="188" font-family="Geist Mono, monospace" font-size="12" fill="#0a0a0a">C</text>
+      <text x="140" y="112" font-family="Geist Mono, monospace" font-size="12" fill="#f55a3c">line of sight</text>
+      <text x="60" y="205" font-family="Inter, sans-serif" font-size="12" fill="#888888">elevation of B from A = depression of A from B = θ</text>
+    </svg>
+    <figcaption>Both angles are measured from the horizontal, so they are equal.</figcaption>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>From a point 40 m from the foot of a vertical tower, the angle of elevation of the top is <span class="measure">32°</span>. Find the height of the tower, to 2 d.p.</p>
+      <input type="number" id="q6-input" step="0.01" placeholder="e.g. 24.99">
+      <button class="check-btn" onclick="checkNumber('q6',24.99,'tan 32° = height / 40, so height = 40 × tan 32° ≈ 24.99 m.')">Check</button>
+      <div class="feedback" id="q6-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>From the top of a cliff, the angle of depression of a boat is <span class="measure">25°</span>. What is the angle of elevation of the cliff top from the boat?</p>
+      <label class="opt"><input type="radio" name="q7" value="65"> 65°</label>
+      <label class="opt"><input type="radio" name="q7" value="25"> 25°</label>
+      <label class="opt"><input type="radio" name="q7" value="155"> 155°</label>
+      <button class="check-btn" onclick="checkMC('q7','25','Elevation and depression are alternate angles between horizontal lines, so they are equal: 25°.')">Check</button>
+      <div class="feedback" id="q7-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 4 ══════════════════ -->
+<section class="module" id="m4">
+  <h2><span class="num">4</span> Trigonometry with Bearings</h2>
+
+  <p>Bearings questions combine directions with distances, so they are solved with <strong>Pythagoras</strong> or the <strong>trig ratios</strong> (for right-angled triangles), or the <strong>sine and cosine rules</strong> (for other triangles).</p>
+
+  <div class="steps-box">
+    <strong>Method</strong>
+    <ol>
+      <li>Sketch a North line at <em>each</em> point involved.</li>
+      <li>Mark the given bearings and distances.</li>
+      <li>Find the angle <strong>inside</strong> the triangle by subtracting/adding the bearings at the same point.</li>
+      <li>Choose Pythagoras, SOHCAHTOA, or the sine/cosine rules and solve.</li>
+      <li>Convert any final direction back into a three-figure bearing.</li>
+    </ol>
+  </div>
+
+  <div class="info-box">
+    <strong>Worked example.</strong> A boat sails 5 km from O on a bearing of 000° (due North) to P, then 12 km on a bearing of 090° (due East) to Q. Find the bearing of Q from O.
+    <p style="margin:.5rem 0 0 0">The angle at O is 90°, so <span class="measure">OQ = √(5² + 12²) = 13 km</span>.<br>
+    <span class="measure">tan θ = 12 / 5</span> → θ ≈ 67.4° east of north → bearing of Q from O = <span class="measure">067.4°</span>.</p>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>A plane flies 3 km due North then 4 km due East. How far is it from its starting point?</p>
+      <input type="number" id="q8-input" placeholder="e.g. 5">
+      <button class="check-btn" onclick="checkNumber('q8',5,'The legs are perpendicular, so use Pythagoras: √(3² + 4²) = √25 = 5 km.')">Check</button>
+      <div class="feedback" id="q8-fb"></div>
+    </div>
+  </div>
+</section>
+
+<div class="part-band">Part C — Sine &amp; Cosine Rules and Area</div>
+
+<!-- ══════════════════ MODULE 5 ══════════════════ -->
+<section class="module" id="m5">
+  <h2><span class="num">5</span> The Sine Rule</h2>
+
+  <p>The sine rule works in <strong>any</strong> triangle (not just right-angled ones). Sides a, b, c are opposite angles A, B, C respectively.</p>
+
+  <span class="formula"><b>a / sin A = b / sin B = c / sin C</b> &nbsp;&nbsp;or&nbsp;&nbsp; <b>sin A / a = sin B / b = sin C / c</b></span>
+
+  <p>Use it when you know a <strong>matching side-and-angle pair</strong> plus one more side or angle.</p>
+
+  <div class="info-box">
+    <strong>Obtuse angles and sin.</strong> For 0° &lt; θ &lt; 180°, <span class="measure">sin θ = sin(180° − θ)</span>. So a sine-rule angle may have <strong>two possible values</strong> (an acute and an obtuse one). Check whether an obtuse angle is possible in the triangle.
+  </div>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 340 200" width="340" height="200" xmlns="http://www.w3.org/2000/svg" aria-label="A general triangle with sides a, b, c opposite angles A, B, C">
+      <polygon points="40,165 300,165 210,45" fill="#eef3fb" stroke="#3772cf" stroke-width="2"/>
+      <text x="30" y="180" font-family="Geist Mono, monospace" font-size="12" fill="#f55a3c">A</text>
+      <text x="304" y="180" font-family="Geist Mono, monospace" font-size="12" fill="#f55a3c">B</text>
+      <text x="212" y="38" font-family="Geist Mono, monospace" font-size="12" fill="#f55a3c">C</text>
+      <text x="100" y="180" font-family="Geist Mono, monospace" font-size="12" fill="#1ba673">c</text>
+      <text x="262" y="100" font-family="Geist Mono, monospace" font-size="12" fill="#1ba673">a</text>
+      <text x="112" y="98" font-family="Geist Mono, monospace" font-size="12" fill="#1ba673">b</text>
+    </svg>
+    <figcaption>Side a is opposite angle A, and so on. Label consistently before substituting.</figcaption>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>In triangle ABC, a = 8 cm, A = <span class="measure">40°</span> and B = <span class="measure">65°</span>. Find side b, to 2 d.p.</p>
+      <input type="number" id="q9-input" step="0.01" placeholder="e.g. 11.28">
+      <button class="check-btn" onclick="checkNumber('q9',11.28,'b / sin 65° = 8 / sin 40°, so b = 8 sin 65° / sin 40° ≈ 11.28 cm.')">Check</button>
+      <div class="feedback" id="q9-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>The sine rule can give two possible angles because…</p>
+      <label class="opt"><input type="radio" name="q10" value="a"> sin θ = sin(180° − θ), so an obtuse angle may also fit</label>
+      <label class="opt"><input type="radio" name="q10" value="b"> angles always add to 360°</label>
+      <label class="opt"><input type="radio" name="q10" value="c"> the calculator is inaccurate</label>
+      <button class="check-btn" onclick="checkMC('q10','a','Because sin θ = sin(180° − θ) for angles up to 180°, an inverse-sine result has a possible obtuse partner.')">Check</button>
+      <div class="feedback" id="q10-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 6 ══════════════════ -->
+<section class="module" id="m6">
+  <h2><span class="num">6</span> The Cosine Rule</h2>
+
+  <p>The cosine rule works in any triangle. Use it when you know <strong>two sides and the included angle</strong> (to find the third side), or <strong>all three sides</strong> (to find an angle).</p>
+
+  <span class="formula"><b>a² = b² + c² − 2bc cos A</b> &nbsp;&nbsp;·&nbsp;&nbsp; <b>cos A = (b² + c² − a²) / 2bc</b></span>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>Find side a, given b = 7 cm, c = 9 cm and the included angle A = <span class="measure">60°</span>. (2 d.p.)</p>
+      <input type="number" id="q11-input" step="0.01" placeholder="e.g. 8.19">
+      <button class="check-btn" onclick="checkNumber('q11',8.19,'a² = 7² + 9² − 2(7)(9)cos 60° = 49 + 81 − 63 = 67, so a = √67 ≈ 8.19 cm.')">Check</button>
+      <div class="feedback" id="q11-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A triangle has sides a = 5, b = 6 and c = 7. Find angle A, to 1 decimal place.</p>
+      <input type="number" id="q12-input" step="0.1" placeholder="e.g. 44.4">
+      <button class="check-btn" onclick="checkNumber('q12',44.4,'cos A = (6² + 7² − 5²) / (2×6×7) = (36 + 49 − 25)/84 = 60/84 = 0.714, so A ≈ 44.4°.')">Check</button>
+      <div class="feedback" id="q12-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 7 ══════════════════ -->
+<section class="module" id="m7">
+  <h2><span class="num">7</span> Area of a Triangle = ½ ab sin C</h2>
+
+  <p>When you know <strong>two sides and the angle between them</strong>, use:</p>
+
+  <span class="formula"><b>Area = ½ × a × b × sin C</b></span>
+  <p>where C is the <strong>included</strong> angle between sides a and b.</p>
+
+  <div class="info-box">
+    <strong>Check it makes sense.</strong> With C = 90°, sin C = 1 and the formula becomes ½ab — exactly the right-angled triangle formula. With the angle close to 0° or 180°, sin C ≈ 0 so the area is nearly zero (a very flat triangle).
+  </div>
+
+  <div class="widget">
+    <h4>🧮 Triangle toolkit</h4>
+    <div class="row">
+      <div>
+        <label for="tk-mode">What do you want to find?</label>
+        <select id="tk-mode" onchange="showToolkit()">
+          <option value="cos-side">Cosine rule — find side a (given b, c, A)</option>
+          <option value="cos-angle">Cosine rule — find angle A (given a, b, c)</option>
+          <option value="sin-angle">Sine rule — find angle B (given a, A, b)</option>
+          <option value="sin-side">Sine rule — find side b (given a, A, B)</option>
+          <option value="area">Area = ½ab sin C (given a, b, C)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" id="tf-cos-side"><div><label>b</label><input type="number" id="cs-b" value="7" step="0.01"></div><div><label>c</label><input type="number" id="cs-c" value="9" step="0.01"></div><div><label>A (°)</label><input type="number" id="cs-A" value="60" step="0.1"></div></div>
+    <div class="row field-hidden" id="tf-cos-angle"><div><label>a</label><input type="number" id="ca-a" value="5" step="0.01"></div><div><label>b</label><input type="number" id="ca-b" value="6" step="0.01"></div><div><label>c</label><input type="number" id="ca-c" value="7" step="0.01"></div></div>
+    <div class="row field-hidden" id="tf-sin-angle"><div><label>a</label><input type="number" id="sa-a" value="8" step="0.01"></div><div><label>A (°)</label><input type="number" id="sa-A" value="40" step="0.1"></div><div><label>b</label><input type="number" id="sa-b" value="10" step="0.01"></div></div>
+    <div class="row field-hidden" id="tf-sin-side"><div><label>a</label><input type="number" id="ss-a" value="8" step="0.01"></div><div><label>A (°)</label><input type="number" id="ss-A" value="40" step="0.1"></div><div><label>B (°)</label><input type="number" id="ss-B" value="65" step="0.1"></div></div>
+    <div class="row field-hidden" id="tf-area"><div><label>a</label><input type="number" id="ar-a" value="9" step="0.01"></div><div><label>b</label><input type="number" id="ar-b" value="11" step="0.01"></div><div><label>C (°)</label><input type="number" id="ar-C" value="52" step="0.1"></div></div>
+
+    <div class="row"><button onclick="runToolkit()">Calculate</button></div>
+    <div class="result" id="tk-out"></div>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>Find the area of a triangle with a = 9 m, b = 11 m and included angle C = <span class="measure">52°</span>. (2 d.p.)</p>
+      <input type="number" id="q13-input" step="0.01" placeholder="e.g. 39.01">
+      <button class="check-btn" onclick="checkNumber('q13',39.01,'Area = ½ × 9 × 11 × sin 52° ≈ 39.01 m².')">Check</button>
+      <div class="feedback" id="q13-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>Which formula gives the area of a triangle when you know two sides and the included angle?</p>
+      <label class="opt"><input type="radio" name="q14" value="half"> ½ab sin C</label>
+      <label class="opt"><input type="radio" name="q14" value="ab"> ab sin C</label>
+      <label class="opt"><input type="radio" name="q14" value="halfbase"> ½ × base × height only</label>
+      <button class="check-btn" onclick="checkMC('q14','half','Area = ½ab sin C, where C is the angle between sides a and b.')">Check</button>
+      <div class="feedback" id="q14-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 8 ══════════════════ -->
+<section class="module" id="m8">
+  <h2><span class="num">8</span> Recap &amp; Exam Practice</h2>
+
+  <h3>Summary sheet</h3>
+  <div class="recap-grid">
+    <div class="recap-card"><h5>Pythagoras</h5><p>a² + b² = c² (right-angled only).</p></div>
+    <div class="recap-card"><h5>SOH</h5><p>sin θ = Opposite / Hypotenuse.</p></div>
+    <div class="recap-card"><h5>CAH</h5><p>cos θ = Adjacent / Hypotenuse.</p></div>
+    <div class="recap-card"><h5>TOA</h5><p>tan θ = Opposite / Adjacent.</p></div>
+    <div class="recap-card"><h5>Elevation / depression</h5><p>Both measured from the horizontal; they are equal (alternate angles).</p></div>
+    <div class="recap-card"><h5>Sine rule</h5><p>a / sin A = b / sin B = c / sin C.</p></div>
+    <div class="recap-card"><h5>Cosine rule</h5><p>a² = b² + c² − 2bc cos A.</p></div>
+    <div class="recap-card"><h5>Area</h5><p>Area = ½ab sin C.</p></div>
+    <div class="recap-card"><h5>Obtuse angles</h5><p>sin θ = sin(180° − θ); cos is negative for 90° &lt; θ &lt; 180°.</p></div>
+  </div>
+
+  <h3>Exam-style questions</h3>
+
+  <div class="q-item" data-q>
+    <p><strong>Q1.</strong> A right-angled triangle has an angle of <span class="measure">28°</span> and an adjacent side of 15 cm. Find the opposite side, to 2 d.p.</p>
+    <input type="number" id="q15-input" step="0.01" placeholder="e.g. 7.98">
+    <button class="check-btn" onclick="checkNumber('q15',7.98,'tan 28° = O / 15, so O = 15 tan 28° ≈ 7.98 cm.')">Check</button>
+    <div class="feedback" id="q15-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q2.</strong> From the top of a 30 m vertical cliff, the angle of depression of a boat is <span class="measure">20°</span>. How far is the boat from the base of the cliff, to 2 d.p.?</p>
+    <input type="number" id="q16-input" step="0.01" placeholder="e.g. 82.42">
+    <button class="check-btn" onclick="checkNumber('q16',82.42,'tan 20° = 30 / d, so d = 30 / tan 20° ≈ 82.42 m.')">Check</button>
+    <div class="feedback" id="q16-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q3.</strong> In triangle ABC, a = 12 cm, b = 9 cm and C = <span class="measure">110°</span>. Find side c, to 2 d.p.</p>
+    <input type="number" id="q17-input" step="0.01" placeholder="e.g. 17.28">
+    <button class="check-btn" onclick="checkNumber('q17',17.28,'c² = 12² + 9² − 2(12)(9)cos 110° = 225 + 73.85 = 298.85, so c ≈ 17.29 cm. (Accept 17.28.)')">Check</button>
+    <div class="feedback" id="q17-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q4.</strong> Find the area of a triangle with sides 14 cm and 10 cm and an included angle of <span class="measure">40°</span>. (2 d.p.)</p>
+    <input type="number" id="q18-input" step="0.01" placeholder="e.g. 45.00">
+    <button class="check-btn" onclick="checkNumber('q18',45.0,'Area = ½ × 14 × 10 × sin 40° ≈ 45.00 cm².')">Check</button>
+    <div class="feedback" id="q18-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q5.</strong> In triangle PQR, p = 7 cm, q = 10 cm and angle Q = <span class="measure">75°</span>. Using the sine rule, find angle P, to 1 decimal place.</p>
+    <input type="number" id="q19-input" step="0.1" placeholder="e.g. 42.5">
+    <button class="check-btn" onclick="checkNumber('q19',42.5,'sin P / 7 = sin 75° / 10, so sin P = 7 sin 75° / 10 = 0.676, P ≈ 42.5°.')">Check</button>
+    <div class="feedback" id="q19-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q6.</strong> Which statement about an obtuse angle θ (90° &lt; θ &lt; 180°) is true?</p>
+    <label class="opt"><input type="radio" name="q20" value="a"> sin θ is positive and cos θ is negative</label>
+    <label class="opt"><input type="radio" name="q20" value="b"> both sin θ and cos θ are positive</label>
+    <label class="opt"><input type="radio" name="q20" value="c"> sin θ is negative and cos θ is positive</label>
+    <button class="check-btn" onclick="checkMC('q20','a','For obtuse angles, sin θ is still positive, but cos θ is negative. This matters in the cosine rule.')">Check</button>
+    <div class="feedback" id="q20-fb"></div>
+  </div>
+
+  <details class="answer">
+    <summary>Show full worked solutions</summary>
+    <p><strong>Q1.</strong> O = 15 tan 28° ≈ <span class="measure">7.98 cm</span>.</p>
+    <p><strong>Q2.</strong> d = 30 / tan 20° ≈ <span class="measure">82.42 m</span>.</p>
+    <p><strong>Q3.</strong> c² = 144 + 81 − 216 cos 110° = 225 + 73.85 = 298.85 → c ≈ <span class="measure">17.29 cm</span>.</p>
+    <p><strong>Q4.</strong> Area = ½ × 14 × 10 × sin 40° ≈ <span class="measure">45.00 cm²</span>.</p>
+    <p><strong>Q5.</strong> P = sin⁻¹(7 sin 75° / 10) ≈ <span class="measure">42.5°</span>.</p>
+    <p><strong>Q6.</strong> For 90° &lt; θ &lt; 180°: <strong>sin θ &gt; 0 and cos θ &lt; 0</strong>.</p>
+  </details>
+</section>
+
+</main>
+
+<div id="progress-bar-wrap">
+  <span id="prog-label">0 / 0 answered</span>
+  <div id="prog-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="prog-fill"></div></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════
+//  Progress tracking
+// ══════════════════════════════════════════════════════════════════════════
+const answered = new Set();
+const TOTAL = document.querySelectorAll('.q-item[data-q]').length;
+
+function updateProgress() {
+  const pct = TOTAL ? Math.round((answered.size / TOTAL) * 100) : 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-bar').setAttribute('aria-valuenow', pct);
+  document.getElementById('prog-label').textContent = answered.size + ' / ' + TOTAL + ' answered';
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Quiz checks
+// ══════════════════════════════════════════════════════════════════════════
+function checkMC(qid, correct, explanation) {
+  const selected = document.querySelector('input[name="' + qid + '"]:checked');
+  const fb = document.getElementById(qid + '-fb');
+  if (!selected) {
+    fb.style.display = 'block'; fb.className = 'feedback wrong';
+    fb.textContent = 'Please select an answer.'; return;
+  }
+  document.querySelectorAll('input[name="' + qid + '"]').forEach(function (inp) {
+    const lbl = inp.closest('label');
+    if (!lbl) return;
+    lbl.classList.remove('option-correct', 'option-wrong');
+    if (inp.value === correct) lbl.classList.add('option-correct');
+    else if (inp.checked) lbl.classList.add('option-wrong');
+    inp.disabled = true;
+  });
+  fb.style.display = 'block';
+  if (selected.value === correct) { fb.className = 'feedback correct'; fb.textContent = '✅ Correct! ' + explanation; }
+  else { fb.className = 'feedback wrong'; fb.textContent = '❌ Not quite. ' + explanation; }
+  answered.add(qid); updateProgress();
+}
+
+function checkNumber(qid, correct, explanation) {
+  const input = document.getElementById(qid + '-input');
+  const fb = document.getElementById(qid + '-fb');
+  const val = parseFloat(input.value);
+  fb.style.display = 'block';
+  const tol = Math.max(0.02, Math.abs(correct) * 0.002);
+  if (!isNaN(val) && Math.abs(val - correct) <= tol) {
+    fb.className = 'feedback correct'; fb.textContent = '✅ Correct! ' + explanation;
+    input.style.borderColor = 'var(--mint-deep)';
+  } else {
+    fb.className = 'feedback wrong'; fb.textContent = '❌ Not quite. ' + explanation;
+    input.style.borderColor = 'var(--error)';
+  }
+  answered.add(qid); updateProgress();
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Helpers
+// ══════════════════════════════════════════════════════════════════════════
+const D = Math.PI / 180;
+function n2(x) { return Math.round(x * 100) / 100; }
+function n1(x) { return Math.round(x * 10) / 10; }
+
+// ── Pythagoras ──
+function calcPyth() {
+  const a = +document.getElementById('py-a').value;
+  const b = +document.getElementById('py-b').value;
+  document.getElementById('py-a-out').textContent = a;
+  document.getElementById('py-b-out').textContent = b;
+  const c = Math.sqrt(a * a + b * b);
+  document.getElementById('py-out').innerHTML =
+    'c = √(' + a + '² + ' + b + '²) = √' + (a * a + b * b) + ' = <strong>' + n2(c) + '</strong>';
+}
+
+// ── SOHCAHTOA explorer ──
+function updateTri() {
+  const theta = +document.getElementById('tri-angle').value;
+  document.getElementById('tri-angle-out').textContent = theta + '°';
+  const H = 140;
+  const adj = H * Math.cos(theta * D);
+  const opp = H * Math.sin(theta * D);
+
+  const Ax = 40, Ay = 220;
+  const Cx = Ax + adj, Cy = 220;
+  const Bx = Cx, By = 220 - opp;
+
+  document.getElementById('tri-poly').setAttribute('points',
+    Ax + ',' + Ay + ' ' + Cx.toFixed(1) + ',' + Cy + ' ' + Bx.toFixed(1) + ',' + By.toFixed(1));
+  document.getElementById('tri-right').setAttribute('d',
+    'M' + Cx.toFixed(1) + ' 208 h12 v12');
+  document.getElementById('tri-arc').setAttribute('d',
+    'M' + (Ax + 34) + ' ' + Ay + ' A34 34 0 0 0 ' + (Ax + 34 * Math.cos(theta * D)).toFixed(1) + ' ' + (Ay - 34 * Math.sin(theta * D)).toFixed(1));
+  document.getElementById('tri-theta').setAttribute('x', (Ax + 44).toFixed(1));
+  document.getElementById('tri-theta').setAttribute('y', (Ay - 12).toFixed(1));
+  document.getElementById('tri-theta').textContent = theta + '°';
+  document.getElementById('tri-h').setAttribute('x', ((Ax + Bx) / 2 - 18).toFixed(1));
+  document.getElementById('tri-h').setAttribute('y', ((Ay + By) / 2 + 4).toFixed(1));
+  document.getElementById('tri-o').setAttribute('x', (Bx + 8).toFixed(1));
+  document.getElementById('tri-o').setAttribute('y', ((By + Ay) / 2).toFixed(1));
+  document.getElementById('tri-a').setAttribute('x', ((Ax + Cx) / 2).toFixed(1));
+  document.getElementById('tri-a').setAttribute('y', 234);
+
+  document.getElementById('tri-out').innerHTML =
+    'O = ' + n1(opp) + ' · A = ' + n1(adj) + ' · H = ' + H + ' (drawing)<br>' +
+    'sin ' + theta + '° = ' + n2(Math.sin(theta * D)).toFixed(2) + ' &nbsp; ' +
+    'cos ' + theta + '° = ' + n2(Math.cos(theta * D)).toFixed(2) + ' &nbsp; ' +
+    'tan ' + theta + '° = ' + n2(Math.tan(theta * D)).toFixed(2);
+}
+
+// ── Triangle toolkit ──
+function showToolkit() {
+  const mode = document.getElementById('tk-mode').value;
+  const map = { 'cos-side': 'cos-side', 'cos-angle': 'cos-angle', 'sin-angle': 'sin-angle', 'sin-side': 'sin-side', 'area': 'area' };
+  Object.keys(map).forEach(function (k) {
+    document.getElementById('tf-' + k).classList.toggle('field-hidden', k !== mode);
+  });
+  runToolkit();
+}
+
+function runToolkit() {
+  const mode = document.getElementById('tk-mode').value;
+  const out = document.getElementById('tk-out');
+  let html = '';
+
+  if (mode === 'cos-side') {
+    const b = num('cs-b'), c = num('cs-c'), A = num('cs-A');
+    const a = Math.sqrt(b * b + c * c - 2 * b * c * Math.cos(A * D));
+    html = 'a² = b² + c² − 2bc cos A<br>a = √(' + n2(b * b + c * c - 2 * b * c * Math.cos(A * D)) + ') = <strong>' + n2(a) + '</strong>';
+  } else if (mode === 'cos-angle') {
+    const a = num('ca-a'), b = num('ca-b'), c = num('ca-c');
+    const cosA = (b * b + c * c - a * a) / (2 * b * c);
+    html = 'cos A = (b² + c² − a²) / 2bc = ' + n2(cosA) + '<br>A = <strong>' + n1(Math.acos(cosA) / D) + '°</strong>';
+  } else if (mode === 'sin-angle') {
+    const a = num('sa-a'), A = num('sa-A'), b = num('sa-b');
+    const s = b * Math.sin(A * D) / a;
+    const B1 = Math.asin(Math.max(-1, Math.min(1, s))) / D;
+    html = 'sin B = b sin A / a = ' + n2(s) + '<br>B = <strong>' + n1(B1) + '°</strong>' +
+           (B1 < 90 ? ' (or obtuse: <strong>' + n1(180 - B1) + '°</strong>)' : '');
+  } else if (mode === 'sin-side') {
+    const a = num('ss-a'), A = num('ss-A'), B = num('ss-B');
+    const b = a * Math.sin(B * D) / Math.sin(A * D);
+    html = 'b = a sin B / sin A = <strong>' + n2(b) + '</strong>';
+  } else {
+    const a = num('ar-a'), b = num('ar-b'), C = num('ar-C');
+    const area = 0.5 * a * b * Math.sin(C * D);
+    html = 'Area = ½ × ' + a + ' × ' + b + ' × sin ' + C + '° = <strong>' + n2(area) + '</strong>';
+  }
+  out.innerHTML = html;
+}
+
+function num(id) { return parseFloat(document.getElementById(id).value); }
+
+// ── Initialise ──
+window.addEventListener('load', function () {
+  calcPyth();
+  updateTri();
+  showToolkit();
+  updateProgress();
+});
+</script>
+</body>
+</html>
