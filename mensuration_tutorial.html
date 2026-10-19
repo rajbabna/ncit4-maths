@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mensuration — Interactive Tutorial</title>
+<style>
+  /* ── Design tokens (drafting-paper theme, shared with the Maths I series) ──
+        #F7F5F0 parchment · #1B2D45 navy · #2E6DA4 blue · #E8531A orange
+        #C0392B red · #1A7A4A green · #EAF2FB tint blue · #FFF8F5 tint warm
+  ─────────────────────────────────────────────────────────────────────────── */
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap');
+
+  :root {
+    --bg:        #F7F5F0;
+    --card:      #FFFFFF;
+    --card-blue: #EAF2FB;
+    --card-warm: #FFF8F5;
+    --navy:      #1B2D45;
+    --blue:      #2E6DA4;
+    --orange:    #E8531A;
+    --green:     #1A7A4A;
+    --red:       #C0392B;
+    --mid:       #5A6A7A;
+    --border:    #D6D0C8;
+    --shadow:    0 2px 12px rgba(27,45,69,.10);
+    --radius:    10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+
+  header {
+    background: var(--navy);
+    color: #fff;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 28px,
+      rgba(46,109,164,.12) 28px, rgba(46,109,164,.12) 30px
+    );
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--orange);
+    color: #fff;
+    font-weight: 600;
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: .3rem .85rem;
+    border-radius: 2rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    position: relative;
+    margin-bottom: .6rem;
+  }
+  header p.sub {
+    color: rgba(255,255,255,.7);
+    font-size: 1.05rem;
+    position: relative;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
+  nav.toc {
+    background: #fff;
+    border-bottom: 2px solid var(--border);
+    padding: .8rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.4rem;
+    justify-content: center;
+    font-size: .88rem;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+  }
+  nav.toc a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 600;
+    padding: .2rem .3rem;
+    border-radius: 4px;
+    transition: background .15s;
+  }
+  nav.toc a:hover { background: var(--card-blue); }
+
+  main { max-width: 880px; margin: 0 auto; padding: 2.5rem 1.5rem 6rem; }
+
+  .part-band {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: #fff;
+    background: linear-gradient(90deg, var(--navy), var(--blue));
+    padding: .55rem 1.2rem;
+    border-radius: var(--radius);
+    margin: 0 0 1.4rem;
+    letter-spacing: .02em;
+  }
+
+  section.module {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem 2.2rem;
+    margin-bottom: 2.4rem;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 70px;
+  }
+  section.module h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy);
+    border-bottom: 3px solid var(--orange);
+    padding-bottom: .45rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  section.module h2 .num {
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    width: 1.85rem; height: 1.85rem;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  section.module h3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--blue);
+    margin: 1.5rem 0 .55rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  section.module p { margin-bottom: .7rem; color: #2d3b48; }
+  section.module ul, section.module ol { padding-left: 1.5rem; margin-bottom: .9rem; color: #2d3b48; }
+  section.module li { margin-bottom: .35rem; }
+
+  .info-box {
+    background: var(--card-blue);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: .9rem 1.1rem;
+    margin: 1rem 0;
+    font-size: .95rem;
+  }
+  .info-box strong { color: var(--blue); }
+
+  .warn-box {
+    background: #FDECEA;
+    border-left: 4px solid var(--red);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: .9rem 1.1rem;
+    margin: 1rem 0;
+    font-size: .95rem;
+  }
+  .warn-box strong { color: var(--red); }
+
+  .steps-box {
+    background: #F4FAF7;
+    border-left: 4px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: .9rem 1.1rem;
+    margin: 1rem 0;
+  }
+  .steps-box ol { padding-left: 1.3rem; }
+  .steps-box li { margin-bottom: .4rem; font-size: .95rem; }
+  .steps-box strong { color: var(--green); display: block; margin-bottom: .4rem; font-size: .9rem; text-transform: uppercase; letter-spacing: .06em; }
+
+  .key {
+    display: inline-block;
+    background: var(--navy);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .82rem;
+    padding: .15rem .5rem;
+    border-radius: 4px;
+    margin: 0 2px;
+  }
+  .measure {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  .diagram-wrap {
+    background: #FAFCFF;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .diagram-wrap figcaption { font-size: .82rem; color: var(--mid); margin-top: .5rem; font-style: italic; }
+
+  /* ── Formula pills ── */
+  .formula {
+    display: block;
+    background: #FFF8F5;
+    border: 1.5px dashed #F0B89C;
+    border-radius: 8px;
+    padding: .6rem .9rem;
+    margin: .6rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .95rem;
+    color: var(--navy);
+  }
+  .formula b { color: var(--orange); }
+
+  /* ── Solid cards grid ── */
+  .solid-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .solid-card {
+    background: #FAFCFF;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    text-align: center;
+  }
+  .solid-card h5 {
+    font-size: .95rem;
+    color: var(--blue);
+    margin-bottom: .5rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .solid-card svg { display: block; margin: 0 auto .5rem; }
+  .solid-card .formula { text-align: left; font-size: .85rem; margin: .4rem 0; }
+  .solid-card .given {
+    display: inline-block;
+    font-size: .72rem;
+    background: var(--gold, #B5830A);
+    background: #B5830A;
+    color: #fff;
+    padding: .1rem .5rem;
+    border-radius: 99px;
+    margin-bottom: .4rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* ── Lab / widget ── */
+  .lab {
+    background: var(--card-blue);
+    border: 1.5px solid #b8d4ef;
+    border-radius: var(--radius);
+    padding: 1.2rem 1.4rem;
+    margin: 1.2rem 0;
+  }
+  .lab h4 { color: var(--blue); font-size: 1rem; margin-bottom: .7rem; font-weight: 600; }
+  .lab .controls { display: flex; flex-wrap: wrap; gap: .7rem 1.2rem; align-items: center; margin-top: .8rem; }
+  .lab .controls label { font-size: .86rem; color: var(--mid); font-weight: 600; }
+  .lab input[type=range] { accent-color: var(--orange); width: 200px; max-width: 100%; vertical-align: middle; }
+  .lab .readout { font-family: 'JetBrains Mono', monospace; color: var(--orange); font-weight: 500; min-width: 3.6rem; display: inline-block; }
+  .lab .stage { text-align: center; }
+  .lab button {
+    background: var(--blue); color: #fff; border: none;
+    border-radius: 6px; padding: .42rem 1rem;
+    font-weight: 600; font-size: .85rem; cursor: pointer;
+    transition: background .15s;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .lab button:hover { background: #1d5a8a; }
+  .lab .note { font-size: .85rem; color: var(--mid); margin-top: .6rem; }
+
+  .widget {
+    background: var(--card-blue);
+    border: 1.5px solid #b8d4ef;
+    border-radius: var(--radius);
+    padding: 1.2rem 1.5rem;
+    margin-top: 1.2rem;
+  }
+  .widget h4 { color: var(--blue); font-size: 1rem; margin-bottom: .8rem; font-weight: 600; }
+  .widget .row { display: flex; flex-wrap: wrap; gap: .7rem; align-items: flex-end; margin-bottom: .7rem; }
+  .widget label { font-size: .88rem; color: var(--mid); font-weight: 600; display: block; margin-bottom: .25rem; }
+  .widget input, .widget select {
+    padding: .4rem .65rem;
+    border: 1.5px solid #aac6e0;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .95rem;
+    width: 130px;
+    outline: none;
+    background: #fff;
+    color: var(--navy);
+  }
+  .widget select { width: 200px; }
+  .widget input:focus, .widget select:focus { border-color: var(--blue); }
+  .widget button {
+    background: var(--blue); color: #fff; border: none;
+    border-radius: 6px; padding: .45rem 1.1rem;
+    font-weight: 600; font-size: .88rem; cursor: pointer;
+    transition: background .15s;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .widget button:hover { background: #1d5a8a; }
+  .widget .result {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--orange);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: .3rem;
+    line-height: 1.6;
+    min-height: 1.4rem;
+  }
+  .field-hidden { display: none !important; }
+
+  /* ── Exercises ── */
+  .exercise-block {
+    background: var(--card-warm);
+    border: 1.5px solid #F5C7B0;
+    border-radius: var(--radius);
+    padding: 1.4rem 1.6rem;
+    margin-top: 1.6rem;
+  }
+  .exercise-block h4 { color: var(--orange); font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 1rem; }
+  .q-item {
+    background: #fff;
+    border: 1px solid #EADDD3;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: .9rem;
+  }
+  .q-item p { margin-bottom: .55rem; font-size: .96rem; }
+  .q-item label.opt {
+    display: flex; align-items: center; gap: .55rem;
+    cursor: pointer; padding: .35rem .5rem; border-radius: 6px;
+    margin-bottom: .2rem; font-size: .93rem;
+    transition: background .12s; border: 1.5px solid transparent;
+  }
+  .q-item label.opt:hover { background: #FFF0EA; }
+  .q-item input[type=radio] { accent-color: var(--orange); width: 1rem; height: 1rem; flex-shrink: 0; }
+  .q-item input[type=text], .q-item input[type=number] {
+    width: 100%; padding: .45rem .75rem;
+    border: 1.5px solid #d0c5bb; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .95rem; color: var(--navy); background: #fff;
+    margin-top: .3rem; outline: none; transition: border-color .15s;
+  }
+  .q-item input[type=text]:focus, .q-item input[type=number]:focus { border-color: var(--blue); }
+  .check-btn {
+    margin-top: .7rem; background: var(--blue); color: #fff;
+    border: none; border-radius: 6px; padding: .5rem 1.3rem;
+    font-family: 'Source Sans 3', sans-serif; font-weight: 600;
+    font-size: .9rem; cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  .check-btn:hover { background: #1d5a8a; }
+  .check-btn:active { transform: scale(.97); }
+  .feedback {
+    margin-top: .55rem; padding: .5rem .85rem; border-radius: 6px;
+    font-size: .91rem; font-weight: 600; display: none;
+  }
+  .feedback.correct { background: #D4EDDA; color: var(--green); border: 1px solid #b6ddc6; }
+  .feedback.wrong   { background: #FDECEA; color: var(--red); border: 1px solid #f5c6cb; }
+  .option-correct { background: #D4EDDA !important; border-color: var(--green) !important; }
+  .option-wrong   { background: #FDECEA !important; border-color: var(--red) !important; }
+
+  table.data { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .92rem; }
+  table.data th, table.data td { border: 1px solid var(--border); padding: .5rem .7rem; text-align: left; }
+  table.data th { background: var(--navy); color: #fff; font-weight: 600; }
+  table.data td:first-child { font-weight: 600; }
+  table.data tr:nth-child(even) td { background: #F7FAFD; }
+  table.data .mono { font-family: 'JetBrains Mono', monospace; color: var(--orange); }
+
+  .recap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .9rem; margin: 1rem 0; }
+  .recap-card { background: var(--card-blue); border: 1.5px solid #b8d4ef; border-radius: var(--radius); padding: .9rem 1.1rem; }
+  .recap-card h5 { color: var(--blue); font-size: .92rem; margin-bottom: .35rem; }
+  .recap-card p { font-size: .88rem; margin: 0; color: #2d3b48; font-family: 'JetBrains Mono', monospace; }
+
+  details.answer {
+    background: #F4FAF7; border: 1.5px solid #b9ddc9; border-radius: 8px;
+    padding: .7rem 1rem; margin-top: .6rem; font-size: .92rem;
+  }
+  details.answer summary { cursor: pointer; font-weight: 600; color: var(--green); }
+  details.answer[open] summary { margin-bottom: .5rem; }
+
+  #progress-bar-wrap {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,.92);
+    border-top: 1.5px solid var(--border);
+    padding: .5rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-size: .85rem; color: var(--mid);
+    z-index: 200; backdrop-filter: blur(6px);
+  }
+  #prog-bar { flex: 1; height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  #prog-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--orange)); border-radius: 99px; transition: width .4s ease; width: 0%; }
+  #prog-label { white-space: nowrap; font-weight: 600; color: var(--blue); }
+
+  @media (max-width: 600px) {
+    section.module { padding: 1.3rem 1rem; }
+    nav.toc { font-size: .78rem; gap: .3rem .9rem; }
+    .widget .row { flex-direction: column; align-items: stretch; }
+    .widget input, .widget select { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">Maths I · Geometry &amp; Measurement</span>
+  <h1>Mensuration</h1>
+  <p class="sub">Perimeter, area, surface area and volume — from rectangles and triangles to spheres, pyramids and cones, plus arcs and sectors. With live calculators.</p>
+</header>
+
+<nav class="toc">
+  <a href="#m1">1 · Rectangles &amp; Triangles</a>
+  <a href="#m2">2 · Circles</a>
+  <a href="#m3">3 · Parallelogram &amp; Trapezium</a>
+  <a href="#m4">4 · Solids</a>
+  <a href="#m5">5 · Arcs &amp; Sectors</a>
+  <a href="#m6">6 · Recap &amp; Practice</a>
+</nav>
+
+<main>
+
+<div class="part-band">Part A — Perimeter &amp; Area of Plane Shapes</div>
+
+<!-- ══════════════════ MODULE 1 ══════════════════ -->
+<section class="module" id="m1">
+  <h2><span class="num">1</span> Perimeter &amp; Area — Rectangle and Triangle</h2>
+
+  <p><strong>Perimeter</strong> is the total distance around a shape (a length). <strong>Area</strong> is the amount of surface it covers (measured in square units, e.g. cm², m²).</p>
+
+  <h3>Rectangle</h3>
+  <span class="formula"><b>Perimeter</b> = 2(l + w) &nbsp;&nbsp;·&nbsp;&nbsp; <b>Area</b> = l × w</span>
+
+  <h3>Triangle</h3>
+  <span class="formula"><b>Area</b> = ½ × base × perpendicular height &nbsp;&nbsp;·&nbsp;&nbsp; <b>Perimeter</b> = a + b + c</span>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 420 190" width="420" height="190" xmlns="http://www.w3.org/2000/svg" aria-label="A rectangle and a triangle with their dimensions labelled">
+      <!-- rectangle -->
+      <rect x="30" y="45" width="140" height="90" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+      <text x="100" y="38" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#E8531A">l</text>
+      <text x="182" y="95" font-family="JetBrains Mono, monospace" font-size="13" fill="#E8531A">w</text>
+      <!-- triangle -->
+      <polygon points="250,140 390,140 320,45" fill="#EAF2FB" stroke="#1A7A4A" stroke-width="2"/>
+      <line x1="320" y1="45" x2="320" y2="140" stroke="#C0392B" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <path d="M320 132 h8 v8" fill="none" stroke="#C0392B" stroke-width="1.2"/>
+      <text x="326" y="95" font-family="JetBrains Mono, monospace" font-size="13" fill="#C0392B">h</text>
+      <text x="320" y="158" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#E8531A">base</text>
+    </svg>
+    <figcaption>Height must be <em>perpendicular</em> to the base — not the sloping side.</figcaption>
+  </div>
+
+  <div class="info-box">
+    <strong>Worked example.</strong> A rectangle is 12 cm long and 7 cm wide. Find its perimeter and area.
+    <p style="margin:.5rem 0 0"><span class="measure">Perimeter = 2(12 + 7) = 2 × 19 = 38 cm</span><br>
+    <span class="measure">Area = 12 × 7 = 84 cm²</span></p>
+  </div>
+
+  <div class="lab">
+    <h4>📐 Rectangle &amp; triangle calculator</h4>
+    <div class="controls">
+      <label for="rect-l">Length</label>
+      <input type="range" id="rect-l" min="1" max="20" value="12" oninput="calcRect()">
+      <span class="readout" id="rect-l-out">12</span>
+      <label for="rect-w">Width</label>
+      <input type="range" id="rect-w" min="1" max="20" value="7" oninput="calcRect()">
+      <span class="readout" id="rect-w-out">7</span>
+    </div>
+    <p class="note">Rectangle → <strong>P = <span id="rect-p">38</span></strong>, <strong>A = <span id="rect-a">84</span></strong> square units.</p>
+    <div class="controls">
+      <label for="tri-b">Base</label>
+      <input type="range" id="tri-b" min="1" max="20" value="10" oninput="calcTri()">
+      <span class="readout" id="tri-b-out">10</span>
+      <label for="tri-h">Height</label>
+      <input type="range" id="tri-h" min="1" max="20" value="6" oninput="calcTri()">
+      <span class="readout" id="tri-h-out">6</span>
+    </div>
+    <p class="note">Triangle → <strong>A = ½<span id="tri-eq"></span> = <span id="tri-a">30</span></strong> square units.</p>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>A rectangle measures 15 m by 9 m. Find its perimeter, in metres.</p>
+      <input type="number" id="q1-input" placeholder="e.g. 48" inputmode="numeric">
+      <button class="check-btn" onclick="checkNumber('q1',48,'P = 2(15 + 9) = 2 × 24 = 48 m.')">Check</button>
+      <div class="feedback" id="q1-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A triangle has base 14 cm and perpendicular height 8 cm. Find its area, in cm².</p>
+      <input type="number" id="q2-input" placeholder="e.g. 56">
+      <button class="check-btn" onclick="checkNumber('q2',56,'A = ½ × base × height = ½ × 14 × 8 = 56 cm².')">Check</button>
+      <div class="feedback" id="q2-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>Which measurement is the “height” of a triangle for the area formula?</p>
+      <label class="opt"><input type="radio" name="q3" value="slant"> The longest side</label>
+      <label class="opt"><input type="radio" name="q3" value="perp"> The perpendicular distance from the base to the opposite vertex</label>
+      <label class="opt"><input type="radio" name="q3" value="any"> Any side</label>
+      <button class="check-btn" onclick="checkMC('q3','perp','Area uses the perpendicular height, measured at 90° to the chosen base.')">Check</button>
+      <div class="feedback" id="q3-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 2 ══════════════════ -->
+<section class="module" id="m2">
+  <h2><span class="num">2</span> Circumference &amp; Area of a Circle</h2>
+
+  <p>The <strong>circumference</strong> is the distance around a circle. The <strong>radius</strong> r is half the <strong>diameter</strong> d.</p>
+
+  <span class="formula"><b>Circumference</b> C = 2πr = πd &nbsp;&nbsp;·&nbsp;&nbsp; <b>Area</b> A = πr²</span>
+
+  <p>Use <span class="key">π ≈ 3.142</span> (or the <span class="key">π</span> button on your calculator) unless told otherwise.</p>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 260 170" width="260" height="170" xmlns="http://www.w3.org/2000/svg" aria-label="A circle with radius and diameter labelled">
+      <circle cx="130" cy="85" r="65" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+      <line x1="130" y1="85" x2="195" y2="85" stroke="#E8531A" stroke-width="2"/>
+      <text x="160" y="78" font-family="JetBrains Mono, monospace" font-size="13" fill="#E8531A">r</text>
+      <line x1="65" y1="85" x2="195" y2="85" stroke="#1A7A4A" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <circle cx="130" cy="85" r="3.5" fill="#1B2D45"/>
+    </svg>
+    <figcaption>d = 2r. Circumference is a length; area is in square units.</figcaption>
+  </div>
+
+  <div class="info-box">
+    <strong>Worked example.</strong> A circle has radius 5 cm. Find (i) its circumference and (ii) its area (2 d.p.).
+    <p style="margin:.5rem 0 0"><span class="measure">C = 2π(5) = 31.42 cm</span><br>
+    <span class="measure">A = π(5²) = 78.54 cm²</span></p>
+  </div>
+
+  <div class="widget">
+    <h4>⭕ Circle calculator</h4>
+    <div class="row">
+      <div>
+        <label for="circ-r">Radius r</label>
+        <input type="number" id="circ-r" value="5" min="0" step="0.1" oninput="calcCircle()">
+      </div>
+      <button onclick="calcCircle()">Calculate</button>
+    </div>
+    <div class="result" id="circ-out"></div>
+    <p style="font-size:.85rem;color:var(--mid);margin-top:.5rem;">Tip: if you are given the diameter, divide by 2 first.</p>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>A circle has diameter 20 cm. Find its circumference, in cm (2 d.p., take π = 3.142).</p>
+      <input type="number" id="q4-input" step="0.01" placeholder="e.g. 62.84">
+      <button class="check-btn" onclick="checkNumber('q4',62.84,'C = πd = 3.142 × 20 = 62.84 cm. (Or r = 10, C = 2πr = 62.84 cm.)')">Check</button>
+      <div class="feedback" id="q4-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>The area of a circle is calculated with which formula?</p>
+      <label class="opt"><input type="radio" name="q5" value="2pir"> A = 2πr</label>
+      <label class="opt"><input type="radio" name="q5" value="pir2"> A = πr²</label>
+      <label class="opt"><input type="radio" name="q5" value="pid"> A = πd</label>
+      <button class="check-btn" onclick="checkMC('q5','pir2','Area = πr². (2πr and πd give the circumference, not the area.)')">Check</button>
+      <div class="feedback" id="q5-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 3 ══════════════════ -->
+<section class="module" id="m3">
+  <h2><span class="num">3</span> Area of a Parallelogram &amp; Trapezium</h2>
+
+  <h3>Parallelogram</h3>
+  <span class="formula"><b>Area</b> = base × perpendicular height</span>
+
+  <h3>Trapezium</h3>
+  <span class="formula"><b>Area</b> = ½(a + b) × h &nbsp;&nbsp;where a and b are the <b>parallel</b> sides</span>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 440 190" width="440" height="190" xmlns="http://www.w3.org/2000/svg" aria-label="A parallelogram and a trapezium with bases and height labelled">
+      <polygon points="40,140 160,140 200,50 80,50" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+      <line x1="80" y1="50" x2="80" y2="140" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <path d="M80 132 h8 v8" fill="none" stroke="#C0392B" stroke-width="1.2"/>
+      <text x="86" y="100" font-family="JetBrains Mono, monospace" font-size="12" fill="#C0392B">h</text>
+      <text x="110" y="158" font-family="JetBrains Mono, monospace" font-size="12" fill="#E8531A">base</text>
+      <polygon points="260,140 420,140 380,50 290,50" fill="#EAF2FB" stroke="#1A7A4A" stroke-width="2"/>
+      <line x1="300" y1="50" x2="300" y2="140" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <path d="M300 132 h8 v8" fill="none" stroke="#C0392B" stroke-width="1.2"/>
+      <text x="306" y="100" font-family="JetBrains Mono, monospace" font-size="12" fill="#C0392B">h</text>
+      <text x="300" y="38" font-family="JetBrains Mono, monospace" font-size="12" fill="#1A7A4A">a</text>
+      <text x="340" y="158" font-family="JetBrains Mono, monospace" font-size="12" fill="#1A7A4A">b</text>
+    </svg>
+    <figcaption>Parallelogram (left) and trapezium (right). Heights are perpendicular to the bases.</figcaption>
+  </div>
+
+  <div class="info-box">
+    <strong>Worked example.</strong> A trapezium has parallel sides 12 cm and 8 cm and height 5 cm. Find its area.
+    <p style="margin:.5rem 0 0"><span class="measure">A = ½(12 + 8) × 5 = ½ × 20 × 5 = 50 cm²</span></p>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>A parallelogram has base 11 cm and perpendicular height 6 cm. Find its area, in cm².</p>
+      <input type="number" id="q6-input" placeholder="e.g. 66">
+      <button class="check-btn" onclick="checkNumber('q6',66,'A = base × height = 11 × 6 = 66 cm².')">Check</button>
+      <div class="feedback" id="q6-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A trapezium has parallel sides 18 m and 10 m and height 7 m. Find its area, in m².</p>
+      <input type="number" id="q7-input" placeholder="e.g. 98">
+      <button class="check-btn" onclick="checkNumber('q7',98,'A = ½(a + b)h = ½(18 + 10) × 7 = ½ × 28 × 7 = 98 m².')">Check</button>
+      <div class="feedback" id="q7-fb"></div>
+    </div>
+  </div>
+</section>
+
+<div class="part-band">Part B — Surface Area &amp; Volume of Solids</div>
+
+<!-- ══════════════════ MODULE 4 ══════════════════ -->
+<section class="module" id="m4">
+  <h2><span class="num">4</span> Surface Area &amp; Volume of Solids</h2>
+
+  <p><strong>Volume</strong> measures the space inside a solid (cubic units). <strong>Surface area</strong> is the total area of all its faces (square units).</p>
+
+  <div class="info-box">
+    <strong>Formulae given in the exam</strong> for the <strong>sphere</strong>, <strong>pyramid</strong> and <strong>cone</strong> are shown in the cards below; the cuboid, cylinder and prism formulae you should know.
+  </div>
+
+  <div class="solid-grid">
+
+    <!-- Cuboid -->
+    <div class="solid-card">
+      <h5>Cuboid</h5>
+      <svg viewBox="0 0 160 120" width="150" height="112" xmlns="http://www.w3.org/2000/svg" aria-label="A cuboid with length, width and height labelled">
+        <polygon points="20,45 100,45 100,100 20,100" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+        <polygon points="20,45 45,25 125,25 100,45" fill="#D6E7F7" stroke="#2E6DA4" stroke-width="2"/>
+        <polygon points="100,45 125,25 125,80 100,100" fill="#C4DCF2" stroke="#2E6DA4" stroke-width="2"/>
+        <text x="55" y="115" font-family="JetBrains Mono, monospace" font-size="11" fill="#E8531A">l</text>
+        <text x="104" y="80" font-family="JetBrains Mono, monospace" font-size="11" fill="#E8531A">h</text>
+        <text x="130" y="55" font-family="JetBrains Mono, monospace" font-size="11" fill="#E8531A">w</text>
+      </svg>
+      <span class="formula">SA = 2(lw + lh + wh)<br>V = l × w × h</span>
+    </div>
+
+    <!-- Cylinder -->
+    <div class="solid-card">
+      <h5>Cylinder</h5>
+      <svg viewBox="0 0 160 120" width="150" height="112" xmlns="http://www.w3.org/2000/svg" aria-label="A cylinder with radius and height labelled">
+        <rect x="45" y="30" width="70" height="65" fill="#EAF2FB" stroke="none"/>
+        <line x1="45" y1="30" x2="45" y2="95" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="115" y1="30" x2="115" y2="95" stroke="#2E6DA4" stroke-width="2"/>
+        <ellipse cx="80" cy="95" rx="35" ry="10" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+        <ellipse cx="80" cy="30" rx="35" ry="10" fill="#D6E7F7" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="80" y1="30" x2="115" y2="30" stroke="#E8531A" stroke-width="1.5"/>
+        <text x="92" y="26" font-family="JetBrains Mono, monospace" font-size="11" fill="#E8531A">r</text>
+        <line x1="132" y1="30" x2="132" y2="95" stroke="#1A7A4A" stroke-width="1.4" stroke-dasharray="4 3"/>
+        <text x="136" y="66" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A7A4A">h</text>
+      </svg>
+      <span class="formula">SA = 2πr² + 2πrh<br>V = πr²h</span>
+    </div>
+
+    <!-- Prism -->
+    <div class="solid-card">
+      <h5>Prism</h5>
+      <svg viewBox="0 0 160 120" width="150" height="112" xmlns="http://www.w3.org/2000/svg" aria-label="A triangular prism showing the uniform cross-section">
+        <polygon points="25,95 85,95 55,40" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+        <polygon points="25,95 85,95 105,75 45,75" fill="#D6E7F7" stroke="#2E6DA4" stroke-width="2" opacity="0.9"/>
+        <line x1="55" y1="40" x2="75" y2="20" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="85" y1="95" x2="105" y2="75" stroke="#2E6DA4" stroke-width="2"/>
+        <polygon points="55,40 75,20 105,75 85,95" fill="#C4DCF2" stroke="#2E6DA4" stroke-width="2" opacity="0.85"/>
+        <text x="60" y="108" font-family="JetBrains Mono, monospace" font-size="10" fill="#5A6A7A">cross-section</text>
+      </svg>
+      <span class="formula">SA = 2A + P × L<br>V = A × L</span>
+      <p style="font-size:.78rem;color:var(--mid);margin:.3rem 0 0;">A = cross-section area, P = perimeter of cross-section, L = length</p>
+    </div>
+
+    <!-- Sphere -->
+    <div class="solid-card">
+      <h5>Sphere</h5>
+      <span class="given">Formula given</span>
+      <svg viewBox="0 0 160 120" width="150" height="112" xmlns="http://www.w3.org/2000/svg" aria-label="A sphere with radius labelled">
+        <circle cx="80" cy="62" r="45" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+        <ellipse cx="80" cy="62" rx="45" ry="15" fill="none" stroke="#9AB9D6" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <line x1="80" y1="62" x2="125" y2="62" stroke="#E8531A" stroke-width="1.6"/>
+        <text x="98" y="56" font-family="JetBrains Mono, monospace" font-size="11" fill="#E8531A">r</text>
+      </svg>
+      <span class="formula">SA = 4πr²<br>V = 4⁄3 πr³</span>
+    </div>
+
+    <!-- Pyramid -->
+    <div class="solid-card">
+      <h5>Pyramid (square base)</h5>
+      <span class="given">Formula given</span>
+      <svg viewBox="0 0 160 120" width="150" height="112" xmlns="http://www.w3.org/2000/svg" aria-label="A square-based pyramid with base, perpendicular height and slant height labelled">
+        <polygon points="30,95 130,95 155,78 55,78" fill="#D6E7F7" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="80" y1="30" x2="30" y2="95" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="80" y1="30" x2="130" y2="95" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="80" y1="30" x2="155" y2="78" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="80" y1="30" x2="55" y2="78" stroke="#9AB9D6" stroke-width="1.4" stroke-dasharray="4 3"/>
+        <line x1="80" y1="30" x2="80" y2="86" stroke="#C0392B" stroke-width="1.4" stroke-dasharray="5 4"/>
+        <text x="84" y="60" font-family="JetBrains Mono, monospace" font-size="11" fill="#C0392B">h</text>
+        <line x1="80" y1="30" x2="130" y2="95" stroke="#E8531A" stroke-width="1.4" stroke-dasharray="4 3"/>
+        <text x="112" y="58" font-family="JetBrains Mono, monospace" font-size="11" fill="#E8531A">s</text>
+        <text x="76" y="92" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A7A4A">b</text>
+      </svg>
+      <span class="formula">SA = b² + 2bs<br>V = 1⁄3 b²h</span>
+      <p style="font-size:.78rem;color:var(--mid);margin:.3rem 0 0;">b = base side, s = slant height, h = perpendicular height</p>
+    </div>
+
+    <!-- Cone -->
+    <div class="solid-card">
+      <h5>Cone</h5>
+      <span class="given">Formula given</span>
+      <svg viewBox="0 0 160 120" width="150" height="112" xmlns="http://www.w3.org/2000/svg" aria-label="A cone with radius, perpendicular height and slant height labelled">
+        <ellipse cx="80" cy="90" rx="45" ry="13" fill="#D6E7F7" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="35" y1="90" x2="80" y2="25" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="125" y1="90" x2="80" y2="25" stroke="#2E6DA4" stroke-width="2"/>
+        <line x1="80" y1="25" x2="80" y2="90" stroke="#C0392B" stroke-width="1.4" stroke-dasharray="5 4"/>
+        <text x="84" y="62" font-family="JetBrains Mono, monospace" font-size="11" fill="#C0392B">h</text>
+        <line x1="80" y1="25" x2="125" y2="90" stroke="#E8531A" stroke-width="1.4" stroke-dasharray="4 3"/>
+        <text x="108" y="56" font-family="JetBrains Mono, monospace" font-size="11" fill="#E8531A">l</text>
+        <line x1="80" y1="90" x2="125" y2="90" stroke="#1A7A4A" stroke-width="1.5"/>
+        <text x="98" y="103" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A7A4A">r</text>
+      </svg>
+      <span class="formula">SA = πr² + πrl<br>V = 1⁄3 πr²h</span>
+      <p style="font-size:.78rem;color:var(--mid);margin:.3rem 0 0;">r = radius, l = slant height, h = perpendicular height</p>
+    </div>
+
+  </div>
+
+  <div class="warn-box">
+    <strong>Slant height vs perpendicular height.</strong> For pyramids and cones the <em>slant height</em> (s or l) slants up the face and is used for surface area; the <em>perpendicular height</em> (h) goes straight up and is used for volume. Find one from the other with Pythagoras when needed.
+  </div>
+
+  <div class="lab">
+    <h4>🧊 Surface-area &amp; volume calculator</h4>
+    <div class="controls">
+      <label for="solid-type">Solid</label>
+      <select id="solid-type" style="width:210px;padding:.4rem .6rem;border:1.5px solid #aac6e0;border-radius:6px;font-family:'Source Sans 3',sans-serif;background:#fff;color:var(--navy);" onchange="showFields()">
+        <option value="cuboid">Cuboid</option>
+        <option value="cylinder">Cylinder</option>
+        <option value="prism">Prism</option>
+        <option value="sphere">Sphere</option>
+        <option value="pyramid">Square pyramid</option>
+        <option value="cone">Cone</option>
+      </select>
+    </div>
+
+    <div class="controls" id="f-cuboid"><label for="s-l">l</label><input type="number" id="s-l" value="8" step="0.1">
+      <label for="s-w">w</label><input type="number" id="s-w" value="5" step="0.1">
+      <label for="s-h">h</label><input type="number" id="s-h" value="4" step="0.1"></div>
+
+    <div class="controls field-hidden" id="f-cylinder"><label for="s-cr">r</label><input type="number" id="s-cr" value="4" step="0.1">
+      <label for="s-ch">h</label><input type="number" id="s-ch" value="10" step="0.1"></div>
+
+    <div class="controls field-hidden" id="f-prism"><label for="s-pa">A</label><input type="number" id="s-pa" value="12" step="0.1">
+      <label for="s-pp">P</label><input type="number" id="s-pp" value="16" step="0.1">
+      <label for="s-pl">L</label><input type="number" id="s-pl" value="9" step="0.1"></div>
+
+    <div class="controls field-hidden" id="f-sphere"><label for="s-sr">r</label><input type="number" id="s-sr" value="6" step="0.1"></div>
+
+    <div class="controls field-hidden" id="f-pyramid"><label for="s-pb">b</label><input type="number" id="s-pb" value="6" step="0.1">
+      <label for="s-ps">s</label><input type="number" id="s-ps" value="5" step="0.1">
+      <label for="s-ph">h</label><input type="number" id="s-ph" value="4" step="0.1"></div>
+
+    <div class="controls field-hidden" id="f-cone"><label for="s-kr">r</label><input type="number" id="s-kr" value="3" step="0.1">
+      <label for="s-kl">l</label><input type="number" id="s-kl" value="7" step="0.1">
+      <label for="s-kh">h</label><input type="number" id="s-kh" value="6.3" step="0.1"></div>
+
+    <div class="controls"><button onclick="calcSolid()">Calculate</button></div>
+    <div class="result" id="solid-out"></div>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>A cuboid measures 5 cm × 3 cm × 10 cm. Find its volume, in cm³.</p>
+      <input type="number" id="q8-input" placeholder="e.g. 150">
+      <button class="check-btn" onclick="checkNumber('q8',150,'V = l × w × h = 5 × 3 × 10 = 150 cm³.')">Check</button>
+      <div class="feedback" id="q8-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A cylinder has radius 7 cm and height 10 cm. Find its volume, in cm³ (1 d.p., π = 3.142).</p>
+      <input type="number" id="q9-input" step="0.1" placeholder="e.g. 1000.0">
+      <button class="check-btn" onclick="checkNumber('q9',1539.6,'V = πr²h = 3.142 × 7² × 10 = 3.142 × 49 × 10 ≈ 1539.6 cm³.')">Check</button>
+      <div class="feedback" id="q9-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A sphere has radius r. Which expression gives its volume?</p>
+      <label class="opt"><input type="radio" name="q10" value="4pir2"> 4πr²</label>
+      <label class="opt"><input type="radio" name="q10" value="43"> 4⁄3 πr³</label>
+      <label class="opt"><input type="radio" name="q10" value="23"> 2⁄3 πr³</label>
+      <button class="check-btn" onclick="checkMC('q10','43','Volume of a sphere = 4⁄3 πr³. (4πr² is its surface area.)')">Check</button>
+      <div class="feedback" id="q10-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A square-based pyramid has base side 6 cm and perpendicular height 9 cm. Find its volume, in cm³.</p>
+      <input type="number" id="q11-input" placeholder="e.g. 108">
+      <button class="check-btn" onclick="checkNumber('q11',108,'V = 1⁄3 b²h = 1⁄3 × 6² × 9 = 1⁄3 × 36 × 9 = 108 cm³.')">Check</button>
+      <div class="feedback" id="q11-fb"></div>
+    </div>
+  </div>
+</section>
+
+<div class="part-band">Part C — Arcs &amp; Sectors</div>
+
+<!-- ══════════════════ MODULE 5 ══════════════════ -->
+<section class="module" id="m5">
+  <h2><span class="num">5</span> Arc Length &amp; Sector Area</h2>
+
+  <p>An <strong>arc</strong> is part of a circle’s circumference. A <strong>sector</strong> (“pie slice”) is part of the circle’s area. Both are simple <strong>fractions of the whole circle</strong>.</p>
+
+  <span class="formula"><b>Arc length</b> = θ⁄360 × 2πr &nbsp;&nbsp;·&nbsp;&nbsp; <b>Sector area</b> = θ⁄360 × πr²</span>
+  <p>where θ is the angle at the centre, in degrees. Also <strong>perimeter of a sector</strong> = arc length + 2r.</p>
+
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 240 200" width="240" height="200" xmlns="http://www.w3.org/2000/svg" aria-label="A sector of a circle with centre angle theta, radius r and arc highlighted">
+      <path d="M120 100 L120 30 A70 70 0 0 1 180 140 Z" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+      <path d="M120 30 A70 70 0 0 1 180 140" fill="none" stroke="#E8531A" stroke-width="3.5"/>
+      <line x1="120" y1="100" x2="120" y2="30" stroke="#1A7A4A" stroke-width="1.8"/>
+      <text x="124" y="72" font-family="JetBrains Mono, monospace" font-size="12" fill="#1A7A4A">r</text>
+      <path d="M120 68 A32 32 0 0 1 145 86" fill="none" stroke="#1B2D45" stroke-width="1.5"/>
+      <text x="132" y="66" font-family="JetBrains Mono, monospace" font-size="12" fill="#1B2D45">θ</text>
+      <text x="176" y="86" font-family="JetBrains Mono, monospace" font-size="12" fill="#E8531A">arc</text>
+      <circle cx="120" cy="100" r="3" fill="#1B2D45"/>
+      <text x="90" y="180" font-family="Source Sans 3, sans-serif" font-size="12.5" fill="#5A6A7A" font-style="italic">shaded region = sector</text>
+    </svg>
+    <figcaption>The fraction is θ⁄360 of the whole circle.</figcaption>
+  </div>
+
+  <div class="info-box">
+    <strong>Worked example.</strong> A sector has radius 9 cm and angle 80°. Find the arc length and sector area (2 d.p.).
+    <p style="margin:.5rem 0 0"><span class="measure">Arc = 80⁄360 × 2π(9) = 80⁄360 × 56.549 ≈ 12.57 cm</span><br>
+    <span class="measure">Sector area = 80⁄360 × π(9²) = 80⁄360 × 254.469 ≈ 56.55 cm²</span></p>
+  </div>
+
+  <div class="lab">
+    <h4>🥧 Arc &amp; sector explorer</h4>
+    <div class="stage">
+      <svg id="sector-svg" viewBox="0 0 300 260" width="300" height="260" xmlns="http://www.w3.org/2000/svg" aria-label="A sector whose angle changes with the slider">
+        <circle cx="150" cy="150" r="110" fill="#F2F6FA" stroke="#D6D0C8" stroke-width="1.5"/>
+        <path id="sector-wedge" d="M150 150 L150 40 A110 110 0 0 1 260 150 Z" fill="#EAF2FB" stroke="#2E6DA4" stroke-width="2"/>
+        <path id="sector-arc" d="M150 40 A110 110 0 0 1 260 150" fill="none" stroke="#E8531A" stroke-width="4"/>
+        <circle cx="150" cy="150" r="4" fill="#1B2D45"/>
+        <text id="sector-theta-label" x="196" y="128" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2D45">90°</text>
+      </svg>
+    </div>
+    <div class="controls">
+      <label for="sector-theta">Angle θ</label>
+      <input type="range" id="sector-theta" min="1" max="360" value="90" oninput="updateSector()">
+      <span class="readout" id="sector-theta-out">90°</span>
+      <label for="sector-r">Radius r</label>
+      <input type="number" id="sector-r" value="10" min="0.1" step="0.1" style="width:90px;padding:.3rem .5rem;border:1.5px solid #aac6e0;border-radius:6px;font-family:'JetBrains Mono',monospace;" oninput="updateSector()">
+    </div>
+    <div class="result" id="sector-out" style="font-family:'JetBrains Mono',monospace;color:var(--orange);font-weight:600;margin-top:.6rem;"></div>
+    <p class="note">At θ = 360° you get the whole circle: arc = circumference, sector area = full area.</p>
+  </div>
+
+  <div class="exercise-block">
+    <h4>Check your understanding</h4>
+
+    <div class="q-item" data-q>
+      <p>A sector has radius 12 cm and angle 60°. Find its arc length, in cm (2 d.p., π = 3.142).</p>
+      <input type="number" id="q12-input" step="0.01" placeholder="e.g. 12.57">
+      <button class="check-btn" onclick="checkNumber('q12',12.57,'Arc = 60⁄360 × 2π(12) = 1⁄6 × 75.408 ≈ 12.57 cm.')">Check</button>
+      <div class="feedback" id="q12-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>A sector has radius 10 cm and angle 90°. Find its area, in cm² (1 d.p., π = 3.142).</p>
+      <input type="number" id="q13-input" step="0.1" placeholder="e.g. 78.5">
+      <button class="check-btn" onclick="checkNumber('q13',78.6,'Sector area = 90⁄360 × π(10²) = ¼ × 314.2 = 78.55 ≈ 78.6 cm².')">Check</button>
+      <div class="feedback" id="q13-fb"></div>
+    </div>
+
+    <div class="q-item" data-q>
+      <p>To find the perimeter of a sector you calculate…</p>
+      <label class="opt"><input type="radio" name="q14" value="arc"> arc length only</label>
+      <label class="opt"><input type="radio" name="q14" value="arc2r"> arc length + 2r (the two radii)</label>
+      <label class="opt"><input type="radio" name="q14" value="circ"> the full circumference</label>
+      <button class="check-btn" onclick="checkMC('q14','arc2r','A sector is bounded by the arc plus the two radii, so P = arc + 2r.')">Check</button>
+      <div class="feedback" id="q14-fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ MODULE 6 ══════════════════ -->
+<section class="module" id="m6">
+  <h2><span class="num">6</span> Recap &amp; Exam Practice</h2>
+
+  <h3>Summary sheet</h3>
+  <table class="data">
+    <thead><tr><th>Shape / Solid</th><th>Perimeter / Area</th><th>Surface area / Volume</th></tr></thead>
+    <tbody>
+      <tr><td>Rectangle</td><td class="mono">P = 2(l + w) · A = lw</td><td>—</td></tr>
+      <tr><td>Triangle</td><td class="mono">A = ½bh · P = a+b+c</td><td>—</td></tr>
+      <tr><td>Circle</td><td class="mono">C = 2πr · A = πr²</td><td>—</td></tr>
+      <tr><td>Parallelogram</td><td class="mono">A = bh</td><td>—</td></tr>
+      <tr><td>Trapezium</td><td class="mono">A = ½(a+b)h</td><td>—</td></tr>
+      <tr><td>Cuboid</td><td class="mono">SA = 2(lw+lh+wh)</td><td class="mono">V = lwh</td></tr>
+      <tr><td>Cylinder</td><td class="mono">SA = 2πr² + 2πrh</td><td class="mono">V = πr²h</td></tr>
+      <tr><td>Prism</td><td class="mono">SA = 2A + PL</td><td class="mono">V = AL</td></tr>
+      <tr><td>Sphere</td><td class="mono">SA = 4πr²</td><td class="mono">V = 4⁄3 πr³</td></tr>
+      <tr><td>Pyramid</td><td class="mono">SA = b² + 2bs</td><td class="mono">V = 1⁄3 b²h</td></tr>
+      <tr><td>Cone</td><td class="mono">SA = πr² + πrl</td><td class="mono">V = 1⁄3 πr²h</td></tr>
+      <tr><td>Arc / Sector</td><td class="mono">arc = θ⁄360 × 2πr</td><td class="mono">area = θ⁄360 × πr²</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Exam-style questions</h3>
+
+  <div class="q-item" data-q>
+    <p><strong>Q1.</strong> A circular flower bed has diameter 6 m. Find its area, in m² (2 d.p., π = 3.142).</p>
+    <input type="number" id="q15-input" step="0.01" placeholder="e.g. 28.28">
+    <button class="check-btn" onclick="checkNumber('q15',28.28,'r = 6 ÷ 2 = 3 m. A = πr² = 3.142 × 9 = 28.278 ≈ 28.28 m².')">Check</button>
+    <div class="feedback" id="q15-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q2.</strong> A triangular prism has a uniform cross-section area 15 cm² and length 12 cm. Find its volume, in cm³.</p>
+    <input type="number" id="q16-input" placeholder="e.g. 180">
+    <button class="check-btn" onclick="checkNumber('q16',180,'For a prism, V = cross-section area × length = 15 × 12 = 180 cm³.')">Check</button>
+    <div class="feedback" id="q16-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q3.</strong> A cone has base radius 5 cm and slant height 13 cm. Find its curved surface area, in cm² (1 d.p., π = 3.142).</p>
+    <input type="number" id="q17-input" step="0.1" placeholder="e.g. 204.2">
+    <button class="check-btn" onclick="checkNumber('q17',204.2,'Curved surface = πrl = 3.142 × 5 × 13 = 204.23 ≈ 204.2 cm².')">Check</button>
+    <div class="feedback" id="q17-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q4.</strong> A sector of a circle of radius 15 cm has angle 120°. Find its area, in cm² (1 d.p., π = 3.142).</p>
+    <input type="number" id="q18-input" step="0.1" placeholder="e.g. 235.7">
+    <button class="check-btn" onclick="checkNumber('q18',235.7,'Sector area = 120⁄360 × π(15²) = 1⁄3 × 707.0 = 235.65 ≈ 235.7 cm².')">Check</button>
+    <div class="feedback" id="q18-fb"></div>
+  </div>
+
+  <div class="q-item" data-q>
+    <p><strong>Q5.</strong> A cylinder and a sphere share the same radius and the cylinder’s height equals its radius. Which statement is true?</p>
+    <label class="opt"><input type="radio" name="q19" value="a"> The cylinder volume is 3 times the sphere volume.</label>
+    <label class="opt"><input type="radio" name="q19" value="b"> The cylinder volume is ¾ of the sphere volume.</label>
+    <label class="opt"><input type="radio" name="q19" value="c"> They have equal volume.</label>
+    <button class="check-btn" onclick="checkMC('q19','b','With h = r: V_cyl = πr³ and V_sphere = 4⁄3πr³ = 1.333πr³, so V_cyl ÷ V_sphere = 1 ÷ 4⁄3 = ¾.')">Check</button>
+    <div class="feedback" id="q19-fb"></div>
+  </div>
+
+  <details class="answer">
+    <summary>Show full worked solutions</summary>
+    <p><strong>Q1.</strong> r = 3 m; A = πr² = 3.142 × 9 = <span class="measure">28.28 m²</span>.</p>
+    <p><strong>Q2.</strong> V = A × L = 15 × 12 = <span class="measure">180 cm³</span>.</p>
+    <p><strong>Q3.</strong> Curved surface = πrl = 3.142 × 5 × 13 ≈ <span class="measure">204.2 cm²</span>.</p>
+    <p><strong>Q4.</strong> Sector area = 120⁄360 × π(15²) = <span class="measure">235.7 cm²</span>.</p>
+    <p><strong>Q5.</strong> V_cyl = πr²h = πr³ (since h = r); V_sphere = 4⁄3 πr³. Ratio = 1 ÷ 4⁄3 = <strong>¾</strong>.</p>
+  </details>
+</section>
+
+</main>
+
+<div id="progress-bar-wrap">
+  <span id="prog-label">0 / 0 answered</span>
+  <div id="prog-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="prog-fill"></div></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════
+//  Progress tracking
+// ══════════════════════════════════════════════════════════════════════════
+const answered = new Set();
+const TOTAL = document.querySelectorAll('.q-item[data-q]').length;
+
+function updateProgress() {
+  const pct = TOTAL ? Math.round((answered.size / TOTAL) * 100) : 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-bar').setAttribute('aria-valuenow', pct);
+  document.getElementById('prog-label').textContent = answered.size + ' / ' + TOTAL + ' answered';
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Quiz checks
+// ══════════════════════════════════════════════════════════════════════════
+function checkMC(qid, correct, explanation) {
+  const selected = document.querySelector('input[name="' + qid + '"]:checked');
+  const fb = document.getElementById(qid + '-fb');
+  if (!selected) {
+    fb.style.display = 'block';
+    fb.className = 'feedback wrong';
+    fb.textContent = 'Please select an answer.';
+    return;
+  }
+  document.querySelectorAll('input[name="' + qid + '"]').forEach(function (inp) {
+    const lbl = inp.closest('label');
+    if (!lbl) return;
+    lbl.classList.remove('option-correct', 'option-wrong');
+    if (inp.value === correct) lbl.classList.add('option-correct');
+    else if (inp.checked) lbl.classList.add('option-wrong');
+    inp.disabled = true;
+  });
+  fb.style.display = 'block';
+  if (selected.value === correct) {
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ Correct! ' + explanation;
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ Not quite. ' + explanation;
+  }
+  answered.add(qid);
+  updateProgress();
+}
+
+function checkNumber(qid, correct, explanation) {
+  const input = document.getElementById(qid + '-input');
+  const fb = document.getElementById(qid + '-fb');
+  const val = parseFloat(input.value);
+  fb.style.display = 'block';
+  const tol = Math.max(0.15, Math.abs(correct) * 0.003);
+  if (!isNaN(val) && Math.abs(val - correct) <= tol) {
+    fb.className = 'feedback correct';
+    fb.textContent = '✅ Correct! ' + explanation;
+    input.style.borderColor = 'var(--green)';
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = '❌ Not quite. ' + explanation;
+    input.style.borderColor = 'var(--red)';
+  }
+  answered.add(qid);
+  updateProgress();
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Helpers
+// ══════════════════════════════════════════════════════════════════════════
+const PI = 3.142;
+function fmt(x) { return Number(x.toFixed(2)); }
+
+// ── Rectangle & triangle ──
+function calcRect() {
+  const l = +document.getElementById('rect-l').value;
+  const w = +document.getElementById('rect-w').value;
+  document.getElementById('rect-l-out').textContent = l;
+  document.getElementById('rect-w-out').textContent = w;
+  document.getElementById('rect-p').textContent = 2 * (l + w);
+  document.getElementById('rect-a').textContent = l * w;
+}
+function calcTri() {
+  const b = +document.getElementById('tri-b').value;
+  const h = +document.getElementById('tri-h').value;
+  document.getElementById('tri-b-out').textContent = b;
+  document.getElementById('tri-h-out').textContent = h;
+  document.getElementById('tri-eq').textContent = '(' + b + ' × ' + h + ')';
+  document.getElementById('tri-a').textContent = (0.5 * b * h);
+}
+
+// ── Circle ──
+function calcCircle() {
+  const r = parseFloat(document.getElementById('circ-r').value);
+  const out = document.getElementById('circ-out');
+  if (isNaN(r) || r <= 0) { out.textContent = 'Enter a positive radius.'; return; }
+  out.innerHTML = 'C = 2πr = ' + fmt(2 * PI * r) + ' units<br>A = πr² = ' + fmt(PI * r * r) + ' square units';
+}
+
+// ── Solid calculator ──
+function showFields() {
+  const type = document.getElementById('solid-type').value;
+  ['cuboid', 'cylinder', 'prism', 'sphere', 'pyramid', 'cone'].forEach(function (t) {
+    document.getElementById('f-' + t).classList.toggle('field-hidden', t !== type);
+  });
+  calcSolid();
+}
+
+function num(id) { return parseFloat(document.getElementById(id).value); }
+
+function calcSolid() {
+  const type = document.getElementById('solid-type').value;
+  const out = document.getElementById('solid-out');
+  let sa = null, v = null, saTxt = '', vTxt = '';
+
+  if (type === 'cuboid') {
+    const l = num('s-l'), w = num('s-w'), h = num('s-h');
+    sa = 2 * (l * w + l * h + w * h);
+    v = l * w * h;
+    saTxt = 'SA = 2(lw+lh+wh)';
+    vTxt = 'V = l×w×h';
+  } else if (type === 'cylinder') {
+    const r = num('s-cr'), h = num('s-ch');
+    sa = 2 * PI * r * r + 2 * PI * r * h;
+    v = PI * r * r * h;
+    saTxt = 'SA = 2πr² + 2πrh';
+    vTxt = 'V = πr²h';
+  } else if (type === 'prism') {
+    const A = num('s-pa'), P = num('s-pp'), L = num('s-pl');
+    sa = 2 * A + P * L;
+    v = A * L;
+    saTxt = 'SA = 2A + PL';
+    vTxt = 'V = A×L';
+  } else if (type === 'sphere') {
+    const r = num('s-sr');
+    sa = 4 * PI * r * r;
+    v = (4 / 3) * PI * r * r * r;
+    saTxt = 'SA = 4πr²';
+    vTxt = 'V = 4⁄3πr³';
+  } else if (type === 'pyramid') {
+    const b = num('s-pb'), s = num('s-ps'), h = num('s-ph');
+    sa = b * b + 2 * b * s;
+    v = (1 / 3) * b * b * h;
+    saTxt = 'SA = b² + 2bs';
+    vTxt = 'V = 1⁄3b²h';
+  } else if (type === 'cone') {
+    const r = num('s-kr'), l = num('s-kl'), h = num('s-kh');
+    sa = PI * r * r + PI * r * l;
+    v = (1 / 3) * PI * r * r * h;
+    saTxt = 'SA = πr² + πrl';
+    vTxt = 'V = 1⁄3πr²h';
+  }
+
+  if (sa === null || isNaN(sa) || isNaN(v)) { out.textContent = 'Enter valid dimensions.'; return; }
+  out.innerHTML = saTxt + ' → <strong>' + fmt(sa) + ' square units</strong><br>' +
+                  vTxt + ' → <strong>' + fmt(v) + ' cubic units</strong>';
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Arc & sector explorer
+// ══════════════════════════════════════════════════════════════════════════
+const S_CX = 150, S_CY = 150, S_R = 110;
+
+function polar(angleDeg) {
+  const a = (angleDeg - 90) * Math.PI / 180; // 0° points up, clockwise
+  return { x: S_CX + S_R * Math.cos(a), y: S_CY + S_R * Math.sin(a) };
+}
+
+function updateSector() {
+  const theta = +document.getElementById('sector-theta').value;
+  const r = parseFloat(document.getElementById('sector-r').value);
+  document.getElementById('sector-theta-out').textContent = theta + '°';
+  document.getElementById('sector-theta-label').textContent = theta + '°';
+
+  const p = polar(theta);
+  const largeArc = theta > 180 ? 1 : 0;
+  const wedge = document.getElementById('sector-wedge');
+  const arc = document.getElementById('sector-arc');
+
+  if (theta >= 360) {
+    wedge.setAttribute('d', 'M150 150 L150 40 A110 110 0 1 1 149.9 40 Z');
+    arc.setAttribute('d', 'M150 40 A110 110 0 1 1 149.9 40');
+  } else {
+    wedge.setAttribute('d', 'M150 150 L150 40 A110 110 0 ' + largeArc + ' 1 ' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ' Z');
+    arc.setAttribute('d', 'M150 40 A110 110 0 ' + largeArc + ' 1 ' + p.x.toFixed(1) + ' ' + p.y.toFixed(1));
+  }
+
+  const label = document.getElementById('sector-theta-label');
+  const lp = polar(theta / 2);
+  label.setAttribute('x', (S_CX + 0.55 * (lp.x - S_CX) + 6).toFixed(0));
+  label.setAttribute('y', (S_CY + 0.55 * (lp.y - S_CY) + 4).toFixed(0));
+
+  const out = document.getElementById('sector-out');
+  if (isNaN(r) || r <= 0) { out.textContent = 'Enter a positive radius.'; return; }
+  const arcLen = (theta / 360) * 2 * PI * r;
+  const area = (theta / 360) * PI * r * r;
+  const frac = theta + '/360';
+  out.innerHTML = 'Arc = ' + frac + ' × 2πr = <strong>' + fmt(arcLen) + ' units</strong><br>' +
+                  'Sector area = ' + frac + ' × πr² = <strong>' + fmt(area) + ' square units</strong><br>' +
+                  'Perimeter of sector = arc + 2r = <strong>' + fmt(arcLen + 2 * r) + ' units</strong>';
+}
+
+// ── Initialise ──
+window.addEventListener('load', function () {
+  calcRect();
+  calcTri();
+  calcCircle();
+  showFields();
+  updateSector();
+  updateProgress();
+});
+</script>
+</body>
+</html>
